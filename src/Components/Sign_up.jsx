@@ -1,24 +1,35 @@
 import React from 'react'
-import { BookOpen } from 'lucide-react';
-import { Star } from 'lucide-react';
-import {House} from 'lucide-react'
-import { LayoutGrid } from 'lucide-react';
-import {Sparkle} from 'lucide-react'
+import { BookOpen,Star,ChevronLeft,Feather,Sparkles} from 'lucide-react';
 
 const Sign_up = () => {
   return (
-    <div className='flex justify-between flex-col items-center min-h-screen bg-[#F1EAD7] gap-[2]'>
+    <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
       
+      <div className="absolute top-10 right-10 w-24 h-24 text-stone-300 rotate-12">
+        <Feather strokeWidth={0.5} size={80}/></div>
+      <div className="absolute bottom-20 left-20 w-32 h-32 text-stone-300 rotate-12">
+        <Feather strokeWidth={0.5} size={100}/></div>
+      <div className="absolute top-1/2 left-1/4 w-16 h-16 text-stone-300 opacity-50">
+        <Sparkles strokeWidth={0.5} size={40}/></div>
+
       <div className='flex items-center mt-16 gap-2 mb-6'>
       <BookOpen strokeWidth={2.5} size={32} className='text-[#8D7B68]'></BookOpen>
       <h1 className='text-[#5c544b] text-center text-[30px] font-serif'>Alinéa</h1>
       </div>
       
+    <div className='top-0 absolute left-0 translate-x-3 translate-y-3 text-[#d8b486]'>
+      <Sparkles size={24} strokeWidth={1}/>
+      </div>
+
+      <div className='bottom-0 absolute right-0 -translate-x-3 -translate-y-3 text-[#d8b486]'>
+      <Sparkles size={24} strokeWidth={1}/>
+      </div>
+
       <form className='my-auto flex font-[Lora] flex-col bg-white/60 pb-20 max-w-[500] min-w-[450] max-h-[700] min-h-[650] px-6 py-12 rounded-[20px] font-extrabold gap-2.5'>
         
         <div className="flex items-center justify-center gap-4 mb-6">
           <div className="h-px w-16 bg-linear-to-r from-transparent to-[#8D7B68]"></div>
-          <LayoutGrid size={14} strokeWidth={4} className="text-[#8D7B68]" />
+          <Feather size={14} strokeWidth={1.5} className="text-[#8D7B68]" />
           <div className="h-px w-16 bg-linear-to-r from-transparent to-[#8D7B68]"></div>
         </div>
 
@@ -27,22 +38,22 @@ const Sign_up = () => {
 
         <div>
         <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" value="name" required>Full Name</label>
-        <input className='placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans focus:ring-1 border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full border-[' type="text" placeholder=" enter your full name" id="name"></input>
+        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name"></input>
         </div>
 
         <div>
         <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="email" value="email" required>Email</label>
-        <input className='placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] w-full text-[#7A6A5A]' type="email" placeholder=" enter your email" id="email"/>
+        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] h-5 w-full text-[#7A6A5A]' type="email" placeholder=" Enter your email" id="email"/>
         </div>
 
         <div>
         <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password" value="password">Password</label>
-        <input className='placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password" placeholder="" id="password"/>
+        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type="password" placeholder=" ......" id="password"/>
         </div>
 
         <div>
         <label className='font-sans text-[#7A6A5A] font-medium'>Confirm Password</label>
-        <input className='placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password"/>
+        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password"/>
         </div>
 
         <div>
@@ -61,7 +72,7 @@ const Sign_up = () => {
     </form>
 
     <div className='flex items-center mb-3.5 gap-0.5 mt-3.5'>
-      <House size={13} className='text-[#5C544B]'/>
+      <ChevronLeft size={13} className='text-[#5C544B]'/>
       <p className='text-[#5C544B] text-[14px] hover:underline'>Back to Home</p>
       
      </div> 
