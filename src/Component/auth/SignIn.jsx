@@ -22,8 +22,10 @@ const LoginPage = () => {
       <div className="bg-white/60 backdrop-blur-sm p-10 rounded-[2.5rem] shadow-2xl shadow-stone-200/50 w-full max-w-110 border border-white relative z-10">
         
         {/* Ornements de coin */}
-        <div className="absolute top-0 left-0 text-[#D8B486] -translate-x-3 -translate-y-3"><Sparkles size={24} strokeWidth={1}/></div>
-        <div className="absolute bottom-0 right-0 text-[#D8B486] translate-x-3 translate-y-3"><Sparkles size={24} strokeWidth={1}/></div>
+        <div className="absolute top-0 left-0 text-[#D8B486] -translate-x-3 -translate-y-3">
+          <Sparkles size={24} strokeWidth={1}/></div>
+        <div className="absolute bottom-0 right-0 text-[#D8B486] translate-x-3 translate-y-3">
+          <Sparkles size={24} strokeWidth={1}/></div>
 
         <div className="text-center mb-10">
           <div className="flex items-center gap-2 mb-4 text-stone-300">
@@ -73,7 +75,7 @@ const LoginPage = () => {
         </form>
 
         <div className="mt-8 text-center text-sm text-stone-500"> New here? 
-          <Link to="/signup" className="text-[#8D7B68] font-semibold hover:underline">Create an account</Link>
+          <Link to="/signup" className="text-[#8D7B68] font-semibold hover:underline">  Create an account</Link>
         </div>
       </div>
 

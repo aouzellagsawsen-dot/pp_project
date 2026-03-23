@@ -3,12 +3,18 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import SignIn from './Component/auth/SignIn';
+import Header from './Component/layout/Header';
+import Footer from './Component/layout/Footer';
+import Policy from './Component/Policy';
 //import './App.css'
 
 export default function App() {
   return (
     <>
-     <SignIn />
+     <Header />
+     <Policy />
+     <Footer />
+     <SignIn /> 
     </>
   );
 }
