@@ -38,22 +38,22 @@ const Sign_up = () => {
 
         <div>
         <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" value="name" required>Full Name</label>
-        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name"></input>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name"></input>
         </div>
 
         <div>
         <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="email" value="email" required>Email</label>
-        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] h-5 w-full text-[#7A6A5A]' type="email" placeholder=" Enter your email" id="email"/>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] h-5 w-full text-[#7A6A5A]' type="email" placeholder=" Enter your email" id="email"/>
         </div>
 
         <div>
         <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password" value="password">Password</label>
-        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type="password" placeholder=" ......" id="password"/>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type="password" placeholder=" ......" id="password"/>
         </div>
 
         <div>
         <label className='font-sans text-[#7A6A5A] font-medium'>Confirm Password</label>
-        <input className='placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password"/>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password"/>
         </div>
 
         <div>
@@ -62,7 +62,7 @@ const Sign_up = () => {
         </div>
 
        <div>
-        <button className='bg-[#8D7B68] text-[#FFFFFF] font-[Inter] rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl'>
+        <button className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl'>
           <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>Create Account</span></button>
       </div>
 
