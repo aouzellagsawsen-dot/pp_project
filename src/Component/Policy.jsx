@@ -39,10 +39,10 @@ const toRoman = (num) => {
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center py-20 px-6 font-serif text-[#4a3728]">
-      
+
       {/* Header - Style République des Lettres */}
       <header className="text-center mb-20 max-w-2xl">
-        <p className="uppercase tracking-[0.4em] text-[10px] mb-3 opacity-60 font-sans">
+        <p className="uppercase tracking-[0.4em] text-[10px] mb-3 opacity-60 font-serif">
           REPUBLIC OF LETTERS · ALINÉA
         </p>
         <div className="flex justify-center items-center gap-6 mb-6">
@@ -54,9 +54,9 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="italic text-lg opacity-80">
-          Six articles, each sealed with our pledge
+         - Six articles, each sealed with our pledge -
         </p>
-        <div className="mt-8 flex justify-center gap-3 opacity-30 text-[10px]">
+        <div className="mt-8 flex justify-center gap-3 opacity-30 text-[15px]">
           <span>✦</span><span>✦</span><span>✦</span>
         </div>
       </header>
@@ -69,23 +69,31 @@ export default function PrivacyPolicy() {
             className="bg-[#fdfbf7] border border-[#e8dfd3] shadow-sm p-10 flex flex-col items-center text-center relative group transition-all duration-700 hover:shadow-xl hover:-translate-y-1"
           >
             {/* Ornements d'angles discrets */}
-            <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-[#d6c7b4] opacity-40"></div>
-            <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-[#d6c7b4] opacity-40"></div>
+            <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-[#8D7B68] opacity-50"></div>
+            <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-[#8D7B68] opacity-50"></div>
 
             {/* Numérotation Romaine */}
             <p className="text-[11px] tracking-[0.3em] text-[#a08b76] mb-8 uppercase opacity-70">
               ARTICLE {toRoman(index + 1)}
             </p>
+
+            <div className="h-px w-full bg-[#4a3728] opacity-20 mt-4 mb-8"></div>
             
             {/* Titre de l'Article */}
-            <h2 className="text-2xl font-medium mb-6 leading-tight text-[#3e2f25]">
-              {article.title}
-            </h2>
+           <div className="min-h-17.5 flex items-center justify-center">
+              <h2 className="text-2xl font-medium leading-tight text-[#3e2f25]">
+               {article.title}
+              </h2>
+            </div>
             
             {/* Corps du texte (Italique pour le style manuscrit) */}
-            <p className="text-[15px] leading-relaxed opacity-85 mb-12 italic font-light px-2">
-              {article.content}
-            </p>
+            <div className="flex-1 flex flex-col justify-center py-8">
+              <p className="text-[15px] leading-relaxed opacity-85 italic font-light px-2">
+               {article.content}
+              </p>
+            </div>
+
+            <div className="h-px w-full bg-[#4a3728] opacity-20 mt-4 mb-8"></div>
 
             {/* Section du Sceau (Image) */}
             <div className="mt-auto flex flex-col items-center">
@@ -113,7 +121,7 @@ export default function PrivacyPolicy() {
 
       {/* Footer Final */}
       <footer className="mt-24 text-center">
-        <div className="h-[1px] w-24 bg-[#4a3728] opacity-10 mx-auto mb-8"></div>
+        <div className="h-px w-24 bg-[#4a3728] opacity-10 mx-auto mb-8"></div>
         <p className="text-[11px] text-[#8c7a6b] italic tracking-[0.15em] uppercase">
           Last sealed — Bejaïa, the twenty-seventh of February, <br className="md:hidden" /> two thousand and twenty-six
         </p>
