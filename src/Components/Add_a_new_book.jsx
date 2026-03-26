@@ -1,7 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Download,Quote } from 'lucide-react'
 
 const Add_a_new_book = () => {
+
+  const [preview, setpreview] = useState(null)
+
+ const handlePreview = (event) => {
+    const file = event.target.files[0]    
+    
+  if (file){      //s'assurer que le user a sélectionné un fichier
+
+   const reader = new FileReader()
+    reader.onload = () => {
+    setpreview(reader.result)
+  }
+  reader.readAsDataURL(file)
+    }
+
+ }
+
+
   return (
   <div className='bg-[#f1ead7] min-h-screen flex flex-col justify-center items-center'>
       
@@ -15,14 +33,15 @@ const Add_a_new_book = () => {
         <div className='col-span-1 flex flex-col pt-6'>
           <label className='text-[#7A6A5A] font-sans font-medium pb-3'>Book Cover</label>
 
-          <label class="relative w-full h-68 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/40">
+          <label className="relative w-full h-68 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/40">
 
-            <input type="file" className='hidden' accept="image/png,image/jpeg"/>
-            <div class="flex flex-col items-center p-6 text-center"></div>
+            <input type="file" className='hidden' accept="image/png,image/jpeg,image/jpg" onChange={handlePreview}/>
+
+            <div className="flex flex-col items-center p-6 text-center"></div>
             <Download className='pb-2 text-[#7A6A5A]' size={30}></Download>
             <p className="text-sm font-medium text-gray-600 leading-tight font-sans px-2 text-center">Click to upload book cover</p>
-            <p class="text-[10px] text-gray-400 mt-2 uppercase">PNG, JPG up to 5MB</p>
-            <img id="image-preview" src="#" alt="Aperçu" class="hidden absolute inset-0 w-full h-full object-cover" />
+            <p className="text-[10px] text-gray-400 mt-2 uppercase">PNG, JPG up to 5MB</p>
+            <img id="image-preview" src={preview} alt="Aperçu" className="absolute inset-0 w-full h-full object-cover"/>
           </label>
         </div>
 
@@ -42,16 +61,16 @@ const Add_a_new_book = () => {
 
             <div>
               <label className='text-[#7A6A5A] font-medium'>Genre</label>
-            <select className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
-              <option value="" selected hidden disabled>Select a genre</option>
-              <option>Classic fiction</option>
-              <option>Coming of Age</option>
-              <option>Dystopian</option>
-              <option>Fantasy</option>
-              <option>Historical Fiction</option>
-              <option>Mystery</option>
-              <option>Romance</option>
-              <option>Science Fiction</option>
+            <select defaultValue="Select a genre" className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
+              <option value="" hidden disabled>Select a genre</option>
+              <option value="Classic Fiction">Classic Fiction</option>
+              <option value="Coming of Age">Coming of Age</option>
+              <option value="Dystopian">Dystopian</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Historical Fiction">Historical Fiction</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Science Fiction">Science Fiction</option>
             </select>
             </div>
 
@@ -73,7 +92,7 @@ const Add_a_new_book = () => {
 
            </form>
       
-           <div class="flex justify-end items-center gap-5 pt-1 col-span-2 col-start-2 pr-6">
+           <div className="flex justify-end items-center gap-5 pt-1 col-span-2 col-start-2 pr-6">
             <button className='text-[#8D7B68] hover:text-[#d6c1aa] cursor-pointer'>Cancel</button>
             <button className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer'>Add Book</button>
             </div>
