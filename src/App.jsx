@@ -6,15 +6,15 @@ import SignIn from './Component/auth/SignIn';
 import Header from './Component/layout/Header';
 import Footer from './Component/layout/Footer';
 import Policy from './Component/Policy';
-import HomePage from './Component/HomePage';
+import HomePage from './Component/homepage/HomePage';
 //import './App.css'
 
 export default function App() {
   return (
     <>
      <Header />
+      <HomePage />
      <Footer />
-     <HomePage />
      <Policy />
      <SignIn /> 
     </>

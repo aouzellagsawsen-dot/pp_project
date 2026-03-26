@@ -1,6 +1,15 @@
-import { BookOpen, Users, Repeat } from 'lucide-react';
+"use client"; 
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: false, margin: "-100px" },
+  transition: { duration: 0.8, ease: "easeOut" }
+};
 
 export default function HomePage() {
+
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center px-6 py-20 font-serif text-[#4a3728]">
       
@@ -62,103 +71,16 @@ export default function HomePage() {
       </p>
 
       {/* 5. Boutons d'action */}
-      <div className="flex flex-col sm:flex-row gap-5">
+      <motion.div {...fadeInUp}
+       transition={{ ...fadeInUp.transition, delay: 0.1 }}
+       className="flex flex-col sm:flex-row gap-5">
         <button className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
           <span className="text-xs">✦</span> Explore Books
         </button>
         <button className="border border-[#4a3728]/70 px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#4a3728]/5 transition-all text-[#4a3728]/80">
           <span className="text-sm">✦</span> Join the Community
         </button>
-      </div>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-
-      <div className="flex items-center justify-center w-full max-w-xl gap-6 opacity-60">
-      
-      {/* Ligne de gauche avec dégradé (s'estompe vers la gauche) */}
-      <div className="h-[1.5px] flex-1 bg-linear-to-r from-[#4a3728] to-transparent"></div>
-
-      {/* Le Losange Central (4 petits carrés) */}
-      <div className="grid grid-cols-2 gap-0.5 rotate-45 transform">
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-      </div>
-
-      {/* Ligne de droite avec dégradé (s'estompe vers la droite) */}
-      <div className="h-[1.5px] flex-1 bg-linear-to-r from-[#4a3728] to-transparent"></div>
-      
+      </motion.div>
     </div>
-
-      
-      <section class="w-full max-w-6xl mt-32 space-y-20">
-  <div class="text-center">
-    <h2 class="text-5xl md:text-6xl font-normal text-[#4a3728] mb-4">How It Works</h2>
-    <p class="text-lg italic opacity-70">Simple, elegant, and community-driven</p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-12 px-4">
-    
-    <div class="relative group">
-     
-      <div class="bg-[#FAF7F2]/50 border border-[#4a3728]/10 rounded-[3rem] p-10 pt-16 text-center hover:border-[#4a3728]/30 transition-colors">
-        
-        <div class="flex justify-center mb-10">
-          <BookOpen class="w-10 h-10 text-[#4a3728] opacity-80 transition-opacity group-hover:opacity-100" /> 
-        </div>
-
-        <h3 class="text-2xl mb-4">Browse Books</h3>
-        <p class="text-sm opacity-70 leading-relaxed">Explore our curated collection of books shared by our community members.</p>
-      </div>
-    </div>
-
-    <div class="relative group">
-      
-      <div class="bg-[#FAF7F2]/50 border border-[#4a3728]/10 rounded-[3rem] p-10 pt-16 text-center hover:border-[#4a3728]/30 transition-colors">
-        
-        <div class="flex justify-center mb-10">
-          <Users class="w-10 h-10 text-[#4a3728] opacity-80 transition-opacity group-hover:opacity-100" />  
-        </div>
-
-        <h3 class="text-2xl mb-4">Connect</h3>
-        <p class="text-sm opacity-70 leading-relaxed">Request to borrow books and connect with fellow readers in your area.</p>
-      </div>
-    </div>
-
-    <div class="relative group">
-      
-      <div class="bg-[#FAF7F2]/50 border border-[#4a3728]/10 rounded-[3rem] p-10 pt-16 text-center hover:border-[#4a3728]/30 transition-colors">
-        
-        <div class="flex justify-center mb-10">
-          <Repeat class="w-10 h-10 text-[#4a3728] opacity-80 transition-opacity group-hover:opacity-100" />
-        </div>
-        <h3 class="text-2xl mb-4">Share & Repeat</h3>
-        <p class="text-sm opacity-70 leading-relaxed">Enjoy your read, share your thoughts, and discover more stories.</p>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="flex items-center justify-center w-full max-w-xl mx-auto gap-6 opacity-40 pt-10">
-    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
-    <div class="grid grid-cols-2 gap-0.5 rotate-45 transform">
-      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
-      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
-    </div>
-    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
-  </div>
-
-</section>
-      
-
-
-
-
-
-
-    </div>
-  );
+  );    
 }
