@@ -12,11 +12,11 @@ import HomePage from './Component/homepage/HomePage';
 export default function App() {
   return (
     <>
-     <Header />
       <HomePage />
-     <Footer />
      <Policy />
      <SignIn /> 
+     <Header />
+      <Footer />
     </>
   );
 }

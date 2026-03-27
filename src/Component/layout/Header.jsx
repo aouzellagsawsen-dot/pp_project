@@ -2,7 +2,7 @@ import { BookOpen, Heart, Bell, Search, User, MessageSquare } from 'lucide-react
 
 const Header = () => {
   return (
-    <header className="w-full bg-[#FDF5E6] border-b border-stone-200 text-[#5D4037] sticky top-0 z-50">
+    <header className="w-full bg-[#FDF5E6] border-b border-stone-200 text-[#5D4037] backdrop-blur-md shadow-sm sticky top-0 z-50">
       <div className="max-w-360 mx-auto px-12 h-20 flex items-center justify-between">
         
         {/* Logo Section */}

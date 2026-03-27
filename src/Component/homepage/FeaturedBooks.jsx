@@ -5,6 +5,24 @@ import { ChevronLeft, ChevronRight, Heart, Star } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+// Fonction pour gérer le clic sur le bouton de favoris
+const HeartButton = () => {
+  const [isFavorite, setIsFavorite] = useState(false);
+  //ici rajouter l'envoie des informations a la base de données
+  return (
+    <button 
+      onClick={(e) => {
+        e.preventDefault(); // Évite de déclencher le lien de la carte
+        setIsFavorite(!isFavorite);
+      }} 
+      className={`absolute top-4 right-4 z-10 bg-white/90 p-2.5 rounded-full transition-all duration-300 shadow-sm 
+        ${isFavorite ? 'text-[#4a3728] scale-110' : 'text-gray-400 hover:text-[#4a3728]'}`}
+    >
+      <Heart size={18} fill={isFavorite ? "currentColor" : "none"} />
+    </button>
+  );
+  }
+
 export default function FeaturedBooks() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3; 
@@ -27,15 +45,14 @@ export default function FeaturedBooks() {
       setCurrentIndex(currentIndex - 1);
     }
   };
-
+ 
   return (
-    <section className="w-full max-w-7xl mx-auto py-24 px-6 flex flex-col items-center bg-[#F1EAD7] font-serif overflow-hidden">
+    <section className="w-full bg-[#F1EAD7] text-[#4a3728] pb-0 mb-0 space-y-20">
+      <br></br>
+      <br></br>
       
       {/* 1. Header */}
       <div className="text-center mb-16 relative">
-        <div className="flex justify-center gap-1.5 mb-6 opacity-30 text-[8px]">
-           <span>●</span><span>●</span><span>●</span>
-        </div>
         <h2 className="text-5xl md:text-6xl text-[#4a3728] mb-4 tracking-tight">Featured Books</h2>
         <p className="text-lg italic text-[#4a3728]/60">Discover stories waiting to be shared</p>
         
@@ -71,9 +88,7 @@ export default function FeaturedBooks() {
                   <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider ${book.status === 'Available' ? 'bg-[#8D7B68]' : 'bg-[#D2B48C]'}`}>
                     {book.status}
                   </div>
-                  <button className="absolute top-4 right-4 z-10 bg-white/90 p-2.5 rounded-full text-[#4a3728] hover:bg-white hover:text-red-500 transition-colors shadow-sm">
-                    <Heart size={18} />
-                  </button>
+                  <HeartButton />
                   <img 
                     src={book.photo} 
                     alt={book.title} 
@@ -113,11 +128,20 @@ export default function FeaturedBooks() {
       </div>
 
       {/* 3. Bouton View All */}
-      <Link href="/catalog" className="mt-16">
-        <button className="bg-[#4a3728] text-[#F1EAD7] px-12 py-4 rounded-2xl text-lg hover:bg-[#5d4633] hover:shadow-xl active:scale-95 transition-all duration-300 font-sans font-semibold tracking-wide">
-          View All Books
+      <Link href="/catalog" className="mt-16 flex justify-center">
+        <button className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
+          <span className="text-xs">✦</span> View All Books
         </button>
       </Link>
+      
+      <div class="flex items-center justify-center w-full max-w-xl mx-auto gap-6 opacity-40 pt-10">
+    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+    <div class="grid grid-cols-2 gap-0.5 rotate-45 transform">
+      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
+      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
+    </div>
+    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+  </div>
 
     </section>
   );

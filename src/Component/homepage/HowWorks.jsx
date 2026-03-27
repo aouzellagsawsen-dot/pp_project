@@ -12,9 +12,9 @@ const fadeInUp = {
 export default function HomePage() {
   return (
     
-    <section class="w-full bg-[#F1EAD7] text-[#4a3728] mt-32 space-y-20">
+    <section class="w-full bg-[#F1EAD7] text-[#4a3728] pb-0 mb-0 space-y-20">
         <div className="w-full max-w-7xl mx-auto px-6 space-y-20">
-  <div class="text-center">
+      <div class="text-center">
     <h2 class="text-5xl md:text-6xl font-normal text-[#4a3728] mb-4">How It Works</h2>
     <p class="text-lg italic opacity-70">Simple, elegant, and community-driven</p>
   </div>

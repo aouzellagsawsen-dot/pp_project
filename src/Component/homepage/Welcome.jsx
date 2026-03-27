@@ -1,5 +1,6 @@
 "use client"; 
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom'; 
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -13,27 +14,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center px-6 py-20 font-serif text-[#4a3728]">
       
-      {/* 1. Séparateur décoratif du haut (Ligne + Losange) */}
-     <div className="flex items-center justify-center w-full max-w-xl gap-6 opacity-60">
-      
-      {/* Ligne de gauche avec dégradé (s'estompe vers la gauche) */}
-      <div className="h-[1.5px] flex-1 bg-linear-to-r from-[#4a3728] to-transparent"></div>
-
-      {/* Le Losange Central (4 petits carrés) */}
-      <div className="grid grid-cols-2 gap-0.5 rotate-45 transform">
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
-      </div>
-
-      {/* Ligne de droite avec dégradé (s'estompe vers la droite) */}
-      <div className="h-[1.5px] flex-1 bg-linear-to-r from-[#4a3728] to-transparent"></div>
-      
-    </div>
-    <br></br>
-    <br></br>
-
       {/* 2. Bloc Central : Titre et Sous-titre avec coins */}
       <div className="relative px-12 md:px-24 py-10 mb-8 group">
         
@@ -74,13 +54,34 @@ export default function HomePage() {
       <motion.div {...fadeInUp}
        transition={{ ...fadeInUp.transition, delay: 0.1 }}
        className="flex flex-col sm:flex-row gap-5">
-        <button className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
-          <span className="text-xs">✦</span> Explore Books
-        </button>
-        <button className="border border-[#4a3728]/70 px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#4a3728]/5 transition-all text-[#4a3728]/80">
-          <span className="text-sm">✦</span> Join the Community
-        </button>
+        <div className="flex gap-4">
+          <Link  to="/explore" 
+             className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
+            <span className="text-xs">✦</span> Explore Books
+          </Link>
+          <Link  to="/signup" 
+               className="border border-[#4a3728]/70 px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#4a3728]/5 transition-all text-[#4a3728]/80" >
+            <span className="text-sm">✦</span> Join the Community
+          </Link>
+        </div>
       </motion.div>
+
+      <br></br>
+      <br></br>
+
+      <div className="flex items-center justify-center w-full max-w-xl mx-auto gap-6 opacity-40 pt-10">
+      <div className="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+      <div className="grid grid-cols-2 gap-0.5 rotate-45 transform">
+        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+        <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+      </div>
+      <div className="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
     </div>
+    </div>
+
+    
+
   );    
 }
