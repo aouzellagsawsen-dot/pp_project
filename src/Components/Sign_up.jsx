@@ -37,6 +37,11 @@ const Sign_up = () => {
         <p className='text-[#7A6A5A] text-[16px] font-medium text-center italic'>- Start sharing and discovering amazing books -</p>
 
         <div>
+        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="username" value="username" required>Username</label>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your username" id="username"></input>
+        </div>
+        
+        <div>
         <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" value="name" required>Full Name</label>
         <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name"></input>
         </div>
@@ -67,7 +72,7 @@ const Sign_up = () => {
       </div>
 
        <div className='mt-1.5 mb-0.5'>
-        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <span className='underline'>Sign in</span></p> 
+        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <span className='underline cursor-pointer'>Sign in</span></p> 
       </div>
     </form>
 

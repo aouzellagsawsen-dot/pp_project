@@ -61,8 +61,8 @@ const Add_a_new_book = () => {
 
             <div>
               <label className='text-[#7A6A5A] font-medium'>Genre</label>
-            <select defaultValue="Select a genre" className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
-              <option value="" hidden disabled>Select a genre</option>
+            <select className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
+              <option value="" selected hidden disabled>Select a genre</option>
               <option value="Classic Fiction">Classic Fiction</option>
               <option value="Coming of Age">Coming of Age</option>
               <option value="Dystopian">Dystopian</option>
@@ -71,6 +71,7 @@ const Add_a_new_book = () => {
               <option value="Mystery">Mystery</option>
               <option value="Romance">Romance</option>
               <option value="Science Fiction">Science Fiction</option>
+              <option value="Other">Other</option>
             </select>
             </div>
 
