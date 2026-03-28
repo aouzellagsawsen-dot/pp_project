@@ -23,9 +23,9 @@ const NotificationCard = ({notification}) => {
 
    return (
     
-    <div className='flex items-start bg-white/60 w-180 h-35 rounded-2xl cursor-pointer hover:bg-white/50 p-6 gap-4 shadow-sm'>
+    <div className='flex items-start bg-white/60 w-180 h-35 rounded-2xl cursor-pointer hover:bg-white/33 p-6 gap-4 shadow-sm'>
              
-        <div className='rounded-full flex justify-center items-center w-12 h-12 bg-[#a78e76] shrink-0'>{GetNotifIcon()}</div>
+        <div className='rounded-full flex justify-center items-center w-12 h-12 bg-[#e8dcd1] shrink-0'>{GetNotifIcon()}</div>
         <div className='flex flex-col flex-1 w-full'>
             <div className='flex justify-between items-center w-full'>
              <h1 className='font-sans mb-1 pt-3 align-baseline'>{notification.title}</h1>
@@ -34,7 +34,8 @@ const NotificationCard = ({notification}) => {
                  </span>}
         </div>    
             
-        <p className='w-full font-sans mb-2 text-[#7A6A5A]'>{notification.text}</p>
+        <p className='w-full font-sans mb-2 text-[#7A6A5A] text-light'>{notification.text}</p>
+        <p className='w-full font-sans mb-2 text-[#7A6A5A] text-sm'>{notification.date}</p>
         </div>
     </div>
 
