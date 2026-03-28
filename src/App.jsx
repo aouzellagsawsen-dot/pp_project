@@ -7,6 +7,7 @@ import Terms_of_use from './Components/Terms_of_use';
 import { BrowserRouter as Router,Route,Routes,Link } from 'react-router-dom';
 import Add_a_new_book from './Components/Add_a_new_book';
 import NotificationPanel from './Components/notifications/NotificationPanel';
+import ExplorePage from './Components/ExplorePage';
 
 //import './App.css'
 
@@ -18,12 +19,14 @@ export default function App() {
     <Link to="/terms"> Lire les conditions </Link>
     <Link to="/Add_a_new_book"> Ajouter un livre </Link>
     <Link to="/notifications"> Notifications</Link>
+    <Link to="/explore"> Catalogue</Link>
     </div>
      <Routes>
         <Route path="/" element={<Sign_up/>} />
         <Route path="/terms" element={<Terms_of_use/>} />
         <Route path="/Add_a_new_book" element={<Add_a_new_book/>}/>
         <Route path="/notifications" element={<NotificationPanel />}/>
+        <Route path="/explore" element={<ExplorePage/>}/>
     </Routes>
     
     

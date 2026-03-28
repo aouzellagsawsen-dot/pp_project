@@ -1,7 +1,36 @@
 import React, { useState } from 'react'
 import { Download,Quote } from 'lucide-react'
 
+
+
 const Add_a_new_book = () => {
+
+  const initialState = {
+    title:'',
+    author:'',
+    genre:'',
+    description:'',
+    quotes:['',''],
+    cover:null
+  }
+  const [isOpen, setIsOpen] = useState(null)
+
+  const [FormData, setFormData] = useState(initialState)
+
+  const handleCancel = () => {
+    // if(window.confirm("Are you sure ? All unsaved changes will be lost.")){
+      setFormData(initialState)
+      setIsOpen(false)
+    
+  }
+
+  const handleChange = (e) => {
+  const {name,value} = e.target 
+  setFormData({
+    ...FormData,
+    [name]:value
+  })
+}
 
   const [preview, setpreview] = useState(null)
 
@@ -50,18 +79,18 @@ const Add_a_new_book = () => {
           <div className='flex gap-4'>
             <div>
             <label className='font-sans text-[#7A6A5A] font-medium'>Book Title</label>
-            <input type="text" placeholder='Enter title' className='bg-[#FFFBF2] border border-[#EFE7D6] font-sans focus:outline-none w-full py-1 rounded-lg placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <input onChange={handleChange} name="title" value={FormData.title} type="text" placeholder='Enter title' className='bg-[#FFFBF2] border border-[#EFE7D6] font-sans focus:outline-none w-full py-1 rounded-lg placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
 
             <div>
             <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='author name'>Author name</label>
-            <input id="author name" type="text" placeholder='Enter author name' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <input onChange={handleChange} name="author" value={FormData.author} id="author name" type="text" placeholder='Enter author name' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
           </div>
 
             <div>
               <label className='text-[#7A6A5A] font-medium'>Genre</label>
-            <select className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
+            <select name="genre" value={FormData.genre} onChange={handleChange} className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
               <option value="" selected hidden disabled>Select a genre</option>
               <option value="Classic Fiction">Classic Fiction</option>
               <option value="Coming of Age">Coming of Age</option>
@@ -77,7 +106,7 @@ const Add_a_new_book = () => {
 
             <div>
             <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='description'>Description</label>
-            <textarea id="description" placeholder='Tell us about the book ...' className='font-sans bg-[#FFFBF2] border border-[#EFE7D6] min-h-32 rounded-lg focus:outline-none w-full placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <textarea onChange={handleChange} name="description" value={FormData.description} id="description" placeholder='Tell us about the book ...' className='font-sans bg-[#FFFBF2] border border-[#EFE7D6] min-h-32 rounded-lg focus:outline-none w-full placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
 
           <div className='flex flex-col gap-2'>
@@ -87,15 +116,27 @@ const Add_a_new_book = () => {
             <label className='uppercase font-sans text-[#7A6A5A] font-bold'>Famous quotes</label>
             </div> 
               
-            <input placeholder='Enter a memorable line ...' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
-            <input placeholder='Enter another line ...' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <input value={FormData.quotes[0]} 
+              onChange={(e) => {
+                const newQuotes = [...FormData.quotes];
+                newQuotes[0] = e.target.value;
+                setFormData({...FormData, quotes: newQuotes});
+              }} 
+              placeholder='Enter a memorable line ...' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <input value={FormData.quotes[1]} 
+            onChange={(e) => {
+                const newQuotes = [...FormData.quotes];
+                newQuotes[1] = e.target.value;
+                setFormData({...FormData, quotes: newQuotes});
+              }} 
+            placeholder='Enter another line ...' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
           </div>
 
            </form>
       
            <div className="flex justify-end items-center gap-5 pt-1 col-span-2 col-start-2 pr-6">
-            <button className='text-[#8D7B68] hover:text-[#d6c1aa] cursor-pointer'>Cancel</button>
-            <button className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer'>Add Book</button>
+            <button onClick={handleCancel} type='button' className='text-[#8D7B68] hover:text-[#d6c1aa] cursor-pointer'>Cancel</button>
+            <button type='submit' className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer'>Add Book</button>
             </div>
       </div>
        
