@@ -1,6 +1,7 @@
 import React from 'react'
 import { Search,ChevronDown } from 'lucide-react'
 
+
 const ExplorePage = () => {
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7]'>

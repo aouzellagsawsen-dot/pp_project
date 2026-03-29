@@ -1,0 +1,176 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "Manuela_Spinka95",
+      "email": "Jerald.Kulas@hotmail.com",
+      "avatar": "https://avatars.githubusercontent.com/u/87368442"
+    },
+    {
+      "id": 2,
+      "username": "Zane_Effertz",
+      "email": "Cristina.Marvin28@hotmail.com",
+      "avatar": "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/female/512/30.jpg"
+    },
+    {
+      "id": 3,
+      "username": "Gary.Koelpin30",
+      "email": "Isabella56@yahoo.com",
+      "avatar": "https://avatars.githubusercontent.com/u/3499561"
+    },
+    {
+      "id": 4,
+      "username": "Pauline_Willms",
+      "email": "Henry86@gmail.com",
+      "avatar": "https://avatars.githubusercontent.com/u/86435228"
+    },
+    {
+      "id": 5,
+      "username": "Genevieve.Schmeler",
+      "email": "Conrad_Pfeffer@gmail.com",
+      "avatar": "https://avatars.githubusercontent.com/u/52813886"
+    },
+    {
+      "id": 6,
+      "username": "Judy41",
+      "email": "Meredith.Prohaska9@hotmail.com",
+      "avatar": "https://avatars.githubusercontent.com/u/88368621"
+    },
+    {
+      "id": 7,
+      "username": "Hubert.Shanahan",
+      "email": "Zelma.Nienow@gmail.com",
+      "avatar": "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/17.jpg"
+    },
+    {
+      "id": 8,
+      "username": "Simon.Johnson47",
+      "email": "Bulah.Johnston58@gmail.com",
+      "avatar": "https://avatars.githubusercontent.com/u/69689415"
+    },
+    {
+      "id": 9,
+      "username": "Eddie71",
+      "email": "Elmira85@hotmail.com",
+      "avatar": "https://avatars.githubusercontent.com/u/30055291"
+    },
+    {
+      "id": 10,
+      "username": "Jeannette.Little",
+      "email": "Clifford52@yahoo.com",
+      "avatar": "https://avatars.githubusercontent.com/u/50517879"
+    }
+  ],
+  "books": [
+    {
+      "id": 11,
+      "title": "Handmade Rubber Cheese",
+      "author": "Benjamin Disraeli",
+      "genre": "Adventure",
+      "publisher": "Harcourt Trade Publishers",
+      "isbn": "978-1-373-51552-0",
+      "status": "available",
+      "ownerId": 4,
+      "addedAt": "2025-06-30T16:47:04.550Z"
+    },
+    {
+      "id": 12,
+      "title": "Elegant Plastic Gloves",
+      "author": "Fyodor Dostoyevsky",
+      "genre": "Thriller",
+      "publisher": "Focal Press",
+      "isbn": "978-0-06-673999-1",
+      "status": "borrowed",
+      "ownerId": 6,
+      "addedAt": "2025-07-22T17:27:41.856Z"
+    },
+    {
+      "id": 13,
+      "title": "Handcrafted Metal Fish",
+      "author": "J.R.R. Tolkien",
+      "genre": "Detective",
+      "publisher": "Oberon Books",
+      "isbn": "978-1-5318-2819-6",
+      "status": "pending_swap",
+      "ownerId": 1,
+      "addedAt": "2025-10-31T18:51:51.964Z"
+    },
+    {
+      "id": 14,
+      "title": "Bespoke Ceramic Soap",
+      "author": "Philip Roth",
+      "genre": "Graphic Novel",
+      "publisher": "Flame Tree Publishing",
+      "isbn": "978-0-86422-014-1",
+      "status": "available",
+      "ownerId": 6,
+      "addedAt": "2025-06-29T08:08:39.645Z"
+    },
+    {
+      "id": 15,
+      "title": "Frozen Bamboo Soap",
+      "author": "Clifford R. Adams",
+      "genre": "Philosophy",
+      "publisher": "Atlas Press",
+      "isbn": "978-1-83864-389-8",
+      "status": "borrowed",
+      "ownerId": 3,
+      "addedAt": "2025-10-27T23:23:54.171Z"
+    },
+    {
+      "id": 16,
+      "title": "Intelligent Rubber Bike",
+      "author": "Edgar Allan Poe",
+      "genre": "Business",
+      "publisher": "E. P. Dutton",
+      "isbn": "978-0-7640-7040-2",
+      "status": "borrowed",
+      "ownerId": 8,
+      "addedAt": "2025-11-05T08:37:20.634Z"
+    },
+    {
+      "id": 17,
+      "title": "Handcrafted Aluminum Chair",
+      "author": "James Patterson",
+      "genre": "Adventure",
+      "publisher": "Edupedia Publications",
+      "isbn": "978-0-7659-6780-0",
+      "status": "borrowed",
+      "ownerId": 6,
+      "addedAt": "2025-07-15T09:20:02.526Z"
+    },
+    {
+      "id": 18,
+      "title": "Handcrafted Bamboo Ball",
+      "author": "Charles E. Derbyshire",
+      "genre": "Philosophy",
+      "publisher": "Adis International",
+      "isbn": "978-0-7728-1009-0",
+      "status": "pending_swap",
+      "ownerId": 4,
+      "addedAt": "2025-05-10T08:01:37.542Z"
+    },
+    {
+      "id": 19,
+      "title": "Soft Marble Keyboard",
+      "author": "James Baldwin",
+      "genre": "Young Adult",
+      "publisher": "HarperCollins",
+      "isbn": "978-0-422-12225-2",
+      "status": "available",
+      "ownerId": 9,
+      "addedAt": "2025-08-17T12:39:35.815Z"
+    },
+    {
+      "id": 20,
+      "title": "Unbranded Wooden Chips",
+      "author": "Arthur Schopenhauer",
+      "genre": "Religion",
+      "publisher": "Andrews McMeel Publishing",
+      "isbn": "978-1-365-37091-5",
+      "status": "pending_swap",
+      "ownerId": 9,
+      "addedAt": "2025-10-26T10:46:46.816Z"
+    }
+  ]
+}
