@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
             message: 'Password must contain uppercase, lowercase letters and a number'
         }
     },
+    pdp : {
+        type : String,
+        default : 'public/uploads/pdp/default-pdp.png'
+    },
     isVerified: {
         type: Boolean,
         default: false // Faux par défaut à la création

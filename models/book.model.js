@@ -8,11 +8,6 @@ const bookSchema = new mongoose.Schema({
         minLength : 2,
         maxLength : 100,
     },
-    cover : {
-        type : Image,
-        required : true,
-        
-    }
     genre : {
         type : String,
         required : true,
@@ -38,13 +33,15 @@ const bookSchema = new mongoose.Schema({
         minLength : 2,
         maxLength : 50,
     },
-    book_cover : {
-        type 
+    cover : {
+        type : String,
+        default : '/public/uploads/covers/default-cover.png'
+
+    },
+}, {
+        timestamps : true
     }
+)
 
-
-
-    }
-
-    }
-})
+const Book = mongoose.model('Book', bookSchema)
+export default Book 

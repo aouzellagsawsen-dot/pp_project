@@ -2,8 +2,7 @@ import express from 'express'
 import User from '../models/user.model.js'
 import { 
     authenticateToken, 
-    authorizeOwner, 
-    getCsrfToken, 
+    authorizeOwner,
     protectUserMutation 
 } from '../middleware/auth.middleware.js'
 

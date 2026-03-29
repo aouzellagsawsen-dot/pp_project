@@ -5,19 +5,29 @@ import cookieParser from 'cookie-parser'
 import passport from 'passport'
 import initializePassport from './passport.js'
 import helmet from 'helmet'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { authLimiter, globalLimiter } from './middleware/rateLimiter.middleware.js'
 import authRoutes from './routes/auth.routes.js'
 import userRoutes from './routes/user.routes.js'
 import adminRoutes from './routes/admin.routes.js'
+import bookRoutes from './routes/book.routes.js'
+import Book from './models/book.model.js'
 // Load environment variables
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+app.set('view engine' , 'ejs')
+
+// Rendre le dossier "public" accessible via l'URL du navigateur
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // ============ BODY PARSER & COOKIE MIDDLEWARE ============
 app.use(helmet())
-
 app.use('/api', globalLimiter) // Appliquer le rate limiter global à toutes les routes API
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -39,6 +49,28 @@ initializePassport(passport)
 app.use('/api/auth', authLimiter, authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/books', bookRoutes)
+
+app.get('/add-book', (req, res) => {
+    res.render('add-book')
+})
+
+app.get('/book-list', async (req, res, next) => {
+    try {
+        // On demande à MongoDB d'aller chercher tous les livres
+        const myBooks = await Book.find(); 
+        
+        // On affiche la page ET on lui donne la valise "books" remplie !
+        res.render('book-list', { books: myBooks }); 
+    } catch (error) {
+        next(error); // Envoie l'erreur à ton super gestionnaire d'erreurs global
+    }
+})
+
+app.get('/register', (req, res) => {
+    res.render('register')
+})
+
 
 // ============ CSRF ERROR HANDLER ============
 app.use((err, req, res, next) => {
@@ -54,7 +86,7 @@ app.use((err, req, res, next) => {
 
 // ============ GESTIONNAIRE D'ERREURS GLOBAL ============
 // Ce middleware DOIT être le tout dernier avant app.listen()
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     // 1. On loggue l'erreur complète dans le terminal pour le développeur
     console.error('ERREUR SERVEUR :', err.stack);
 
@@ -71,7 +103,8 @@ app.use((err, req, res) => {
             : err.message,
         code: err.code || 'SERVER_ERROR'
     });
-});
+})
+
 // ============ START SERVER ============
 app.listen(PORT, () => {
     console.log(`✓ Server running on http://localhost:${PORT}`)

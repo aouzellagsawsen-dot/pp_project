@@ -27,6 +27,7 @@ router.delete('/profile/:userId', protectUserMutation, async (req, res) => {
     }
 })
 
+// List all users
 router.get('/users', authenticateToken, async (req, res) => {
     try {
         const users = await User.find().select('-password')
