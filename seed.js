@@ -1,5 +1,5 @@
 // On importe la version spécifique "en" (English) de faker
-import { fakerEN as faker } from '@faker-js/faker'; 
+import { faker as faker } from '@faker-js/faker'; 
 import fs from 'fs';
 
 const generateData = () => {

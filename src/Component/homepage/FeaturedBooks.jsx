@@ -5,6 +5,13 @@ import { ChevronLeft, ChevronRight, Heart, Star } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: false, margin: "-100px" },
+  transition: { duration: 0.8, ease: "easeOut" }
+};
+
 // Fonction pour gérer le clic sur le bouton de favoris
 const HeartButton = () => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -46,32 +53,35 @@ export default function FeaturedBooks() {
     }
   };
  
-  return (
-    <section className="w-full bg-[#F1EAD7] text-[#4a3728] pb-0 mb-0 space-y-20">
-      <br></br>
-      <br></br>
+ return (
+    <section className="w-full bg-[#F1EAD7] text-[#4a3728] py-20 space-y-20">
       
       {/* 1. Header */}
-      <div className="text-center mb-16 relative">
-        <h2 className="text-5xl md:text-6xl text-[#4a3728] mb-4 tracking-tight">Featured Books</h2>
-        <p className="text-lg italic text-[#4a3728]/60">Discover stories waiting to be shared</p>
+      <div className="text-center relative max-w-4xl mx-auto">
+        <h2 className="text-5xl md:text-6xl font-serif text-[#4a3728] mb-4 tracking-tight">
+          Featured Books
+        </h2>
+        <p className="text-lg italic text-[#4a3728]/60">
+          Discover stories waiting to be shared
+        </p>
         
+        {/* Ornements d'angles */}
         <div className="absolute -top-6 -left-12 w-8 h-8 border-t border-l border-[#4a3728]/20 rounded-tl-xl hidden md:block"></div>
         <div className="absolute -top-6 -right-12 w-8 h-8 border-t border-r border-[#4a3728]/20 rounded-tr-xl hidden md:block"></div>
       </div>
 
       {/* 2. Carrousel */}
-      <div className="relative w-full flex items-center group px-4">
+      <div className="relative w-full flex items-center px-4 md:px-12">
         
         {/* Flèche Gauche */}
         <button 
           onClick={prevSlide}
-          className="absolute left-0 z-20 p-4 rounded-full bg-white/80 shadow-md transition-all hover:bg-white hover:scale-110 text-[#4a3728] active:scale-95"
+          className="absolute left-4 z-30 p-4 rounded-full bg-white/80 shadow-md transition-all hover:bg-white hover:scale-110 text-[#4a3728] active:scale-95"
         >
           <ChevronLeft size={24} strokeWidth={2} />
         </button>
 
-        {/* Zone d'affichage */}
+        {/* Zone d'affichage mobile-friendly */}
         <div className="w-full overflow-hidden">
           <motion.div 
             className="flex gap-6"
@@ -79,41 +89,51 @@ export default function FeaturedBooks() {
             transition={{ type: "spring", stiffness: 120, damping: 20 }}
           >
             {booksData.map((book) => (
-              <motion.div 
-                key={book.id}
-                className="min-w-[calc(33.333%-1rem)] bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 group/card"
+              <Link 
+                key={book.id} 
+                to={`/book/${book.id}`} 
+                className="min-w-[calc(33.333%-1rem)] block no-underline group/card"
               >
-                {/* Image */}
-                <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
-                  <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider ${book.status === 'Available' ? 'bg-[#8D7B68]' : 'bg-[#D2B48C]'}`}>
-                    {book.status}
+                <motion.div className="bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 h-full cursor-pointer">
+                  
+                  {/* Image Container */}
+                  <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
+                    <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider ${book.status === 'Available' || book.status === 'AVAILABLE NOW' ? 'bg-[#8D7B68]' : 'bg-[#D2B48C]'}`}>
+                      {book.status}
+                    </div>
+                    
+                    <HeartButton />
+                    
+                    <img 
+                      src={book.photo} 
+                      alt={book.title} 
+                      className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" 
+                    />
                   </div>
-                  <HeartButton />
-                  <img 
-                    src={book.photo} 
-                    alt={book.title} 
-                    className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" 
-                  />
-                </div>
 
-                {/* Infos */}
-                <div className="px-3 space-y-2">
-                  <h3 className="text-2xl font-medium text-[#4a3728] truncate">{book.title}</h3>
-                  <p className="text-[#4a3728]/60 italic text-sm">{book.author}</p>
-                  
-                  <div className="flex items-center gap-1.5 pt-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} className="fill-[#4a3728] text-[#4a3728]" />
-                    ))}
+                  {/* Infos Textuelles */}
+                  <div className="px-3 space-y-2">
+                    <h3 className="text-2xl font-serif font-medium text-[#4a3728] truncate">
+                      {book.title}
+                    </h3>
+                    <p className="text-[#4a3728]/60 italic text-sm">
+                      {book.author}
+                    </p>
+                    
+                    <div className="flex items-center gap-1.5 pt-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={14} className={i < Math.floor(book.rating || 5) ? "fill-[#4a3728] text-[#4a3728]" : "text-gray-300"} />
+                      ))}
+                    </div>
+                    
+                    <div className="pt-4">
+                      <span className="bg-[#F1EAD7] text-[#8D7B68] text-[10px] font-bold px-4 py-2 rounded-lg uppercase tracking-[0.2em] border border-[#8D7B68]/10">
+                        {book.genre}
+                      </span>
+                    </div>
                   </div>
-                  
-                  <div className="pt-4">
-                    <span className="bg-[#F1EAD7] text-[#8D7B68] text-[10px] font-bold px-4 py-2 rounded-lg uppercase tracking-[0.2em] border border-[#8D7B68]/10">
-                      {book.genre}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             ))}
           </motion.div>
         </div>
@@ -121,27 +141,37 @@ export default function FeaturedBooks() {
         {/* Flèche Droite */}
         <button 
           onClick={nextSlide}
-          className="absolute right-0 z-20 p-4 rounded-full bg-white/80 shadow-md transition-all hover:bg-white hover:scale-110 text-[#4a3728] active:scale-95"
+          className="absolute right-4 z-30 p-4 rounded-full bg-white/80 shadow-md transition-all hover:bg-white hover:scale-110 text-[#4a3728] active:scale-95"
         >
           <ChevronRight size={24} strokeWidth={2} />
         </button>
       </div>
 
-      {/* 3. Bouton View All */}
-      <Link href="/catalog" className="mt-16 flex justify-center">
-        <button className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
-          <span className="text-xs">✦</span> View All Books
-        </button>
-      </Link>
-      
-      <div class="flex items-center justify-center w-full max-w-xl mx-auto gap-6 opacity-40 pt-10">
-    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
-    <div class="grid grid-cols-2 gap-0.5 rotate-45 transform">
-      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
-      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
-    </div>
-    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
-  </div>
+      {/* 3. Footer de section */}
+      <div className="flex flex-col items-center gap-16">
+        <motion.div {...fadeInUp}
+                 transition={{ ...fadeInUp.transition, delay: 0.1 }}
+                 className="flex flex-col sm:flex-row gap-5">
+                 <Link to="/signup" 
+                  className="inline-flex  items-center gap-2 bg-[#8C7A63] hover:bg-[#766652] text-white px-10 py-4 rounded-full shadow-lg transition-all duration-300 mx-auto text-lg no-underline hover:scale-105">
+                  <span className="text-sm">✦</span>
+                  Get Started for Free
+                 </Link>
+                </motion.div>
+        
+
+        {/* Séparateur Graphique */}
+        <div className="flex items-center justify-center w-full max-w-xl mx-auto gap-6 opacity-40">
+          <div className="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+          <div className="grid grid-cols-2 gap-0.5 rotate-45 transform">
+            <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+            <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+            <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+            <div className="w-1.5 h-1.5 bg-[#4a3728]"></div>
+          </div>
+          <div className="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+        </div>
+      </div>
 
     </section>
   );

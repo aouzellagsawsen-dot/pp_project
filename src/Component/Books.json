@@ -1,122 +1,117 @@
 [
-    {
-      "id": 11,
-      "title": "Oriental Plastic Ball",
-      "author": "Herman Melville",
-      "genre": "Mythology",
-      "photo": "https://picsum.photos/seed/WUGaoc/3849/680",
-      "publisher": "Leafwood Publishers",
-      "isbn": "978-1-216-32966-6",
-      "status": "borrowed",
-      "ownerId": 10,
-      "addedAt": "2025-12-22T09:59:15.658Z"
+  {
+    "id": 11,
+    "title": "Oriental Plastic Ball",
+    "author": "Herman Melville",
+    "genre": "Mythology",
+    "photo": "https://picsum.photos/seed/WUGaoc/800/1200",
+    "publisher": "Leafwood Publishers",
+    "isbn": "978-1-216-32966-6",
+    "status": "BORROWED",
+    "rating": 4.2,
+    "summary": "Une exploration épique des mythes anciens à travers le prisme de la modernité, où chaque chapitre révèle une nouvelle facette de la condition humaine.",
+    "themes": ["Mythology", "Philosophy", "Ancient Sea"],
+    "quotes": [
+      "La mer est le miroir de l'âme, calme en surface mais tourmentée dans ses profondeurs.",
+      "Le destin n'est qu'un ballon de plastique porté par les vents d'Orient."
+    ],
+    "owner": {
+      "id": 10,
+      "name": "Karim",
+      "location": "Nantucket, MA"
     },
-    {
-      "id": 12,
-      "title": "Tasty Plastic Bike",
-      "author": "Alan Moore and Dave Gibbons",
-      "genre": "Horror",
-      "photo": "https://picsum.photos/seed/XwtTnL/862/3853",
-      "publisher": "Caister Academic Press",
-      "isbn": "978-1-359-28495-2",
-      "status": "borrowed",
-      "ownerId": 5,
-      "addedAt": "2026-01-07T22:34:57.256Z"
+    "addedAt": "2025-12-22T09:59:15.658Z"
+  },
+  {
+    "id": 12,
+    "title": "Tasty Plastic Bike",
+    "author": "Alan Moore & Dave Gibbons",
+    "genre": "Horror",
+    "photo": "https://picsum.photos/seed/XwtTnL/800/1200",
+    "publisher": "Caister Academic Press",
+    "isbn": "978-1-359-28495-2",
+    "status": "BORROWED",
+    "rating": 4.8,
+    "summary": "Un roman graphique sombre et viscéral qui déconstruit l'héroïsme dans un monde au bord de l'apocalypse plastique.",
+    "themes": ["Dystopia", "Horror", "Urban Decay"],
+    "quotes": [
+      "Nous regardons tous le caniveau, mais certains d'entre eux fixent les étoiles en plastique.",
+      "Le temps est un cercle, et ce vélo n'a pas de freins."
+    ],
+    "owner": {
+      "id": 5,
+      "name": "Serine",
+      "location": "London, UK"
     },
-    {
-      "id": 13,
-      "title": "Handcrafted Concrete Chicken",
-      "author": "Isabel Florence Hapgood",
-      "genre": "Horror",
-      "photo": "https://picsum.photos/seed/69vgN/1089/3637",
-      "publisher": "Broadview Press",
-      "isbn": "978-0-11-201140-8",
-      "status": "borrowed",
-      "ownerId": 7,
-      "addedAt": "2025-11-11T21:52:18.305Z"
+    "addedAt": "2026-01-07T22:34:57.256Z"
+  },
+  {
+    "id": 13,
+    "title": "Handcrafted Concrete Chicken",
+    "author": "Isabel Florence Hapgood",
+    "genre": "Horror",
+    "photo": "https://picsum.photos/seed/69vgN/800/1200",
+    "publisher": "Broadview Press",
+    "isbn": "978-0-11-201140-8",
+    "status": "BORROWED",
+    "rating": 3.9,
+    "summary": "Dans un village isolé, une sculpture de poulet en béton semble prendre vie la nuit. Un récit d'horreur folklorique sur les superstitions rurales.",
+    "themes": ["Folklore", "Superstition", "Rural Life"],
+    "quotes": [
+      "Le béton est froid, mais ses yeux brûlaient d'une lueur ancienne.",
+      "Ne tournez jamais le dos à ce qui a été sculpté dans le silence."
+    ],
+    "owner": {
+      "id": 7,
+      "name": "Fouad",
+      "location": "Moscow, RU"
     },
-    {
-      "id": 14,
-      "title": "Fresh Aluminum Mouse",
-      "author": "George Grossmith",
-      "genre": "Drama",
-      "photo": "https://picsum.photos/seed/E7XeauEN/357/3044",
-      "publisher": "Orchard Books",
-      "isbn": "978-1-258-24146-9",
-      "status": "pending_swap",
-      "ownerId": 9,
-      "addedAt": "2025-08-22T00:38:21.455Z"
+    "addedAt": "2025-11-11T21:52:18.305Z"
+  },
+  {
+    "id": 19,
+    "title": "Tasty Bamboo Pants",
+    "author": "John Bunyan",
+    "genre": "Horror",
+    "photo": "https://picsum.photos/seed/Pvsm7PH/800/1200",
+    "publisher": "Chick Publications",
+    "isbn": "978-1-8382820-5-9",
+    "status": "AVAILABLE NOW",
+    "rating": 4.5,
+    "summary": "Une allégorie terrifiante sur la vanité et la consommation, où les vêtements que nous portons finissent par nous posséder.",
+    "themes": ["Allegory", "Vanity", "Spiritual Warfare"],
+    "quotes": [
+      "Le chemin de la perdition est tissé dans la fibre la plus douce.",
+      "Soyez prêts, car le voyageur ne porte que ce qu'il peut abandonner."
+    ],
+    "owner": {
+      "id": 10,
+      "name": "Youssef",
+      "location": "Bedford, UK"
     },
-    {
-      "id": 15,
-      "title": "Gorgeous Concrete Ball",
-      "author": "William Golding",
-      "genre": "Poetry",
-      "photo": "https://picsum.photos/seed/vm6NFcMgj/3885/663",
-      "publisher": "Chronicle Books",
-      "isbn": "978-1-0364-8956-4",
-      "status": "pending_swap",
-      "ownerId": 7,
-      "addedAt": "2025-11-13T09:15:49.091Z"
+    "addedAt": "2025-08-29T04:24:55.058Z"
+  },
+  {
+    "id": 20,
+    "title": "Awesome Concrete Car",
+    "author": "Victor Hugo",
+    "genre": "Business",
+    "photo": "https://picsum.photos/seed/tKz30vZ/800/1200",
+    "publisher": "Scholastic Press",
+    "isbn": "978-1-82237-658-0",
+    "status": "BORROWED",
+    "rating": 5.0,
+    "summary": "Un examen puissant de la révolution industrielle et de la mécanique du succès dans le Paris du XIXe siècle.",
+    "themes": ["Industrialism", "Success", "Social Justice"],
+    "quotes": [
+      "Rien n'arrête une idée dont l'heure est venue, pas même une voiture de béton.",
+      "Le futur est une porte, le passé en est la clé."
+    ],
+    "owner": {
+      "id": 7,
+      "name": "Yasmine",
+      "location": "Paris, FR"
     },
-    {
-      "id": 16,
-      "title": "Luxurious Silk Keyboard",
-      "author": "Jonathan Franzen",
-      "genre": "Philosophy",
-      "photo": "https://picsum.photos/seed/5b01D/1347/3120",
-      "publisher": "Lethe Press",
-      "isbn": "978-1-002-16418-1",
-      "status": "pending_swap",
-      "ownerId": 4,
-      "addedAt": "2025-05-19T09:51:05.401Z"
-    },
-    {
-      "id": 17,
-      "title": "Intelligent Marble Bike",
-      "author": "W.G. Sebald",
-      "genre": "Mystery",
-      "photo": "https://picsum.photos/seed/abWDqvEr/3316/935",
-      "publisher": "Carcanet Press",
-      "isbn": "978-1-85548-761-1",
-      "status": "borrowed",
-      "ownerId": 9,
-      "addedAt": "2025-08-28T06:54:28.087Z"
-    },
-    {
-      "id": 18,
-      "title": "Intelligent Aluminum Tuna",
-      "author": "Virgil",
-      "genre": "Poetry",
-      "photo": "https://picsum.photos/seed/MLbUF/1799/337",
-      "publisher": "Virago Press",
-      "isbn": "978-1-78043-069-0",
-      "status": "borrowed",
-      "ownerId": 5,
-      "addedAt": "2025-12-11T01:49:51.978Z"
-    },
-    {
-      "id": 19,
-      "title": "Tasty Bamboo Pants",
-      "author": "John Bunyan",
-      "genre": "Horror",
-      "photo": "https://picsum.photos/seed/Pvsm7PH/55/2200",
-      "publisher": "Chick Publications",
-      "isbn": "978-1-8382820-5-9",
-      "status": "available",
-      "ownerId": 10,
-      "addedAt": "2025-08-29T04:24:55.058Z"
-    },
-    {
-      "id": 20,
-      "title": "Awesome Concrete Car",
-      "author": "Victor Hugo",
-      "genre": "Business",
-      "photo": "https://picsum.photos/seed/tKz30vZ/2376/1117",
-      "publisher": "Scholastic Press",
-      "isbn": "978-1-82237-658-0",
-      "status": "borrowed",
-      "ownerId": 7,
-      "addedAt": "2025-10-13T12:05:33.779Z"
-    }
-  ]
+    "addedAt": "2025-10-13T12:05:33.779Z"
+  }
+]
