@@ -7,9 +7,19 @@ const ExplorePage = () => {
 
     const [search, setsearch] = useState("")
     const [genre, setgenre] = useState("All genres")
-    const [available, setavailable] = useState("All books")
+    const [status, setstatus] = useState("All books")
 
     const books = database.books
+
+    const filteredBooks = books.filter((book)=>{
+
+        const matchesSearch = book.title.toLowerCase().includes(search.toLowerCase()) ||
+                                book.author.toLowerCase().includes(search.toLowerCase())
+        const matchesGenre = genre ==="All genres" || book.genre.toLowerCase()=== genre.toLowerCase()
+        const matchesStatus = status === "All books" ||  book.status === status
+        
+        return matchesSearch && matchesGenre && matchesStatus ;
+    })
 
   return (
 <div className='flex justify-center flex-col items-center min-h-screen bg-[#f1ead7]'>
@@ -24,16 +34,16 @@ const ExplorePage = () => {
 
                 <div className='bg-[#FFF8E7] rounded-2xl col-span-2 flex border border-[#e4d2c0]'>
                     <Search className='w-5 h-5 ml-2 mt-2 text-[#7A6A5A]'></Search>
-                    <input id="searchbar" placeholder='Search by title or author...' type="text" className='w-full placeholder:font-extralight placeholder:font-sans pl-1.5 focus:outline-none'/>
+                    <input value={search} onChange={(e)=>setsearch(e.target.value)} id="searchbar" placeholder='Search by title or author...' type="text" className='w-full placeholder:font-extralight placeholder:font-sans pl-1.5 focus:outline-none'/>
                 </div>
 
                 <div className='col-span-1 rounded-2xl bg-[#FFF8E7] flex border border-[#e4d2c0] relative'>
-                    <select className='appearance-none focus:outline-none p-2 cursor-pointer w-full'>
+                    <select value={genre} onChange={(e)=>setgenre(e.target.value)} className='appearance-none focus:outline-none p-2 cursor-pointer w-full'>
                         <option value="All genres" selected>All genres</option>
                         <option value="Classic Fiction">Classic Fiction</option>
                         <option value="Coming of Age">Coming of Age</option>
                         <option value="Dystopian">Dystopian</option>
-                        <option value="Fantasy">Fantasy</option>
+                        <option value="Horror">Horror</option>
                         <option value="Historical Fiction">Historical Fiction</option>
                         <option value="Mystery">Mystery</option>
                         <option value="Romance">Romance</option>
@@ -46,10 +56,11 @@ const ExplorePage = () => {
                 </div>
 
                 <div className='col-span-1 rounded-2xl bg-[#FFF8E7] flex border border-[#e4d2c0] relative'>
-                    <select className='appearance-none focus:outline-none p-2 cursor-pointer w-full'>
+                    <select value={status} onChange={(e)=>setstatus(e.target.value)} className='appearance-none focus:outline-none p-2 cursor-pointer w-full'>
                         <option value="All books" selected>All books</option>
-                        <option value="Available" >Available</option>
-                        <option value="Borrowed" >Borrowed</option>
+                        <option value="available" >Available</option>
+                        <option value="borrowed" >Borrowed</option>
+                        <option value="pending_swap" >Pending swap</option>
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-gray-700">
                         <ChevronDown size={16}/>
@@ -61,14 +72,14 @@ const ExplorePage = () => {
         </div>
          </div>
         <div className='max-w-6xl mt-9 mb-5 space-y-4 grid grid-cols-4 gap-6 w-full relative items-stretch'>
-            {books.map((book)=>{
-                return <ProductCard key={book.id} book={book}/>
-            })}
+            { filteredBooks.length > 0 ? (
+            filteredBooks.map((book)=>(
+                <ProductCard key={book.id} book={book}/>
+            ))) : (
+                <p>No books found</p>
+            ) }
         </div>
-
-
-
-    </div>
+</div>
   )
 }
 
