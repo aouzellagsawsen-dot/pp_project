@@ -5,6 +5,8 @@ import User from '../models/user.model.js'
 import { body, validationResult } from 'express-validator'
 import { sendEmail } from '../services/email.service.js'
 import { getCsrfToken } from '../middleware/auth.middleware.js'
+import { uploadPdp } from '../middleware/upload.middleware.js'
+
 
 const router = express.Router()
 
@@ -23,48 +25,51 @@ const registerValidation = [
 ]
 
 // ============ 2. INSCRIPTION (REGISTER) ============
-router.post('/register', registerValidation, async (req, res) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() })
-    }
-
-    try {
-        const { name, username, email, password } = req.body
-
-        // Vérification doublon
-        const userExists = await User.findOne({ email })
-        if (userExists) {
-            return res.status(400).json({ success: false, message: 'Email déjà utilisé' })
+router.post('/register', uploadPdp.single('profilePicture'), registerValidation, async (req, res, next) => { // N'oublie pas le 'next' ici pour ton gestionnaire d'erreurs !
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ success: false, errors: errors.array() })
         }
 
-        // Création
-        const newUser = await User.create({ name, username, email, password })
-        const verificationToken = jwt.sign(
-            { email: newUser.email }, 
-            process.env.JWT_EMAIL_SECRET, 
-            { expiresIn: '1h' }
-        )
-        const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`
-        // Envoi email de bienvenue (Non-bloquant)
-        sendEmail({
-            email: newUser.email,
-            subject: 'Alinéa, where stories travel ',
-            message: `Welcome ${newUser.name}, you've joined our community! Explore, share, and connect with fellow book lovers. Happy reading!\n\nClick here to verify your account (valid for 1 hour): \n${verificationUrl}`
-        }).catch(err => console.error("Erreur email bienvenue:", err.message))
+        try {
+            const { name, username, email, password } = req.body
 
-        res.status(201).json({
-            success: true,
-            message: 'Utilisateur créé. Vous pouvez vous connecter.',
-            user: { id: newUser._id, name: newUser.name, email: newUser.email }
-        })
-    } catch (error) {
-        console.error('Register Error:', error.message)
-        // Don't leak sensitive database/validation errors to client
-        const message = error.message.includes('E11000') ? 'Cet email ou username est déjà utilisé' : 'Erreur lors de l\'inscription'
-        res.status(500).json({ success: false, message, code: 'REGISTRATION_ERROR' })
+            // Vérification doublon
+            const userExists = await User.findOne({ email })
+            if (userExists) {
+                return res.status(400).json({ success: false, message: 'Email déjà utilisé' })
+            }
+
+            // Création
+            const pdp = req.file ? `public/uploads/pdp/${req.file.filename}` : `public/uploads/pdp/default-pdp.png`
+            const newUser = await User.create({ name, username, email, password, pdp })
+            
+            const verificationToken = jwt.sign(
+                { email: newUser.email }, 
+                process.env.JWT_EMAIL_SECRET, 
+                { expiresIn: '1h' }
+            )
+            const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`
+            
+            // Envoi email de bienvenue (Non-bloquant)
+            sendEmail({
+                email: newUser.email,
+                subject: 'Alinéa, where stories travel',
+                message: `Welcome ${newUser.name}, you've joined our community! Explore, share, and connect with fellow book lovers. Happy reading!\n\nClick here to verify your account (valid for 1 hour): \n${verificationUrl}`
+            }).catch(err => console.error("Erreur email bienvenue:", err.message))
+
+            res.status(201).json({
+                success: true,
+                message: 'Utilisateur créé. Vous pouvez vous connecter.',
+                user: { id: newUser._id, name: newUser.name, email: newUser.email }
+            })
+        } catch (error) {
+            console.error('Register Error:', error.message)
+            // On remplace le res.status(500) par next() pour utiliser ton gestionnaire global !
+            next(error)
+        }
     }
-})
+)
 
 // ============ 3. CONNEXION (LOGIN) ============
 router.post('/login', async (req, res, next) => {
@@ -176,6 +181,5 @@ router.post('/verify-email', async (req, res) => {
         return res.status(400).json({ success: false, message, code: 'VERIFICATION_ERROR' })
     }
 })
-
 
 export default router

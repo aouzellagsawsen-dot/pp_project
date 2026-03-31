@@ -1,6 +1,6 @@
+import 'dotenv/config'
 import express from 'express'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import passport from 'passport'
 import initializePassport from './passport.js'
@@ -13,8 +13,7 @@ import userRoutes from './routes/user.routes.js'
 import adminRoutes from './routes/admin.routes.js'
 import bookRoutes from './routes/book.routes.js'
 import Book from './models/book.model.js'
-// Load environment variables
-dotenv.config()
+import User from './models/user.model.js'
 
 const app = express()
 const PORT = process.env.PORT
@@ -41,17 +40,14 @@ mongoose.connect(process.env.MONGO_URI)
         console.error('✗ MongoDB connection error:', err)
         process.exit(1)
     })
-
+    
 // ============ PASSPORT SETUP ============
 initializePassport(passport)
 
-// ============ ROUTING ===============
-app.use('/api/auth', authLimiter, authRoutes)
-app.use('/api/users', userRoutes)
-app.use('/api/admin', adminRoutes)
-app.use('/api/books', bookRoutes)
 
-app.get('/add-book', (req, res) => {
+// ============ TEST ROUTE =============
+
+/* app.get('/add-book', (req, res) => {
     res.render('add-book')
 })
 
@@ -70,6 +66,24 @@ app.get('/book-list', async (req, res, next) => {
 app.get('/register', (req, res) => {
     res.render('register')
 })
+
+app.get('/users', async (req, res, next) => {
+    try {
+        // On demande à MongoDB d'aller chercher tous les livres
+        const myUsers = await User.find(); 
+        
+        // On affiche la page ET on lui donne la valise "books" remplie !
+        res.render('users', { users: myUsers }); 
+    } catch (error) {
+        next(error); // Envoie l'erreur à ton super gestionnaire d'erreurs global
+    }
+}) */
+
+// ============ ROUTING ===============
+app.use('/api/auth', authLimiter, authRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/admin', adminRoutes)
+app.use('/api/books', bookRoutes)
 
 
 // ============ CSRF ERROR HANDLER ============

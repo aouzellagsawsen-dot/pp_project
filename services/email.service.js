@@ -2,18 +2,18 @@ import nodemailer from 'nodemailer';
 
 // 1. Configuration du transporteur (Le bureau de poste)
 var transport = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
   auth: {
-    user: "4f38d4cd4629ae",
-    pass: "8cff5519f38d83"
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
 // 2. La fonction magique réutilisable
 export const sendEmail = async (options) => {
     const mailOptions = {
-        from: '"Ma Super App" <${process.env.EMAIL_FROM}>',
+        from: `"Ma Super App" <${process.env.EMAIL_FROM}>`,
         to: options.email,
         subject: options.subject,
         text: options.message,

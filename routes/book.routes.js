@@ -17,7 +17,7 @@ router.post('/', uploadCover.single('image'), async (req, res) => {
             document.getElementById('customGenre').style.display = 'none'
         }
 
-        const cover = req.file ? `public/uploads/covers/${req.file.filename}` : null
+        const cover = req.file ? `public/uploads/covers/${req.file.filename}` : `public/uploads/covers/default-cover.png`
 
         // On crée le livre dans MongoDB
         const newBook = await Book.create({
@@ -28,10 +28,6 @@ router.post('/', uploadCover.single('image'), async (req, res) => {
             description,
             cover
         })
-        if (cover) {
-            // On ajoute le chemin de la VRAIE image dans notre objet
-            newBook.coverImage = `/public/uploads/covers/${req.file.filename}`
-        }
 
         res.status(201).json({ success: true, data: newBook })
 
