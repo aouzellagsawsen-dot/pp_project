@@ -155,7 +155,7 @@ export default function FeaturedBooks() {
                  <Link to="/signup" 
                   className="inline-flex  items-center gap-2 bg-[#8C7A63] hover:bg-[#766652] text-white px-10 py-4 rounded-full shadow-lg transition-all duration-300 mx-auto text-lg no-underline hover:scale-105">
                   <span className="text-sm">✦</span>
-                  Get Started for Free
+                  View All Books
                  </Link>
                 </motion.div>
         

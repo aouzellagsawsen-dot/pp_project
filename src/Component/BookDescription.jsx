@@ -1,7 +1,16 @@
+"use client"; 
+import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, MapPin, Heart, ChevronLeft } from 'lucide-react';
 import booksData from "./Books.json";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: false, margin: "-100px" },
+  transition: { duration: 0.8, ease: "easeOut" }
+};
 
 const BookDescription = () => {
   const { id } = useParams(); // Récupère l'ID 
@@ -26,8 +35,60 @@ const BookDescription = () => {
   window.scrollTo(0, 0);
 }, []);
 
+const SealedLetter = ({ isVisible }) => (
+  <AnimatePresence>
+    {isVisible && (
+      <motion.div
+        initial={{ y: 100, x: "-50%", opacity: 0, scale: 0.8 }}
+        animate={{ y: -150, x: "-50%", opacity: 1, scale: 1 }}
+        exit={{ y: -300, x: "-50%", opacity: 0, scale: 1.1, filter: "blur(8px)" }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+        className="fixed bottom-10 left-1/2 z-50 pointer-events-none"
+      >
+        <div className="relative bg-[#E8DFCA] w-64 h-40 rounded-sm shadow-2xl border border-[#D4C5A9] flex items-center justify-center">
+          {/* Les plis de l'enveloppe en CSS */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1/2 border-b border-[#D4C5A9] origin-top bg-[#F0E6D2]" 
+                 style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
+          </div>
+          
+          {/* Le Sceau de Cire (Wax Seal) */}
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.4, type: "spring" }}
+            className="w-12 h-12 bg-[#6B2D21] rounded-full shadow-lg flex items-center justify-center border border-[#4A1F17] z-10"
+          >
+             <div className="text-[#F2E8D9] text-[8px] font-serif font-bold text-center leading-tight select-none">
+               B.D<br/>2026
+             </div>
+          </motion.div>
+
+          <p className="absolute bottom-4 font-serif italic text-[#8D7B68] text-xs">Request Sent</p>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+const [showLetter, setShowLetter] = useState(false);
+
+  const handleReserve = () => {
+    // 1. Déclenche l'animation
+    setShowLetter(true);
+    setIsReserved(true);
+
+    // 2. Cache l'enveloppe après 3 secondes
+    setTimeout(() => {
+      setShowLetter(false);
+    }, 3000);
+    
+    // Logique pour ton backend / localStorage ici...
+  };
+
   return (
     <main className="w-full min-h-screen bg-[#F1EAD7]">
+      <SealedLetter isVisible={showLetter} />
       <div className="max-w-7xl mx-auto px-8 py-20 font-sans text-[#4A3F35]">
         
         {/* --- BOUTON RETOUR (Placé à l'intérieur du conteneur centré) --- */}
@@ -41,7 +102,7 @@ const BookDescription = () => {
           
           {/* --- GAUCHE : PHOTO & OWNER (4 colonnes sur 12) --- */}
           <div className="md:col-span-4 flex flex-col">
-            <div className="w-full aspect-[3/4] bg-[#FAF7F0] p-6 rounded-[2rem] shadow-2xl border border-stone-100 overflow-hidden">
+            <div className="w-full aspect-3/4 bg-[#FAF7F0] p-6 rounded-4xl shadow-2xl border border-stone-100 overflow-hidden">
               <img 
                 src={book.photo} 
                 alt={book.title} 
@@ -110,13 +171,12 @@ const BookDescription = () => {
             {/* BOUTONS ACTIONS */}
             <div className="flex gap-6 mb-16">
               <button 
-                onClick={() => setIsReserved(!isReserved)}
-                className={`flex-2 font-serif text-xl py-5 rounded-2xl transition-all shadow-lg active:scale-[0.98] ${
-                  isReserved ? 'bg-stone-400 text-white' : 'bg-[#8D7B68] text-white hover:bg-[#7A6957]'
-                }`}
-              >
-                {isReserved ? 'RÉSERVÉ' : 'RESERVE'}
-              </button>
+            onClick={handleReserve}
+            disabled={isReserved}
+            className={`flex-1 font-serif text-xl py-5 rounded-2xl transition-all shadow-lg overflow-hidden relative ${
+              isReserved ? 'bg-stone-300 text-stone-600' : 'bg-[#8D7B68] text-white'}`}>
+            {isReserved ? 'WAITING FOR SEAL...' : 'RESERVE THIS BOOK'}
+          </button>
               
               <button 
                 onClick={() => setIsFavorite(!isFavorite)}

@@ -9,11 +9,11 @@
     "isbn": "978-1-216-32966-6",
     "status": "BORROWED",
     "rating": 4.2,
-    "summary": "Une exploration épique des mythes anciens à travers le prisme de la modernité, où chaque chapitre révèle une nouvelle facette de la condition humaine.",
+    "summary": "An epic exploration of ancient myths through the lens of modernity, where each chapter reveals a new facet of the human condition.",
     "themes": ["Mythology", "Philosophy", "Ancient Sea"],
     "quotes": [
-      "La mer est le miroir de l'âme, calme en surface mais tourmentée dans ses profondeurs.",
-      "Le destin n'est qu'un ballon de plastique porté par les vents d'Orient."
+      "The sea is the mirror of the soul, calm on the surface but tormented in its depths.",
+      "Destiny is but a plastic ball carried by the winds of the Orient."
     ],
     "owner": {
       "id": 10,
@@ -32,11 +32,11 @@
     "isbn": "978-1-359-28495-2",
     "status": "BORROWED",
     "rating": 4.8,
-    "summary": "Un roman graphique sombre et viscéral qui déconstruit l'héroïsme dans un monde au bord de l'apocalypse plastique.",
+    "summary": "A dark and visceral graphic novel that deconstructs heroism in a world on the brink of a plastic apocalypse.",
     "themes": ["Dystopia", "Horror", "Urban Decay"],
     "quotes": [
-      "Nous regardons tous le caniveau, mais certains d'entre eux fixent les étoiles en plastique.",
-      "Le temps est un cercle, et ce vélo n'a pas de freins."
+      "We are all looking at the gutter, but some of them are staring at the plastic stars.",
+      "Time is a circle, and this bike has no brakes."
     ],
     "owner": {
       "id": 5,
@@ -55,11 +55,11 @@
     "isbn": "978-0-11-201140-8",
     "status": "BORROWED",
     "rating": 3.9,
-    "summary": "Dans un village isolé, une sculpture de poulet en béton semble prendre vie la nuit. Un récit d'horreur folklorique sur les superstitions rurales.",
+    "summary": "In a remote village, a concrete chicken sculpture seems to come to life at night. A folk horror tale about rural superstitions.",
     "themes": ["Folklore", "Superstition", "Rural Life"],
     "quotes": [
-      "Le béton est froid, mais ses yeux brûlaient d'une lueur ancienne.",
-      "Ne tournez jamais le dos à ce qui a été sculpté dans le silence."
+      "The concrete is cold, but its eyes burned with an ancient glow.",
+      "Never turn your back on what has been sculpted in silence."
     ],
     "owner": {
       "id": 7,
@@ -78,11 +78,11 @@
     "isbn": "978-1-8382820-5-9",
     "status": "AVAILABLE NOW",
     "rating": 4.5,
-    "summary": "Une allégorie terrifiante sur la vanité et la consommation, où les vêtements que nous portons finissent par nous posséder.",
+    "summary": "A terrifying allegory on vanity and consumption, where the clothes we wear eventually end up possessing us.",
     "themes": ["Allegory", "Vanity", "Spiritual Warfare"],
     "quotes": [
-      "Le chemin de la perdition est tissé dans la fibre la plus douce.",
-      "Soyez prêts, car le voyageur ne porte que ce qu'il peut abandonner."
+      "The path to perdition is woven into the softest fiber.",
+      "Be prepared, for the traveler carries only what he can leave behind."
     ],
     "owner": {
       "id": 10,
@@ -101,11 +101,11 @@
     "isbn": "978-1-82237-658-0",
     "status": "BORROWED",
     "rating": 5.0,
-    "summary": "Un examen puissant de la révolution industrielle et de la mécanique du succès dans le Paris du XIXe siècle.",
+    "summary": "A powerful examination of the industrial revolution and the mechanics of success in 19th-century Paris.",
     "themes": ["Industrialism", "Success", "Social Justice"],
     "quotes": [
-      "Rien n'arrête une idée dont l'heure est venue, pas même une voiture de béton.",
-      "Le futur est une porte, le passé en est la clé."
+      "Nothing stops an idea whose time has come, not even a concrete car.",
+      "The future is a door, the past is its key."
     ],
     "owner": {
       "id": 7,
