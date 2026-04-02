@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Download,Quote } from 'lucide-react'
-
+import database from '../data/db.json'
 
 
 const Add_a_new_book = () => {
+
+  const Books=database.books 
 
   const initialState = {
     title:'',
@@ -15,14 +17,15 @@ const Add_a_new_book = () => {
   }
   const [isOpen, setIsOpen] = useState(null)
 
+  const [bookData, setbookData] = useState(initialState)
+
   const [FormData, setFormData] = useState(initialState)
 
   const handleCancel = () => {
     // if(window.confirm("Are you sure ? All unsaved changes will be lost.")){
       setFormData(initialState)
       setIsOpen(false)
-    
-  }
+    }
 
   const handleChange = (e) => {
   const {name,value} = e.target 
@@ -48,6 +51,32 @@ const Add_a_new_book = () => {
 
  }
 
+const [books, setbooks] = useState(Books)
+const [isLoading, setisLoading] = useState(false)
+
+const handleAddBook = (e) =>{
+  e.preventDefault()    //empêche la page de se rafraichir
+  setisLoading(true)
+
+  const newBook = {
+    id: Math.floor(Math.random() * 1000) + 100, 
+    title: bookData.title,
+    author: bookData.author,
+    genre: bookData.genre,
+    photo: bookData.cover || "https://picsum.photos/seed/default/400/600", 
+    publisher: "Non spécifié", 
+    isbn: `978-${Math.floor(Math.random() * 1000000000)}`, 
+    status: "available", // Nouveau livre est dispo par défaut
+    ownerId: 1, // ID de l'utilisateur actuel (statique pour le moment)
+    addedAt: new Date().toISOString()
+  }
+
+  setTimeout(()=>{
+    setbooks([...books,newBook])
+    setisLoading(false)
+    alert("Livre ajouté à ta base temporaire !");
+  },800)
+}
 
   return (
   <div className='bg-[#f1ead7] min-h-screen flex flex-col justify-center items-center'>
@@ -136,7 +165,9 @@ const Add_a_new_book = () => {
       
            <div className="flex justify-end items-center gap-5 pt-1 col-span-2 col-start-2 pr-6">
             <button onClick={handleCancel} type='button' className='text-[#8D7B68] hover:text-[#d6c1aa] cursor-pointer'>Cancel</button>
-            <button type='submit' className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer'>Add Book</button>
+            <button type='submit' className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer' disabled={isLoading} onClick={handleAddBook}>
+              {isLoading ? "Envoi en cours..." : "Add Book"}
+            </button>
             </div>
       </div>
        

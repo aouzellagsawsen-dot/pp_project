@@ -8,6 +8,7 @@ import { BrowserRouter as Router,Route,Routes,Link } from 'react-router-dom';
 import Add_a_new_book from './Components/Add_a_new_book';
 import NotificationPanel from './Components/notifications/NotificationPanel';
 import ExplorePage from './Components/Catalog/ExplorePage';
+import Page from './Components/dashboard/Page';
 
 //import './App.css'
 
@@ -20,6 +21,7 @@ export default function App() {
     <Link to="/Add_a_new_book"> Ajouter un livre </Link>
     <Link to="/notifications"> Notifications</Link>
     <Link to="/explore"> Catalogue</Link>
+    <Link to="/dashboard"> Dashboard</Link>
     </div>
      <Routes>
         <Route path="/" element={<Sign_up/>} />
@@ -27,6 +29,7 @@ export default function App() {
         <Route path="/Add_a_new_book" element={<Add_a_new_book/>}/>
         <Route path="/notifications" element={<NotificationPanel />}/>
         <Route path="/explore" element={<ExplorePage/>}/>
+        <Route path="/dashboard" element={<Page/>}/>
     </Routes>
     
     
