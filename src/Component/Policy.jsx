@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const articles = [
   {
     title: "Information We Collect",
@@ -37,6 +39,9 @@ const toRoman = (num) => {
 };
 
 export default function PrivacyPolicy() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center py-20 px-6 font-serif text-[#4a3728]">
 

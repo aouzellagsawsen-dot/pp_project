@@ -1,8 +1,9 @@
 import { BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#FDF5E6] text-[#5D4037] pt-16 pb-8 px-12 border-t border-stone-200 mt-20 font-sans">
+    <footer className="bg-[#FDF5E6] text-[#5D4037] pt-16 pb-8 px-12 border-t border-stone-200 font-sans">
       <div className="max-w-360 mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
         
         {/* Brand Section */}
@@ -35,8 +36,8 @@ const Footer = () => {
         <div className="flex flex-col space-y-3">
           <h3 className="font-sans font-bold text-base mb-2">Legal</h3>
           <nav className="flex flex-col space-y-4 font-serif text-[#7A5C41] font-medium tracking-wide">
-            <a href="/terms" className="hover:text-[#8D7B68] transition-colors">Terms of Service</a>
-            <a href="/privacy" className="hover:text-[#8D7B68] transition-colors">Privacy Policy</a>
+           <Link title="Terms" to="" className="hover:text-[#8D7B68] transition-colors">Terms of Service</Link>
+           <Link to="/Policy" className="hover:text-[#8D7B68] transition-colors">Privacy Policy</Link>
           </nav>
         </div>
       </div>

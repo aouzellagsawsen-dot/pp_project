@@ -1,4 +1,4 @@
-import { BookOpen, Heart, Bell, Search, User, MessageSquare } from 'lucide-react';
+import { BookOpen, Heart, Bell, User, MessageSquare } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -17,7 +17,7 @@ const Header = () => {
     Explore Books </a>
   <a href="/add-book" className=" hover:text-[#8D7B68] transition-colors ">
     Add Book </a>
-  <a href="/about" className=" hover:text-[#8D7B68] transition-colors ">
+  <a href="/About" className=" hover:text-[#8D7B68] transition-colors ">
     About</a>
 </nav>
 
@@ -39,13 +39,8 @@ const Header = () => {
               </span>
             </a>
 
-            {/* Bouton Recherche */}
-            <a href="/search" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all" title="Rechercher">
-              <Search size={22} strokeWidth={1.5} />
-            </a>
-
             {/* Bouton Messages */}
-            <a href="/messages" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative group" title="Messages">
+            <a href="/Message" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative group" title="Messages">
               <MessageSquare size={22} strokeWidth={1.5} />
               {/* Optionnel : Petit point si tu as un nouveau message */}
               <span className="absolute top-2 right-2 bg-[#8B5E3C] w-2 h-2 rounded-full border border-[#FDF5E6]">

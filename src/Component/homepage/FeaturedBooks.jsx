@@ -64,89 +64,99 @@ export default function FeaturedBooks() {
         <p className="text-lg italic text-[#4a3728]/60">
           Discover stories waiting to be shared
         </p>
-        
-        {/* Ornements d'angles */}
-        <div className="absolute -top-6 -left-12 w-8 h-8 border-t border-l border-[#4a3728]/20 rounded-tl-xl hidden md:block"></div>
-        <div className="absolute -top-6 -right-12 w-8 h-8 border-t border-r border-[#4a3728]/20 rounded-tr-xl hidden md:block"></div>
       </div>
 
       {/* 2. Carrousel */}
-      <div className="relative w-full flex items-center px-4 md:px-12">
+<div className="relative w-full flex items-center px-4 md:px-12">
+  
+  {/* Flèche Gauche */}
+  <button onClick={prevSlide} className="absolute left-4 z-30 p-4 rounded-full bg-white/80 shadow-md hover:scale-110 transition-all text-[#4a3728]">
+    <ChevronLeft size={24} />
+  </button>
+
+  {/* LE CONTENEUR CORRIGÉ */}
+  <div className="w-full overflow-hidden py-12 px-4"> {/* py-12 permet à l'ombre de respirer */}
+    <motion.div 
+      className="flex gap-6"
+      animate={{ x: `-${currentIndex * (100 / itemsPerPage)}%` }}
+      transition={{ type: "spring", stiffness: 120, damping: 20 }}
+    >
+      {booksData.map((book) => (
+        <Link 
+    key={book.id} 
+    to={`/book/${book.id}`} 
+    className="min-w-[calc(33.333%-1rem)] block no-underline group/card"
+  >
+    <motion.div className="bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 h-full cursor-pointer">
+      
+      {/* 1. CONTAINER IMAGE + STATUT + HEART */}
+      <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
         
-        {/* Flèche Gauche */}
-        <button 
-          onClick={prevSlide}
-          className="absolute left-4 z-30 p-4 rounded-full bg-white/80 shadow-md transition-all hover:bg-white hover:scale-110 text-[#4a3728] active:scale-95"
-        >
-          <ChevronLeft size={24} strokeWidth={2} />
-        </button>
-
-        {/* Zone d'affichage mobile-friendly */}
-        <div className="w-full overflow-hidden">
-          <motion.div 
-            className="flex gap-6"
-            animate={{ x: `-${currentIndex * (100 / itemsPerPage)}%` }}
-            transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          >
-            {booksData.map((book) => (
-              <Link 
-                key={book.id} 
-                to={`/book/${book.id}`} 
-                className="min-w-[calc(33.333%-1rem)] block no-underline group/card"
-              >
-                <motion.div className="bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 h-full cursor-pointer">
-                  
-                  {/* Image Container */}
-                  <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
-                    <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider ${book.status === 'Available' || book.status === 'AVAILABLE NOW' ? 'bg-[#8D7B68]' : 'bg-[#D2B48C]'}`}>
-                      {book.status}
-                    </div>
-                    
-                    <HeartButton />
-                    
-                    <img 
-                      src={book.photo} 
-                      alt={book.title} 
-                      className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" 
-                    />
-                  </div>
-
-                  {/* Infos Textuelles */}
-                  <div className="px-3 space-y-2">
-                    <h3 className="text-2xl font-serif font-medium text-[#4a3728] truncate">
-                      {book.title}
-                    </h3>
-                    <p className="text-[#4a3728]/60 italic text-sm">
-                      {book.author}
-                    </p>
-                    
-                    <div className="flex items-center gap-1.5 pt-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={14} className={i < Math.floor(book.rating || 5) ? "fill-[#4a3728] text-[#4a3728]" : "text-gray-300"} />
-                      ))}
-                    </div>
-                    
-                    <div className="pt-4">
-                      <span className="bg-[#F1EAD7] text-[#8D7B68] text-[10px] font-bold px-4 py-2 rounded-lg uppercase tracking-[0.2em] border border-[#8D7B68]/10">
-                        {book.genre}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
-          </motion.div>
+        {/* Badge Statut Dynamique */}
+        <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm ${
+          book.status === 'AVAILABLE NOW' || book.status === 'Available' 
+            ? 'bg-[#8D7B68]' 
+            : 'bg-[#D2B48C]/90'
+        }`}>
+          {book.status}
         </div>
-
-        {/* Flèche Droite */}
-        <button 
-          onClick={nextSlide}
-          className="absolute right-4 z-30 p-4 rounded-full bg-white/80 shadow-md transition-all hover:bg-white hover:scale-110 text-[#4a3728] active:scale-95"
-        >
-          <ChevronRight size={24} strokeWidth={2} />
-        </button>
+        
+        {/* Bouton Favoris (Composant HeartButton défini plus haut) */}
+        <HeartButton />
+        
+        {/* L'image du livre */}
+        <img 
+          src={book.photo} 
+          alt={book.title} 
+          className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" 
+        />
       </div>
 
+      {/* 2. INFOS TEXTUELLES */}
+      <div className="px-3 space-y-2">
+        {/* Titre */}
+        <h3 className="text-2xl font-serif font-medium text-[#4a3728] truncate">
+          {book.title}
+        </h3>
+        
+        {/* Auteur */}
+        <p className="text-[#4a3728]/60 italic text-sm">
+          {book.author}
+        </p>
+        
+        {/* 3. RATING (Étoiles) */}
+        <div className="flex items-center gap-1.5 pt-1">
+          {[...Array(5)].map((_, i) => (
+            <Star 
+              key={i} 
+              size={14} 
+              className={i < Math.floor(book.rating) 
+                ? "fill-[#4a3728] text-[#4a3728]" 
+                : "text-gray-300"
+              } 
+            />
+          ))}
+          <span className="text-[12px] opacity-50 ml-1">({book.rating})</span>
+        </div>
+        
+        {/* 4. GENRE (Badge bas) */}
+        <div className="pt-4">
+          <span className="inline-block bg-[#EFEAD8]/50 text-[#8D7B68] text-[10px] font-bold px-5 py-2.5 rounded-xl uppercase tracking-widest border border-[#4a3728]/5">
+            {book.genre}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  </Link>
+))}
+    </motion.div>
+  </div>
+
+  {/* Flèche Droite */}
+  <button onClick={nextSlide} className="absolute right-4 z-30 p-4 rounded-full bg-white/80 shadow-md hover:scale-110 transition-all text-[#4a3728]">
+    <ChevronRight size={24} />
+  </button>
+</div>
       {/* 3. Footer de section */}
       <div className="flex flex-col items-center gap-16">
         <motion.div {...fadeInUp}

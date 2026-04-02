@@ -48,6 +48,8 @@ const Welcome = () => {
           Get Started for Free
          </Link>
         </motion.div>
+        <br />
+        <br />
 
     </div>
      </section>

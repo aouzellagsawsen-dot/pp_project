@@ -22,7 +22,7 @@ const BookDescription = () => {
   const handleContact = () => {
     // On redirige vers la messagerie en passant l'ID et le nom du owner dans l'URL
   if (book && book.owner) {
-    navigate(`/messages?userId=${book.owner.id}&userName=${book.owner.name}`);
+    navigate(`/Message?userId=${book.owner.id}&userName=${book.owner.name}`);
   }
 };
 
