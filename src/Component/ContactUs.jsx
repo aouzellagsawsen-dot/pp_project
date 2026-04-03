@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// Correction des imports Lucide
-import { BookOpen, Feather, Sparkles, Send, ChevronLeft, CheckCircle2 } from 'lucide-react';
+import { BookOpen, Send, ChevronLeft, CheckCircle2, Feather } from 'lucide-react';
 
 const ContactPage = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -23,37 +22,15 @@ const ContactPage = () => {
   };
 
   return (
-    /* Background Color: #F1EAD7 */
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans text-[#5C544B] relative overflow-hidden">
-      
-      {/* Decorative Background Icons */}
-      <div className="absolute top-10 right-10 w-24 h-24 text-stone-300/40 rotate-12">
-        <Feather strokeWidth={0.5} size={80}/>
-      </div>
-      <div className="absolute bottom-20 left-20 w-32 h-32 text-stone-300/40 -rotate-12">
-        <Feather strokeWidth={0.5} size={100}/>
-      </div>
-      <div className="absolute top-1/2 left-1/4 w-16 h-16 text-stone-300/30">
-        <Sparkles strokeWidth={0.5} size={40}/>
-      </div>
 
       {/* Logo Section */} 
       <div className="flex items-center gap-2 mb-8 relative z-20">
-        {/* Vérifiez que BookOpen est bien importé ici */}
         <BookOpen className="w-8 h-8 text-[#8D7B68]" strokeWidth={1.5} />
         <h1 className="text-3xl font-serif font-medium tracking-tight text-[#4A3F35]">Alinéa</h1>
       </div>
 
-      {/* Main Card with Blur and Transparency */}
       <div className="bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl shadow-stone-400/20 w-full max-w-lg border border-white/50 relative z-10">
-        
-        {/* Corner Ornaments */}
-        <div className="absolute top-0 left-0 text-[#D8B486] -translate-x-3 -translate-y-3">
-          <Sparkles size={24} strokeWidth={1}/>
-        </div>
-        <div className="absolute bottom-0 right-0 text-[#D8B486] translate-x-3 translate-y-3">
-          <Sparkles size={24} strokeWidth={1}/>
-        </div>
 
         {!submitted ? (
           <>
@@ -144,7 +121,6 @@ const ContactPage = () => {
         )}
       </div>
 
-      {/* Footer Link */}
       <Link to="/" className="mt-8 text-sm text-stone-400 hover:text-stone-600 flex items-center gap-2 transition-colors relative z-10">
         <ChevronLeft size={16} /> Back to Home
       </Link>

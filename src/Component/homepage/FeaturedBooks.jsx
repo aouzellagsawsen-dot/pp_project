@@ -19,7 +19,7 @@ const HeartButton = () => {
   return (
     <button 
       onClick={(e) => {
-        e.preventDefault(); // Évite de déclencher le lien de la carte
+        e.preventDefault(); 
         setIsFavorite(!isFavorite);
       }} 
       className={`absolute top-4 right-4 z-10 bg-white/90 p-2.5 rounded-full transition-all duration-300 shadow-sm 
@@ -66,7 +66,6 @@ export default function FeaturedBooks() {
         </p>
       </div>
 
-      {/* 2. Carrousel */}
 <div className="relative w-full flex items-center px-4 md:px-12">
   
   {/* Flèche Gauche */}
@@ -74,8 +73,7 @@ export default function FeaturedBooks() {
     <ChevronLeft size={24} />
   </button>
 
-  {/* LE CONTENEUR CORRIGÉ */}
-  <div className="w-full overflow-hidden py-12 px-4"> {/* py-12 permet à l'ombre de respirer */}
+  <div className="w-full overflow-hidden py-12 px-4"> 
     <motion.div 
       className="flex gap-6"
       animate={{ x: `-${currentIndex * (100 / itemsPerPage)}%` }}
@@ -89,7 +87,6 @@ export default function FeaturedBooks() {
   >
     <motion.div className="bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 h-full cursor-pointer">
       
-      {/* 1. CONTAINER IMAGE + STATUT + HEART */}
       <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
         
         {/* Badge Statut Dynamique */}
@@ -112,7 +109,7 @@ export default function FeaturedBooks() {
         />
       </div>
 
-      {/* 2. INFOS TEXTUELLES */}
+      {/* INFOS TEXTUELLES */}
       <div className="px-3 space-y-2">
         {/* Titre */}
         <h3 className="text-2xl font-serif font-medium text-[#4a3728] truncate">
@@ -124,7 +121,7 @@ export default function FeaturedBooks() {
           {book.author}
         </p>
         
-        {/* 3. RATING (Étoiles) */}
+        {/* RATING (Étoiles) */}
         <div className="flex items-center gap-1.5 pt-1">
           {[...Array(5)].map((_, i) => (
             <Star 
@@ -139,7 +136,7 @@ export default function FeaturedBooks() {
           <span className="text-[12px] opacity-50 ml-1">({book.rating})</span>
         </div>
         
-        {/* 4. GENRE (Badge bas) */}
+        {/* GENRE (Badge bas) */}
         <div className="pt-4">
           <span className="inline-block bg-[#EFEAD8]/50 text-[#8D7B68] text-[10px] font-bold px-5 py-2.5 rounded-xl uppercase tracking-widest border border-[#4a3728]/5">
             {book.genre}
@@ -157,7 +154,7 @@ export default function FeaturedBooks() {
     <ChevronRight size={24} />
   </button>
 </div>
-      {/* 3. Footer de section */}
+      {/* Footer de section */}
       <div className="flex flex-col items-center gap-16">
         <motion.div {...fadeInUp}
                  transition={{ ...fadeInUp.transition, delay: 0.1 }}
