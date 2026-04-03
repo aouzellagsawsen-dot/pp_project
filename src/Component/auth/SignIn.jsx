@@ -93,7 +93,7 @@ const LoginPage = () => {
       </div>
 
       <Link to="/" className="mt-8 text-sm text-stone-400 hover:text-stone-600 flex items-center gap-2 transition-colors relative z-10">
-        <ChevronLeft size={16} /> Back to home
+        <ChevronLeft size={16} /> Back to Home
       </Link>
     </div>
   );

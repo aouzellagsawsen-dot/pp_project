@@ -8,7 +8,7 @@ import BookDescription from './Component/BookDescription';
 import Message from './Component/Message';
 import About from './Component/About';
 import ForgotPassword from './Component/auth/ForgotPassword';
-
+import ContactUs from './Component/ContactUs';
 
 export default function App() {
   return (
@@ -24,6 +24,7 @@ export default function App() {
           <Route path="/Message" element={<Message />} />
           <Route path="/About" element={<About />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/ContactUs" element={<ContactUs />} />
          
         </Routes>
       </main>
