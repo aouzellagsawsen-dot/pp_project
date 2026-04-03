@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Feather, Sparkles, LogIn, ChevronLeft } from 'lucide-react';
 
 const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans text-[#5C544B] relative overflow-hidden">
       
@@ -49,21 +50,33 @@ const LoginPage = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-semibold ml-1">Password</label>
-            <input 
-              type="password" 
-              placeholder="••••••••"
-              className="w-full px-5 py-3.5 rounded-2xl bg-[#FFFBF2] border border-[#EFE7D6] focus:outline-none focus:ring-2 focus:ring-[#8D7B68]/20 transition-all text-sm"
-            />
-          </div>
+      <div className="space-y-2">
+  <label className="text-sm font-semibold ml-1">Password</label>
+  <div className="relative flex items-center gap-3">
+    {/* Champ de saisie */}
+    <input 
+      type={showPassword ? "text" : "password"} 
+      placeholder="••••••••"
+      className="w-full px-5 py-3.5 rounded-2xl bg-[#FFFBF2] border border-[#EFE7D6] focus:outline-none focus:ring-2 focus:ring-[#8D7B68]/20 transition-all text-sm"
+    />
+    
+    {/* Checkbox seule à côté */}
+    <input 
+      type="checkbox" 
+      checked={showPassword}
+      onChange={() => setShowPassword(!showPassword)}
+      className="w-5 h-5 rounded-lg border-[#EFE7D6] accent-[#8D7B68] cursor-pointer transition-transform active:scale-90"
+      title="Montrer le mot de passe"
+    />
+  </div>
+</div>
 
           <div className="flex items-center justify-between text-xs px-1">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" className="rounded border-stone-300 text-[#8D7B68] focus:ring-[#8D7B68] bg-[#FFFBF2]" />
               <span className="text-stone-600">Remember me</span>
             </label>
-            <Link to="/forgot-password" size="sm" className="text-stone-500 hover:text-[#8D7B68] transition-colors underline decoration-dotted">
+            <Link to="/ForgotPassword" size="sm" className="text-stone-500 hover:text-[#8D7B68] transition-colors underline decoration-dotted">
               Forgot password?
             </Link>
           </div>

@@ -46,6 +46,10 @@ const MessagesPage = () => {
     }
   }, [targetUserId]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 

@@ -7,6 +7,7 @@ import HomePage from './Component/homepage/HomePage';
 import BookDescription from './Component/BookDescription';
 import Message from './Component/Message';
 import About from './Component/About';
+import ForgotPassword from './Component/auth/ForgotPassword';
 
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/policy" element={<Policy />} />
           <Route path="/Message" element={<Message />} />
           <Route path="/About" element={<About />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
          
         </Routes>
       </main>

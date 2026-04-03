@@ -6,6 +6,7 @@ import ReadyStart from "./ReadyStart";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 import AdminPanel from "../AdminPanel";
+import SignIn from "../auth/SignIn";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
        <Testimonial />
        <ReadyStart />
         <AdminPanel />
+        <SignIn />
       
     </main>
   );

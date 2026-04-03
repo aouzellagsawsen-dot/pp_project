@@ -20,8 +20,8 @@ const Members = [
 ];
 
 const Stats = [
-  { label: "Community Members", value: "850+", icon: <Users size={20} /> },
-  { label: "Books in Circulation", value: "1,200+", icon: <BookOpen size={20} /> },
+  { label: "Community Members", value: "100+", icon: <Users size={20} /> },
+  { label: "Books in Circulation", value: "150+", icon: <BookOpen size={20} /> },
   { label: "Book Borrowed Rate", value: "88%", icon: <TrendingUp size={20} /> }, 
 ];
 

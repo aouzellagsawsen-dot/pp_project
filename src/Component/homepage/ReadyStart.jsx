@@ -15,11 +15,16 @@ const Welcome = () => {
     <section className=" w-full bg-[#F1EAD7] text-[#4a3728] pb-0 mb-0 text-center">
     <div className="max-w-4xl mx-auto flex-col items-center">
 
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="h-px bg-[#C9B99A] w-24"></div>
-          <span className="text-[#8B7E66] text-xl">❖</span>
-          <div className="h-px bg-[#C9B99A] w-24"></div>
-        </div>
+        <div class="flex items-center justify-center w-full max-w-xl mx-auto gap-6 opacity-40 pt-10">
+    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+    <div class="grid grid-cols-2 gap-0.5 rotate-45 transform">
+      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
+      <div class="w-1.5 h-1.5 bg-[#4a3728]"></div><div class="w-1.5 h-1.5 bg-[#4a3728]"></div>
+    </div>
+    <div class="h-px flex-1 bg-linear-to-l from-[#4a3728] to-transparent"></div>
+  </div>
+  <br />
+  <br />
 
         {/* Titre Principal */}
         <h2 className="text-6xl font-medium text-[#333] mb-6 tracking-tight">
