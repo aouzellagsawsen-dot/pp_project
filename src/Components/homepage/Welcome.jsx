@@ -55,7 +55,7 @@ export default function HomePage() {
        transition={{ ...fadeInUp.transition, delay: 0.1 }}
        className="flex flex-col sm:flex-row gap-5">
         <div className="flex gap-4">
-          <Link  to="/explore" 
+          <Link  to="/catalog" 
              className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
             <span className="text-xs">✦</span> Explore Books
           </Link>

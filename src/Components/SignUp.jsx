@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Sign_up = () => {
+
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -91,7 +95,7 @@ const Sign_up = () => {
 
     <div className='flex items-center mb-3.5 gap-0.5 mt-3.5'>
       <ChevronLeft size={13} className='text-[#5C544B]'/>
-      <p className='text-[#5C544B] text-[14px] hover:underline'>Back to Home</p>
+      <Link className='text-[#5C544B] text-[14px] hover:underline cursor-pointer' to="/">Back to Home</Link>
       
      </div> 
     </div>

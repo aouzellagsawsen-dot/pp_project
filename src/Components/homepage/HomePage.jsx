@@ -3,10 +3,6 @@ import HowWorks from "./HowWorks";
 import FeaturedBooks from "./FeaturedBooks";
 import Testimonial from "./Testimonial";
 import ReadyStart from "./ReadyStart";
-import Header from "../layout/Header";
-import Footer from "../layout/Footer";
-import AdminPanel from "../AdminPanel";
-import SignIn from "../auth/SignIn";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -20,9 +16,7 @@ export default function Home() {
        <FeaturedBooks />
        <Testimonial />
        <ReadyStart />
-        <AdminPanel />
-        <SignIn />
-      
+        
     </main>
   );
 }

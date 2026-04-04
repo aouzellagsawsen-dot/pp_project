@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Search,ChevronDown} from 'lucide-react'
 import ProductCard from './ProductCard'
 import database from '../../data/db.json'
+import { Link } from 'react-router-dom'
 
 const ExplorePage = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
 
     const [search, setsearch] = useState("")
     const [genre, setgenre] = useState("All genres")
@@ -74,7 +79,11 @@ const ExplorePage = () => {
         <div className='max-w-6xl mt-9 mb-5 space-y-4 grid grid-cols-4 gap-6 w-full relative items-stretch'>
             { filteredBooks.length > 0 ? (
             filteredBooks.map((book)=>(
-                <ProductCard key={book.id} book={book}/>
+                <Link 
+                    key={book.id} 
+                    to={`/book/${book.id}`} 
+                    className='min-w-[calc(33.333%-1rem)] block no-underline group/card'
+                ><ProductCard key={book.id} book={book}/></Link>
             ))) : (
                 <p>No books found</p>
             ) }

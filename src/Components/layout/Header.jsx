@@ -13,7 +13,7 @@ const Header = () => {
 
         {/* Navigation Links - Centrés grâce au flex-1 et justify-center */}
        <nav className="hidden md:flex flex-1 font-serif justify-center text-[#5D4037] items-center gap-10">
-  <a  href="/" className=" hover:text-[#8D7B68] transition-colors ">
+  <a  href="/catalog" className=" hover:text-[#8D7B68] transition-colors ">
     Explore Books </a>
   <a href="/AddNewBook" className=" hover:text-[#8D7B68] transition-colors ">
     Add Book </a>
@@ -49,7 +49,7 @@ const Header = () => {
           </div>
 
           {/* Profil Utilisateur */}
-          <a href="/profile" className="flex items-center gap-3 pl-2 group">
+          <a href="/dashboard" className="flex items-center gap-3 pl-2 group">
             <div className="w-9 h-9 bg-stone-200 rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-[#8D7B68] transition-all overflow-hidden">
               <User size={20} className="text-stone-500" />
             </div>

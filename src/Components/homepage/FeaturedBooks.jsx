@@ -159,7 +159,7 @@ export default function FeaturedBooks() {
         <motion.div {...fadeInUp}
                  transition={{ ...fadeInUp.transition, delay: 0.1 }}
                  className="flex flex-col sm:flex-row gap-5">
-                 <Link to="/signup" 
+                 <Link to="/catalog" 
                   className="inline-flex  items-center gap-2 bg-[#8C7A63] hover:bg-[#766652] text-white px-10 py-4 rounded-full shadow-lg transition-all duration-300 mx-auto text-lg no-underline hover:scale-105">
                   <span className="text-sm">✦</span>
                   View All Books

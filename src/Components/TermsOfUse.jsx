@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Sparkles} from 'lucide-react' 
 import Cachet from './Cachet.png'
 
 const Terms_of_use = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const CG = "'Cormorant Garamond', serif";
   return (

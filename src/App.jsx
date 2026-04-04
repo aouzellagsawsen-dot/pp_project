@@ -13,6 +13,9 @@ import Message from './Components/Message';
 import About from './Components/About';
 import ForgotPassword from './Components/auth/ForgotPassword';
 import ContactUs from './Components/ContactUs';
+import Favorites from './Components/Favorites';
+import ExplorePage from './Components/Catalog/ExplorePage';
+import Layout from './Components/dashboard/Layout'
 
 export default function App() {
   return (
@@ -32,6 +35,9 @@ export default function App() {
           <Route path="/terms" element={<TermsOfUse/>} />
           <Route path="/AddNewBook" element={<AddNewBook/>}/>
           <Route path="/notifications" element={<NotificationPanel/>}/>
+          <Route path="/favorites" element={<Favorites/>}/>
+          <Route path="/catalog" element={<ExplorePage/>}/>
+          <Route path="/dashboard" element={<Layout/>}/>
         </Routes>
       </main>
       <Footer />

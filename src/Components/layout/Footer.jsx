@@ -25,8 +25,8 @@ const Footer = () => {
         <div className="flex flex-col space-y-3">
           <h3 className="font-sans font-bold text-base mb-2">Quick Links</h3>
           <nav className="flex flex-col space-y-4 font-serif text-[#7A5C41] font-medium tracking-wide">
-            <a href="/explore" className="hover:text-[#8D7B68] transition-colors">Explore Books</a>
-            <a href="/add-book" className="hover:text-[#8D7B68] transition-colors">Add a Book</a>
+            <a href="/catalog" className="hover:text-[#8D7B68] transition-colors">Explore Books</a>
+            <a href="/AddNewBook" className="hover:text-[#8D7B68] transition-colors">Add a Book</a>
             <a href="/dashboard" className="hover:text-[#8D7B68] transition-colors">Dashboard</a>
             <a href="/ContactUs" className="hover:text-[#8D7B68] transition-colors">Contact Us</a>
           </nav>
@@ -36,7 +36,7 @@ const Footer = () => {
         <div className="flex flex-col space-y-3">
           <h3 className="font-sans font-bold text-base mb-2">Legal</h3>
           <nav className="flex flex-col space-y-4 font-serif text-[#7A5C41] font-medium tracking-wide">
-           <Link title="Terms" to="" className="hover:text-[#8D7B68] transition-colors">Terms of Service</Link>
+           <Link title="Terms" to="/terms" className="hover:text-[#8D7B68] transition-colors">Terms of Service</Link>
            <Link to="/Policy" className="hover:text-[#8D7B68] transition-colors">Privacy Policy</Link>
           </nav>
         </div>
