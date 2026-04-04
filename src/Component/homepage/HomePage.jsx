@@ -7,8 +7,12 @@ import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 import AdminPanel from "../AdminPanel";
 import SignIn from "../auth/SignIn";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <main className="min-h-screen bg-[#F1EAD7] flex flex-col relative overflow-x-clip">
        <Welcome />
