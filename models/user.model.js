@@ -37,29 +37,22 @@ const userSchema = new mongoose.Schema({
 },
     password: {
         type: String,
-    // 1. Requis seulement si on n'a pas d'ID Google
-    required: function() {
-        return !this.googleID;
-    },
-    validate: {
-        validator: function(value) {
-            // 2. Si c'est un utilisateur Google, on court-circuite tout : c'est valide.
-            if (this.googleID) return true;
-
-            // 3. Sinon, on vérifie manuellement la longueur et le format
-            if (!value || value.length < 8) return false;
-            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(value);
+        // Requis seulement si on n'a pas d'ID Google
+        required: function() {
+            return !this.googleID;
         },
-        message: 'Le mot de passe est obligatoire (8 caractères min, avec majuscule, minuscule et chiffre).'
-    },
         maxlength: 128,
-        select: false, // Exclude password from query results by default
+        select: false, // Sécurité : exclu des requêtes par défaut
         validate: {
             validator: function(value) {
-                // Password must contain at least one uppercase letter, one lowercase letter, and one number
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(value)
+                // 1. Si c'est un utilisateur Google, on valide sans vérifier le mot de passe
+                if (this.googleID) return true;
+
+                // 2. Sinon, on vérifie manuellement la présence, la longueur et le format
+                if (!value || value.length < 8) return false;
+                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(value);
             },
-            message: 'Password must contain uppercase, lowercase letters and a number'
+            message: 'Le mot de passe est obligatoire (8 caractères min, avec majuscule, minuscule et chiffre).'
         }
     },
     pdp : {

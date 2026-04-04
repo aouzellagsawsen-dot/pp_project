@@ -1,6 +1,7 @@
 import LocalStrategy from 'passport-local'
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
 import User from './models/user.model.js'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 
 // ============ CUSTOM COOKIE EXTRACTOR ============
 const cookieExtractor = (req) => {
