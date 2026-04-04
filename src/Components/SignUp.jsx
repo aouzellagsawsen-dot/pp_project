@@ -1,7 +1,14 @@
-import React from 'react'
-import { BookOpen,Star,ChevronLeft,Feather,Sparkles} from 'lucide-react';
+import React, { useState } from 'react'
+import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
 
 const Sign_up = () => {
+
+  const [showPassword, setShowPassword] = useState(false)
+
+  const toggleVisibility = () =>{
+    setShowPassword(!showPassword)
+  }
+
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
       
@@ -37,6 +44,11 @@ const Sign_up = () => {
         <p className='text-[#7A6A5A] text-[16px] font-medium text-center italic'>- Start sharing and discovering amazing books -</p>
 
         <div>
+        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="username" value="username" required>Username</label>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your username" id="username"></input>
+        </div>
+        
+        <div>
         <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" value="name" required>Full Name</label>
         <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name"></input>
         </div>
@@ -48,7 +60,12 @@ const Sign_up = () => {
 
         <div>
         <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password" value="password">Password</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type="password" placeholder=" ......" id="password"/>
+        <div className='flex gap-2'>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type={showPassword ? "text" : "password"} placeholder=" ......" id="password"/>
+        <button onClick={toggleVisibility}>
+          {showPassword ? <EyeOff size={20} className='text-[#7A6A5A]'></EyeOff> : <Eye size={20} className='text-[#7A6A5A]'></Eye>}
+        </button>
+        </div>
         </div>
 
         <div>
@@ -67,7 +84,7 @@ const Sign_up = () => {
       </div>
 
        <div className='mt-1.5 mb-0.5'>
-        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <span className='underline'>Sign in</span></p> 
+        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <span className='underline cursor-pointer'>Sign in</span></p> 
       </div>
     </form>
 

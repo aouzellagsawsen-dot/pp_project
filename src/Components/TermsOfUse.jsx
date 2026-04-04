@@ -110,7 +110,7 @@ const Terms_of_use = () => {
              
              <div className='flex flex-col items-center'>
               <img src={Cachet} className='w-25 h-25'></img>
-              <caption className='text-[#8B6A45] italic text-[12px] pt-1'>Official Seal · Alinéa, MMXXVI</caption>
+              <p className='text-[#8B6A45] italic text-[12px] pt-1'>Official Seal · Alinéa, MMXXVI</p>
               </div>
           </div>
     </div>

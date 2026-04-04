@@ -1,41 +1,47 @@
 import React, { useState } from 'react'
-import { Bell,MessageCircle,Star,Box} from 'lucide-react'
+import { Bell,MessageCircle,Star,Box,Check} from 'lucide-react'
 
-const NotificationCard = (notification) => {
+const NotificationCard = ({notification}) => {
     
-    const Utils = () => {
+    if(!notification) return null 
+
+    const GetNotifIcon = () => {
         switch(notification.type){
-            case "reminder" : 
-                notification.icon = <Bell></Bell>
-                break;
             case "borrow" : 
-                notification.icon = <Box></Box>
-                break;
+                return <Bell className='text-[orange]'></Bell>
+            case "reminder" : 
+                return <Box className='text-[green]'></Box>
             case "message" : 
-                notification.icon = <MessageCircle></MessageCircle>
-                break;
+               return <MessageCircle className='text-[blue]'></MessageCircle>
             case "review" : 
-                notification.icon = <Star></Star>
-                break;            
+                return <Star className='text-[brown]'></Star>
+            default:
+                return <Bell></Bell>;
+                         
         }
     }
 
-   
-    return (
-    <div className='bg-[#f1ead7] min-h-screen flex flex-col justify-center items-center'>
-        <h1 className='font-serif font-semibold text-4xl text-[#5C544B] tracking-tight pb-1'>Notifications</h1>
-       <div className='max-w-3xl m-auto'> 
-        <div className='bg-white/60 w-180 h-10 rounded-2xl cursor-pointer hover:bg-white/50 p-6 gap-4'>
-            <div className='rounded-full flex justify-center items-center w-12 h-12 bg-[#5C544B]'>
-                <span>{notification.icon}</span>
-            </div>
-            <h1 className='font-sans mb-1'>{notification.title}</h1>
-            <p className='font-sans mb-2'>{notification.text}</p>
+   return (
+    
+    <div className='flex items-start bg-white/60 w-180 h-35 rounded-2xl cursor-pointer hover:bg-white/33 p-6 gap-4 shadow-sm'>
+             
+        <div className='rounded-full flex justify-center items-center w-12 h-12 bg-[#e8dcd1] shrink-0'>{GetNotifIcon()}</div>
+        <div className='flex flex-col flex-1 w-full'>
+            <div className='flex justify-between items-center w-full'>
+             <h1 className='font-sans mb-1 pt-3 align-baseline'>{notification.title}</h1>
+             {notification.isNew && <span className='p-auto h-9 w-auto bg-[#8D7B68] rounded-full text-white text-bold font-sans flex justify-center items-center text-xs'>
+                 <span className='px-2'>New</span>
+                 </span>}
+        </div>    
+            
+        <p className='w-full font-sans mb-2 text-[#7A6A5A] text-light'>{notification.text}</p>
+        <p className='w-full font-sans mb-2 text-[#7A6A5A] text-sm'>{notification.date}</p>
         </div>
-
     </div>
 
-    </div>
+   
+
+    
   )
 }
 
