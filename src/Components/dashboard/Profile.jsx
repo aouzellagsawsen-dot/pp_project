@@ -11,11 +11,11 @@ const Profile = () => {
           <User className='text-[white] w-7 h-7' size={20}></User>
         </div>
         <div className='flex flex-col gap-2 ml-3.5'>
-        <h1>new_user</h1>
-        <p className='text-[#7A6A5A]'>new_user@email.com</p>
-        <button className='flex items-center gap-2 border text-[#7A6A5A]'>
-          <Settings size={17}></Settings>
-          <span>Edit the profile</span>
+        <h1 className='text-[20px]'>new_user</h1>
+        <p className='text-[#7A6A5A] text-[14px]'>new_user@email.com</p>
+        <button className='flex items-center gap-2 border text-[#7A6A5A] rounded-2xl'>
+          <Settings size={17} className='ml-3'></Settings>
+          <span className='font-[8px] font-sans mr-3'>Edit the profile</span>
           </button>
         </div>
         </div>
@@ -24,23 +24,23 @@ const Profile = () => {
          <p className='text-[#7A6A5A] font-sans pb-3'>Book lover and avid reader. Always looking for my next great read!</p>
         </div>
       </div>
-      <div className='bg-[#FAF6F0] rounded-2xl h-42 flex flex-col gap-4 pr-4'>
-        <div className='w-full flex justify-between pt-3 cursor-pointer hover:bg-[#8D7B68]/5'>
-          <Link className='font-sans pl-4'>My public profile</Link>
-          <ChevronRight className='text-[#8D7B68]' size={20}></ChevronRight>
-        </div>
-        <div className='w-full flex justify-between cursor-pointer hover:bg-[#8D7B68]/5'>
-          <Link className='font-sans pl-4' to="/notifications">Notifications</Link>
-          <ChevronRight className='text-[#8D7B68]' size={20}></ChevronRight>
-         </div>
-         <div className='w-full flex justify-between cursor-pointer hover:bg-[#8D7B68]/5'> 
-          <Link className='font-sans pl-4' to="./favorites">My favorites</Link>
-          <ChevronRight className='text-[#8D7B68]' size={20}></ChevronRight>
-          </div>
-          <div className='w-full flex justify-between cursor-pointer hover:bg-[#8D7B68]/5'> 
-          <Link className='font-sans pl-4'>Admin Panel</Link>
-          <ChevronRight className='text-[#8D7B68]' size={20}></ChevronRight>
-          </div>
+      <div className='bg-[#FAF6F0] rounded-2xl h-35 flex flex-col justify-center items-center border border-gray-200 overflow-hidden'>
+        <Link className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'>
+          <span className='font-sans text-[15px]'>My public profile</span>
+          <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
+        </Link>
+        <Link  to="/notifications" className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'>
+          <span className='font-sans text-[15px]'>Notifications</span>
+          <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
+         </Link>
+         <Link  to="/favorites" className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'> 
+          <span className='font-sans text-[15px]'>My favorites</span>
+          <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
+          </Link>
+          <Link className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'> 
+          <span className='font-sans text-[15px]'>Admin Panel</span>
+          <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
+          </Link>
       </div>
     </div>
   )

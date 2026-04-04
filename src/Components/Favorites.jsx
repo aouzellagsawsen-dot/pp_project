@@ -1,8 +1,9 @@
 import React from 'react'
+import { Heart } from 'lucide-react'
 
 const Favorites = () => {
   return (
-    <div>Favorites</div>
+    <div className='min-h-screen bg-[#f1ead7]'></div>
   )
 }
 

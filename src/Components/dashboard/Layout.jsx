@@ -28,7 +28,8 @@ const Page = () => {
           <p className='text-[#8D7B68] mt-0.5 text-[14px]'>Your space of reading is waiting for you</p>
           </div>
         </div>
-        <Link className='bg-[#7A6A5A] text-[white] font-semibold flex rounded-2xl py-2.75 px-5.5 gap-2 m-5' to="/AddNewBook">
+        <Link className='bg-[#7A6A5A] text-[white] font-semibold flex rounded-2xl py-2.75 px-5.5 gap-2 m-5 transition-transform duration-300 ease-in-out
+         hover:scale-105 hover:shadow-xl' to="/AddNewBook">
           <Plus size={20}></Plus>
           <span>Add a book</span>
         </Link>
@@ -78,8 +79,19 @@ const Page = () => {
           })}
           
         </div>
+        <div className='flex flex-col w-full'>
+        <div className='flex items-center gap-3 mb-6'>
+            {/* Optionnel : Trouver l'icône correspondant au tab actuel */}
+            <span className='text-2xl text-[#7A6A5A]'>
+              {menuItems.find(item => item.name === tab)?.icon}
+            </span>
+            <h2 className='text-[20px] font-serif text-[#3E2F2B] capitalize'>
+              {tab}
+            </h2>
+          </div>
         <div className='w-full'>
           <Outlet/>
+          </div>
           </div>
       </div>
       </div>

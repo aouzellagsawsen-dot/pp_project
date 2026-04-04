@@ -13,6 +13,7 @@ import MyBooks from './Components/dashboard/MyBooks';
 import Profile from './Components/dashboard/Profile';
 import History from './Components/dashboard/History';
 import Borrows from './Components/dashboard/Borrows';
+import Favorites from './Components/Favorites';
 
 
 //import './App.css'
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="history" element={<History/>}/>
             <Route path="profile" element={<Profile/>}/>
         </Route>
+        <Route path="/favorites" element={<Favorites/>}/>
     </Routes>
     
     

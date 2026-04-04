@@ -1,7 +1,14 @@
-import React from 'react'
-import { BookOpen,Star,ChevronLeft,Feather,Sparkles} from 'lucide-react';
+import React, { useState } from 'react'
+import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
 
 const Sign_up = () => {
+
+  const [showPassword, setShowPassword] = useState(false)
+
+  const toggleVisibility = () =>{
+    setShowPassword(!showPassword)
+  }
+
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
       
@@ -53,7 +60,12 @@ const Sign_up = () => {
 
         <div>
         <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password" value="password">Password</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type="password" placeholder=" ......" id="password"/>
+        <div className='flex gap-2'>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type={showPassword ? "text" : "password"} placeholder=" ......" id="password"/>
+        <button onClick={toggleVisibility}>
+          {showPassword ? <EyeOff size={20} className='text-[#7A6A5A]'></EyeOff> : <Eye size={20} className='text-[#7A6A5A]'></Eye>}
+        </button>
+        </div>
         </div>
 
         <div>
