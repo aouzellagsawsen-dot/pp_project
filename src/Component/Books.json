@@ -1,0 +1,117 @@
+[
+  {
+    "id": 11,
+    "title": "Oriental Plastic Ball",
+    "author": "Herman Melville",
+    "genre": "Mythology",
+    "photo": "https://picsum.photos/seed/WUGaoc/800/1200",
+    "publisher": "Leafwood Publishers",
+    "isbn": "978-1-216-32966-6",
+    "status": "BORROWED",
+    "rating": 4.2,
+    "summary": "An epic exploration of ancient myths through the lens of modernity, where each chapter reveals a new facet of the human condition.",
+    "themes": ["Mythology", "Philosophy", "Ancient Sea"],
+    "quotes": [
+      "The sea is the mirror of the soul, calm on the surface but tormented in its depths.",
+      "Destiny is but a plastic ball carried by the winds of the Orient."
+    ],
+    "owner": {
+      "id": 10,
+      "name": "Karim",
+      "location": "Nantucket, MA"
+    },
+    "addedAt": "2025-12-22T09:59:15.658Z"
+  },
+  {
+    "id": 12,
+    "title": "Tasty Plastic Bike",
+    "author": "Alan Moore & Dave Gibbons",
+    "genre": "Horror",
+    "photo": "https://picsum.photos/seed/XwtTnL/800/1200",
+    "publisher": "Caister Academic Press",
+    "isbn": "978-1-359-28495-2",
+    "status": "BORROWED",
+    "rating": 4.8,
+    "summary": "A dark and visceral graphic novel that deconstructs heroism in a world on the brink of a plastic apocalypse.",
+    "themes": ["Dystopia", "Horror", "Urban Decay"],
+    "quotes": [
+      "We are all looking at the gutter, but some of them are staring at the plastic stars.",
+      "Time is a circle, and this bike has no brakes."
+    ],
+    "owner": {
+      "id": 5,
+      "name": "Serine",
+      "location": "London, UK"
+    },
+    "addedAt": "2026-01-07T22:34:57.256Z"
+  },
+  {
+    "id": 13,
+    "title": "Handcrafted Concrete Chicken",
+    "author": "Isabel Florence Hapgood",
+    "genre": "Horror",
+    "photo": "https://picsum.photos/seed/69vgN/800/1200",
+    "publisher": "Broadview Press",
+    "isbn": "978-0-11-201140-8",
+    "status": "BORROWED",
+    "rating": 3.9,
+    "summary": "In a remote village, a concrete chicken sculpture seems to come to life at night. A folk horror tale about rural superstitions.",
+    "themes": ["Folklore", "Superstition", "Rural Life"],
+    "quotes": [
+      "The concrete is cold, but its eyes burned with an ancient glow.",
+      "Never turn your back on what has been sculpted in silence."
+    ],
+    "owner": {
+      "id": 7,
+      "name": "Fouad",
+      "location": "Moscow, RU"
+    },
+    "addedAt": "2025-11-11T21:52:18.305Z"
+  },
+  {
+    "id": 19,
+    "title": "Tasty Bamboo Pants",
+    "author": "John Bunyan",
+    "genre": "Horror",
+    "photo": "https://picsum.photos/seed/Pvsm7PH/800/1200",
+    "publisher": "Chick Publications",
+    "isbn": "978-1-8382820-5-9",
+    "status": "AVAILABLE NOW",
+    "rating": 4.5,
+    "summary": "A terrifying allegory on vanity and consumption, where the clothes we wear eventually end up possessing us.",
+    "themes": ["Allegory", "Vanity", "Spiritual Warfare"],
+    "quotes": [
+      "The path to perdition is woven into the softest fiber.",
+      "Be prepared, for the traveler carries only what he can leave behind."
+    ],
+    "owner": {
+      "id": 10,
+      "name": "Youssef",
+      "location": "Bedford, UK"
+    },
+    "addedAt": "2025-08-29T04:24:55.058Z"
+  },
+  {
+    "id": 20,
+    "title": "Awesome Concrete Car",
+    "author": "Victor Hugo",
+    "genre": "Business",
+    "photo": "https://picsum.photos/seed/tKz30vZ/800/1200",
+    "publisher": "Scholastic Press",
+    "isbn": "978-1-82237-658-0",
+    "status": "BORROWED",
+    "rating": 5.0,
+    "summary": "A powerful examination of the industrial revolution and the mechanics of success in 19th-century Paris.",
+    "themes": ["Industrialism", "Success", "Social Justice"],
+    "quotes": [
+      "Nothing stops an idea whose time has come, not even a concrete car.",
+      "The future is a door, the past is its key."
+    ],
+    "owner": {
+      "id": 7,
+      "name": "Yasmine",
+      "location": "Paris, FR"
+    },
+    "addedAt": "2025-10-13T12:05:33.779Z"
+  }
+]
