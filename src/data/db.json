@@ -1,4 +1,5 @@
 {
+
   "testimonials": [
     {
       "id": 1,
@@ -17,8 +18,9 @@
       "name": "Yasmine",
       "role": "ALINÉA MEMBER",
       "text": "Alinéa has transformed how I discover and share books. The community is wonderful!"
-=======
-  "users": [
+    }
+  ],
+      "users": [
     {
       "id": 1,
       "username": "Sienna.Mills73",
@@ -200,7 +202,6 @@
       "status": "borrowed",
       "ownerId": 7,
       "addedAt": "2025-10-13T12:05:33.779Z"
->>>>>>> origin/mounia
     }
   ]
 }
