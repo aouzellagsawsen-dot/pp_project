@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Download,Quote } from 'lucide-react'
-import database from '../data/db.json'
+
 
 
 const Add_a_new_book = () => {
