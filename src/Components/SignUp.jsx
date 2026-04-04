@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Sign_up = () => {
 
@@ -84,7 +85,7 @@ const Sign_up = () => {
       </div>
 
        <div className='mt-1.5 mb-0.5'>
-        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <span className='underline cursor-pointer'>Sign in</span></p> 
+        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <Link className='underline cursor-pointer' to="/signin">Sign in</Link></p> 
       </div>
     </form>
 
