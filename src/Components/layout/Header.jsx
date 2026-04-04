@@ -13,9 +13,9 @@ const Header = () => {
 
         {/* Navigation Links - Centrés grâce au flex-1 et justify-center */}
        <nav className="hidden md:flex flex-1 font-serif justify-center text-[#5D4037] items-center gap-10">
-  <a  href="/explore" className=" hover:text-[#8D7B68] transition-colors ">
+  <a  href="/" className=" hover:text-[#8D7B68] transition-colors ">
     Explore Books </a>
-  <a href="/add-book" className=" hover:text-[#8D7B68] transition-colors ">
+  <a href="/AddNewBook" className=" hover:text-[#8D7B68] transition-colors ">
     Add Book </a>
   <a href="/About" className=" hover:text-[#8D7B68] transition-colors ">
     About</a>
