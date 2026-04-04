@@ -30,10 +30,28 @@ const userSchema = new mongoose.Schema({
             message: 'Invalid email format'
         }
     },
+    googleID: {
+    type: String,
+    unique: true,
+    sparse: true 
+},
     password: {
         type: String,
-        required: true,
-        minlength: 8,
+    // 1. Requis seulement si on n'a pas d'ID Google
+    required: function() {
+        return !this.googleID;
+    },
+    validate: {
+        validator: function(value) {
+            // 2. Si c'est un utilisateur Google, on court-circuite tout : c'est valide.
+            if (this.googleID) return true;
+
+            // 3. Sinon, on vérifie manuellement la longueur et le format
+            if (!value || value.length < 8) return false;
+            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(value);
+        },
+        message: 'Le mot de passe est obligatoire (8 caractères min, avec majuscule, minuscule et chiffre).'
+    },
         maxlength: 128,
         select: false, // Exclude password from query results by default
         validate: {

@@ -181,5 +181,47 @@ router.post('/verify-email', async (req, res) => {
         return res.status(400).json({ success: false, message, code: 'VERIFICATION_ERROR' })
     }
 })
+// ============ 7. AUTHENTIFICATION GOOGLE (OAUTH2) ============
+
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+
+router.get('/google/callback', 
+    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+    (req, res) => {
+        const user = req.user; // Récupéré depuis la stratégie dans passport.js
+
+        // On génère les mêmes tokens que pour le login classique
+        const accessToken = jwt.sign(
+            { userId: user._id, email: user.email }, 
+            process.env.JWT_ACCESS_SECRET, 
+            { expiresIn: '15m' }
+        );
+        const refreshToken = jwt.sign(
+            { userId: user._id, email: user.email }, 
+            process.env.JWT_REFRESH_SECRET, 
+            { expiresIn: '7d' }
+        );
+
+        // On dépose les cookies 
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        // Maintenant l'utilisateur arrive au dashboard AVEC ses cookies d'accès
+        res.redirect('http://localhost:5173/dashboard');
+    }
+);
 
 export default router
