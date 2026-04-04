@@ -2,13 +2,18 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
-import Sign_up from './Components/Sign_up';
-import Terms_of_use from './Components/Terms_of_use';
+import SignUp from './Components/SignUp';
+import TermsOfUse from './Components/TermsOfUse';
 import { BrowserRouter as Router,Route,Routes,Link } from 'react-router-dom';
-import Add_a_new_book from './Components/Add_a_new_book';
+import AddNewBook from './Components/AddNewBook'
 import NotificationPanel from './Components/notifications/NotificationPanel';
 import ExplorePage from './Components/Catalog/ExplorePage';
-import Page from './Components/dashboard/Page';
+import Layout from './Components/dashboard/Layout';
+import MyBooks from './Components/dashboard/MyBooks';
+import Profile from './Components/dashboard/Profile';
+import History from './Components/dashboard/History';
+import Borrows from './Components/dashboard/Borrows';
+
 
 //import './App.css'
 
@@ -18,18 +23,23 @@ export default function App() {
    <div>
     <Link to="/">S'inscrire </Link>
     <Link to="/terms"> Lire les conditions </Link>
-    <Link to="/Add_a_new_book"> Ajouter un livre </Link>
+    <Link to="/AddNewBook"> Ajouter un livre </Link>
     <Link to="/notifications"> Notifications</Link>
     <Link to="/explore"> Catalogue</Link>
     <Link to="/dashboard"> Dashboard</Link>
     </div>
      <Routes>
-        <Route path="/" element={<Sign_up/>} />
-        <Route path="/terms" element={<Terms_of_use/>} />
-        <Route path="/Add_a_new_book" element={<Add_a_new_book/>}/>
+        <Route path="/" element={<SignUp/>} />
+        <Route path="/terms" element={<TermsOfUse/>} />
+        <Route path="/AddNewBook" element={<AddNewBook/>}/>
         <Route path="/notifications" element={<NotificationPanel />}/>
         <Route path="/explore" element={<ExplorePage/>}/>
-        <Route path="/dashboard" element={<Page/>}/>
+        <Route path="/dashboard" element={<Layout/>}>
+            <Route path="borrows" element={<Borrows/>}/>
+            <Route path="mybooks" element={<MyBooks/>}/>
+            <Route path="history" element={<History/>}/>
+            <Route path="profile" element={<Profile/>}/>
+        </Route>
     </Routes>
     
     
