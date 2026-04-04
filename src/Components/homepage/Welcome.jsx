@@ -59,7 +59,7 @@ export default function HomePage() {
              className="bg-[#8D7B68] text-[#F1EAD7] px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
             <span className="text-xs">✦</span> Explore Books
           </Link>
-          <Link  to="/signup" 
+          <Link  to="/SignUp" 
                className="border border-[#4a3728]/70 px-10 py-4 rounded-full flex items-center gap-3 hover:bg-[#4a3728]/5 transition-all text-[#4a3728]/80" >
             <span className="text-sm">✦</span> Join the Community
           </Link>
