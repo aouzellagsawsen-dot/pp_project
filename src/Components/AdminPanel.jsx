@@ -19,6 +19,10 @@ const AdminPanel = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+
   return (
     <div className="min-h-screen bg-[#F2E8D9] p-12 font-serif text-[#5D4037]">
       <div className="max-w-4xl mx-auto">

@@ -37,7 +37,7 @@ const Profile = () => {
           <span className='font-sans text-[15px]'>My favorites</span>
           <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
           </Link>
-          <Link className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'> 
+          <Link to="/adminpanel" className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'> 
           <span className='font-sans text-[15px]'>Admin Panel</span>
           <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
           </Link>

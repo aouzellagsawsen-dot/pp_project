@@ -15,7 +15,12 @@ import ForgotPassword from './Components/auth/ForgotPassword';
 import ContactUs from './Components/ContactUs';
 import Favorites from './Components/Favorites';
 import ExplorePage from './Components/Catalog/ExplorePage';
+import AdminPanel from './Components/AdminPanel';
 import Layout from './Components/dashboard/Layout'
+import MyBooks from './Components/dashboard/MyBooks';
+import History from './Components/dashboard/History';
+import Profile from './Components/dashboard/Profile';
+import Borrows from './Components/dashboard/Borrows';
 
 export default function App() {
   return (
@@ -36,8 +41,14 @@ export default function App() {
           <Route path="/AddNewBook" element={<AddNewBook/>}/>
           <Route path="/notifications" element={<NotificationPanel/>}/>
           <Route path="/favorites" element={<Favorites/>}/>
+          <Route path="/adminpanel" element={<AdminPanel/>}/>
           <Route path="/catalog" element={<ExplorePage/>}/>
-          <Route path="/dashboard" element={<Layout/>}/>
+          <Route path="/dashboard" element={<Layout/>}>
+            <Route path="borrows" element={<Borrows/>} />
+            <Route path="mybooks" element={<MyBooks />} />
+            <Route path="history" element={<History />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
         </Routes>
       </main>
       <Footer />
