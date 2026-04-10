@@ -5,6 +5,7 @@ import { Link, NavLink, Outlet } from 'react-router-dom'
 const Page = () => {
 
   const [tab, settab] = useState('Borrows')
+  const userName = localStorage.getItem('userName') || "Reader";
 
     const menuItems = [
       {name:'Borrows',path:'borrows',icon:<Box size={17}/>},
@@ -12,6 +13,12 @@ const Page = () => {
       {name:'History',path:'history',icon:<Clock size={17}/>},
       {name:'Profile',path:'profile',icon:<Settings size={17}/>}
     ]
+    
+    const handleLogout = () => {
+  localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('userName'); // Important !
+  navigate('/login');
+};
   
    
    return (
@@ -24,7 +31,7 @@ const Page = () => {
         </div>
         <div className='flex flex-col ml-5'>
           <p className='text-[#8D7B68] text-[13px] mb-0.5'>Hello</p>
-          <h1 className='text-[28px]'>user</h1>
+          <h1 className='text-[28px]'>{userName}</h1>
           <p className='text-[#8D7B68] mt-0.5 text-[14px]'>Your space of reading is waiting for you</p>
           </div>
         </div>

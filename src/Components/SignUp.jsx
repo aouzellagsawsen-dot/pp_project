@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate} from 'react-router-dom';
 
-const Sign_up = () => {
+const Sign_up = ({ setIsLoggedIn }) => {
+  const [nameInput, setNameInput] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
       window.scrollTo(0, 0);
@@ -13,6 +16,22 @@ const Sign_up = () => {
   const toggleVisibility = () =>{
     setShowPassword(!showPassword)
   }
+
+
+  const handleSubmit = (e) => {
+  e.preventDefault(); // Indispensable
+ 
+  const nameToSave = username.value || username; 
+  
+  localStorage.setItem('userName', nameToSave);
+  if (setIsLoggedIn) {
+    setIsLoggedIn(true);
+  }
+  
+  localStorage.setItem('isLoggedIn', 'true');
+  const destination = location.state?.from || "/welcome";
+  navigate(destination);
+};
 
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
@@ -37,7 +56,8 @@ const Sign_up = () => {
       <Sparkles size={24} strokeWidth={1}/>
       </div>
 
-      <form className='my-auto flex font-[Lora] flex-col bg-white/60 pb-20 max-w-[500] min-w-[450] max-h-[700] min-h-[650] px-6 py-12 rounded-[20px] font-extrabold gap-2.5'>
+      <form onSubmit={handleSubmit}
+      className='my-auto flex font-[Lora] flex-col bg-white/60 pb-20 max-w-[500] min-w-[450] max-h-[700] min-h-[650] px-6 py-12 rounded-[20px] font-extrabold gap-2.5'>
         
         <div className="flex items-center justify-center gap-4 mb-6">
           <div className="h-px w-16 bg-linear-to-r from-transparent to-[#8D7B68]"></div>
@@ -67,7 +87,7 @@ const Sign_up = () => {
         <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password" value="password">Password</label>
         <div className='flex gap-2'>
         <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type={showPassword ? "text" : "password"} placeholder=" ......" id="password"/>
-        <button onClick={toggleVisibility}>
+        <button  type="button" onClick={toggleVisibility}>
           {showPassword ? <EyeOff size={20} className='text-[#7A6A5A]'></EyeOff> : <Eye size={20} className='text-[#7A6A5A]'></Eye>}
         </button>
         </div>
@@ -84,8 +104,10 @@ const Sign_up = () => {
         </div>
 
        <div>
-        <button className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl'>
-          <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>Create Account</span></button>
+        <button type="submit"
+        className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl'>
+          <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>Create Account</span>
+        </button>
       </div>
 
        <div className='mt-1.5 mb-0.5'>

@@ -21,28 +21,32 @@ import MyBooks from './Components/dashboard/MyBooks';
 import History from './Components/dashboard/History';
 import Profile from './Components/dashboard/Profile';
 import Borrows from './Components/dashboard/Borrows';
+import BienvenuePage from './Components/homepage/BienvenuePage';
+import { useState } from 'react';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <div className="flex flex-col min-h-screen">
-      <Header /> 
+      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/book/:id" element={<BookDescription />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/book/:id" element={<BookDescription isLoggedIn={isLoggedIn} />} />
+          <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/policy" element={<Policy />} />
           <Route path="/Message" element={<Message />} />
           <Route path="/About" element={<About />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/ContactUs" element={<ContactUs />} />
-          <Route path="/SignUp" element={<SignUp/>} />
+          <Route path="/SignUp" element={<SignUp setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/terms" element={<TermsOfUse/>} />
           <Route path="/AddNewBook" element={<AddNewBook/>}/>
           <Route path="/notifications" element={<NotificationPanel/>}/>
           <Route path="/favorites" element={<Favorites/>}/>
           <Route path="/adminpanel" element={<AdminPanel/>}/>
           <Route path="/catalog" element={<ExplorePage/>}/>
+          <Route path="/welcome" element={<BienvenuePage/>} />
           <Route path="/dashboard" element={<Layout/>}>
             <Route path="borrows" element={<Borrows/>} />
             <Route path="mybooks" element={<MyBooks />} />
@@ -51,7 +55,7 @@ export default function App() {
           </Route>
         </Routes>
       </main>
-      <Footer />
+      <Footer isLoggedIn={isLoggedIn}/>
     </div>
   );
 }

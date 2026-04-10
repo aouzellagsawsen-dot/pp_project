@@ -1,7 +1,7 @@
 "use client"; 
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Star, MapPin, Heart, ChevronLeft } from 'lucide-react';
 import booksData from "./Books.json";
 
@@ -12,7 +12,7 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: "easeOut" }
 };
 
-const BookDescription = () => {
+const BookDescription = ({ isLoggedIn }) => {
   const { id } = useParams(); // Récupère l'ID 
   const navigate = useNavigate();
   
@@ -100,7 +100,7 @@ const [showLetter, setShowLetter] = useState(false);
         {/* --- GRILLE PRINCIPALE --- */}
         <div className="grid md:grid-cols-12 gap-16 items-start">
           
-          {/* --- GAUCHE : PHOTO & OWNER (4 colonnes sur 12) --- */}
+          {/* --- GAUCHE : PHOTO & OWNER --- */}
           <div className="md:col-span-4 flex flex-col">
             <div className="w-full aspect-3/4 bg-[#FAF7F0] p-6 rounded-4xl shadow-2xl border border-stone-100 overflow-hidden">
               <img 
@@ -121,10 +121,11 @@ const [showLetter, setShowLetter] = useState(false);
                   <p className="font-bold text-[#5D4037] text-sm">{book.owner.name}</p>
                 </div>
               </div>
-              <button onClick={handleContact}
-                className="bg-white/80 text-[#4A3F35] text-[10px] font-bold px-5 py-2 rounded-full hover:bg-[#8D7B68] hover:text-white transition-all border border-[#8D7B68]/20 shadow-sm">
-                CONTACT
-              </button>
+             <Link to={isLoggedIn ? `/Message?userId=${book.owner.id}&userName=${book.owner.name}` : "/SignUp"}
+              state={!isLoggedIn ? { from: `/book/${id}` } : null}
+              className="bg-white/80 text-[#4A3F35] text-[10px] font-bold px-5 py-2 rounded-full hover:bg-[#8D7B68] hover:text-white transition-all border border-[#8D7B68]/20 shadow-sm inline-block text-center">
+              CONTACT
+             </Link>
             </div>
           </div>
 
