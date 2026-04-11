@@ -105,8 +105,15 @@ const Sign_up = ({ setIsLoggedIn }) => {
 
        <div>
         <button type="submit"
-        className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl'>
+        className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl cursor-pointer'>
           <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>Create Account</span>
+        </button>
+      </div>
+
+      <div>
+        <button type="button" class="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer">
+          <img class="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"></img>
+          <span className='font-medium'>Sign up with Google</span>
         </button>
       </div>
 
