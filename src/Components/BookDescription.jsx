@@ -86,6 +86,14 @@ const [showLetter, setShowLetter] = useState(false);
     // Logique pour ton backend / localStorage ici...
   };
 
+  const handleActionWithAuth = (action) => {
+  if (!isLoggedIn) {
+    alert("Please login to perform this action");
+    return;
+  }
+  action();
+};
+
   return (
     <main className="w-full min-h-screen bg-[#F1EAD7]">
       <SealedLetter isVisible={showLetter} />
@@ -172,15 +180,15 @@ const [showLetter, setShowLetter] = useState(false);
             {/* BOUTONS ACTIONS */}
             <div className="flex gap-6 mb-16">
               <button 
-            onClick={handleReserve}
-            disabled={isReserved}
-            className={`flex-1 font-serif text-xl py-5 rounded-2xl transition-all shadow-lg overflow-hidden relative ${
-              isReserved ? 'bg-stone-300 text-stone-600' : 'bg-[#8D7B68] text-white'}`}>
-            {isReserved ? 'WAITING FOR SEAL...' : 'RESERVE THIS BOOK'}
-          </button>
+                onClick={handleReserve}
+                disabled={isReserved}
+                className={`flex-1 font-serif text-xl py-5 rounded-2xl transition-all shadow-lg overflow-hidden relative ${
+                  isReserved ? 'bg-stone-300 text-stone-600' : 'bg-[#8D7B68] text-white'}`}>
+                {isReserved ? 'WAITING FOR SEAL...' : 'RESERVE THIS BOOK'}
+              </button>
               
               <button 
-                onClick={() => setIsFavorite(!isFavorite)}
+                onClick={() => handleProtectedAction(() => setIsFavorite(!isFavorite))}
                 className={`flex-1 flex items-center justify-center gap-3 border-2 rounded-2xl py-5 transition-all active:scale-[0.98] ${
                   isFavorite ? 'border-red-200 bg-red-50 text-red-600' : 'border-stone-300 bg-white/40 text-stone-600'
                 }`}

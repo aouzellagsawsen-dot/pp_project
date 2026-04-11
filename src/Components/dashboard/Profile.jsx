@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { User,Settings,ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Profile = () => {
+  useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
   return (
     <div className='flex flex-col gap-5'>
       <div className='bg-[#FAF6F0] rounded-2xl h-60'>

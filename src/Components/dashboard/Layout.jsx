@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { User,Plus,Heart,Star,Box,Book,BookOpen,Clock,Settings } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 
@@ -19,6 +19,9 @@ const Page = () => {
   localStorage.removeItem('userName'); // Important !
   navigate('/login');
 };
+useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   
    
    return (
