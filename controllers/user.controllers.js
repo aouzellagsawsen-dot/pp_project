@@ -28,17 +28,17 @@ export const getUserProfile = async (req, res) => {
         if (!user) {
             return res.status(404).json({ 
                 success: false,
-                message: 'Utilisateur introuvable',
+                message: 'User not found',
                 code: 'USER_NOT_FOUND'
             })
         }
         res.json({
             success: true,
-            message: 'Profil utilisateur récupéré',
+            message: 'User profile retrieved',
             user: user
         })
     } catch (error) {
-        console.error('Get User Profile Error:', error.message)
+        console.error('Get Profile Error:', error.message)
         res.status(500).json({ 
             success: false,
             message: 'Erreur lors de la récupération du profil',
@@ -50,7 +50,7 @@ export const getUserProfile = async (req, res) => {
 // ============ UPDATE USER PROFILE ============
 export const updateUserProfile = async (req, res) => {
     try {
-        const { name, email, username } = req.body
+        const { name, email, username, pdp } = req.body
         
         // 1. On cherche l'utilisateur d'abord
         const user = await User.findById(req.params.userId)
@@ -91,6 +91,10 @@ export const updateUserProfile = async (req, res) => {
         // 4. Mise à jour du nom (si fourni)
         if (name) {
             user.name = name
+        }
+
+        if (pdp) {
+            user.pdp = pdp
         }
 
         // 5. On sauvegarde (C'EST ICI QUE TES VALIDATEURS MONGOOSE S'ACTIVENT !)

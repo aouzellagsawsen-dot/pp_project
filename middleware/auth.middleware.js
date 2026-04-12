@@ -1,13 +1,14 @@
 import jwt from 'jsonwebtoken'
-import { doubleCsrf,  } from 'csrf-csrf'
+import { doubleCsrf } from 'csrf-csrf'
 
 // ============ CSRF PROTECTION ============
-const {
-    generateToken, 
-    doubleCsrfProtection, 
-} = doubleCsrf({
+// ============ CSRF PROTECTION ============
+const { generateCsrfToken, doubleCsrfProtection, } = doubleCsrf({
     getSecret: () => process.env.CSRF_SECRET,
     cookieName: "x-csrf-token", 
+    
+    getSessionIdentifier: (req) => req.cookies?.accessToken || "utilisateur_non_connecte",
+
     cookieOptions: {
         httpOnly: true,
         sameSite: "strict",
@@ -86,7 +87,7 @@ export const authorizeOwner = (req, res, next) => {
 
 // ============ EXPORTS CSRF ============
 export const csrfCheck = doubleCsrfProtection
-export const getCsrfToken = generateToken
+export const getCsrfToken = generateCsrfToken
 
 // ============ COMBINED MIDDLEWARE ============
 export const protectUserRoute = [authenticateToken, authorizeOwner]

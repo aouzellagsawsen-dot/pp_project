@@ -1,6 +1,8 @@
-/* import LocalStrategy from 'passport-local'
+import LocalStrategy from 'passport-local'
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
-import User from './models/user.model.js'
+import User from '../models/user.model.js'
+
+
 
 // ============ CUSTOM COOKIE EXTRACTOR ============
 const cookieExtractor = (req) => {
@@ -61,4 +63,5 @@ export default function initializePassport(passport) {
     // Enregistrement des stratégies
     passport.use('local', new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.use('jwt', new JWTStrategy(jwtOptions, verifyJwt))
-} */
+    
+}

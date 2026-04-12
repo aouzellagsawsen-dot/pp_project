@@ -51,7 +51,11 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false // Faux par défaut à la création
-    }
+    },
+    favorites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book'
+    }]
 }, {
     timestamps: true
 })

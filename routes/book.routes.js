@@ -1,53 +1,28 @@
 import express from 'express'
-import Book from '../models/book.model.js'
 import { uploadCover } from '../middleware/upload.middleware.js'
+import { protectMutation } from '../middleware/auth.middleware.js'
+import { addPhysicalBook, allBooks, deleteBook, updateBook } from '../controllers/book.controllers.js'
+import { approveLoan, requestLoan } from '../controllers/loan.controller.js'
 
 const router = express.Router()
 
-// ajouter un livre 
-router.post('/', uploadCover.single('image'), async (req, res) => {
-    try {
-        // req.body contient le texte (title, author, genre...)
-        let { title, author, genre, customGenre, description } = req.body
+// =========== AJOUTER UN LIVRE =============
+router.post('/', protectMutation, uploadCover.single('image'), addPhysicalBook)
 
-        if(genre !== 'Others') {
-            customGenre = undefined
-        }else 
-        {
-            document.getElementById('customGenre').style.display = 'none'
-        }
+// ============ SUPPRIMER UN LIVRE ============
+router.delete('/:id', protectMutation, deleteBook)
 
-        const cover = req.file ? `public/uploads/covers/${req.file.filename}` : `public/uploads/covers/default-cover.png`
-
-        // On crée le livre dans MongoDB
-        const newBook = await Book.create({
-            title,
-            author,
-            genre,
-            customGenre,
-            description,
-            cover
-        })
-
-        res.status(201).json({ success: true, data: newBook })
-
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message })
-    }
-})
+// ============ MODIFIER UN LIVRE ============
+router.put('/:id', protectMutation, uploadCover.single('image'), updateBook)
 
 // lister tous les livres
-router.get('/list', async (req, res, next) => {
-    try {
-        // 1. On va chercher tous les livres dans la DB
-        // .sort({ createdAt: -1 }) permet d'afficher les plus récents en premier !
-        const books = await Book.find().sort({ createdAt: -1 });
+router.get('/list', allBooks)
 
-        // 2. On affiche la page EJS en lui passant la variable "books"
-        res.render('books-list', { books: books });
+// Le borrower fait la demande sur une copie spécifique
+router.post('/copy/:copyId/request-loan', protectMutation, requestLoan)
 
-    } catch (error) {
-        next(error)}
-});
+// Le lender approuve (ou rejette) une demande spécifique
+router.post('/loan/:loanId/approve', protectMutation, approveLoan)
+// (Tu pourras créer une fonction rejectLoan similaire qui remet le livre en 'Available')
 
 export default router

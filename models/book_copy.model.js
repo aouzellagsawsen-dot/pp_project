@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose"
 
-const bookCopySchema = new mongoose.Schema({
-  bookId: { 
+const physicalBookSchema = new mongoose.Schema({
+  bookInfos: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Book', 
     required: true 
@@ -13,15 +13,15 @@ const bookCopySchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    enum: ['AVAILABLE', 'REQUESTED', 'BORROWED'], 
-    default: 'AVAILABLE' 
+    enum: ['Available', 'Requested', 'Borrowed'], 
+    default: 'Available' 
   },
-  condition: { 
-    type: String, 
-    enum: ['NEW', 'GOOD', 'FAIR', 'POOR'], 
-    default: 'GOOD' 
-  },
+  ownerNotes: {
+    type: String,
+    maxLength: 250
+  }
   
 }, { timestamps: true });
 
-module.exports = mongoose.model('BookCopy', bookCopySchema);
+const PhysicalBook = mongoose.model('PhysicalBook', physicalBookSchema)
+export default PhysicalBook

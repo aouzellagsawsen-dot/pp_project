@@ -38,7 +38,7 @@ export const getAllUsers = async (req, res) => {
         const users = await User.find().select('-password')
         res.json({
             success: true,
-            message: 'Tous les utilisateurs récupérés (accès admin uniquement)',
+            message: 'All users retrieved (authenticated access only)',
             count: users.length,
             users: users
         })
@@ -48,46 +48,6 @@ export const getAllUsers = async (req, res) => {
             success: false,
             message: 'Erreur lors de la récupération des utilisateurs',
             code: 'GET_USERS_ERROR'
-        })
-    }
-}
-
-// ============ DELETE USER (ADMIN ONLY) ============
-export const deleteUser = async (req, res) => {
-    try {
-        const { userId } = req.params
-        
-        // Additional security check
-        if (!userId) {
-            return res.status(400).json({
-                success: false,
-                message: 'User ID manquant',
-                code: 'MISSING_USER_ID'
-            })
-        }
-
-        const deletedUser = await User.findByIdAndDelete(userId)
-        
-        if (!deletedUser) {
-            return res.status(404).json({
-                success: false,
-                message: 'Utilisateur introuvable',
-                code: 'USER_NOT_FOUND'
-            })
-        }
-        
-        res.json({ 
-            success: true,
-            message: 'Utilisateur supprimé avec succès par l\'admin',
-            user: { id: deletedUser._id, email: deletedUser.email },
-            code: 'USER_DELETED'
-        })
-    } catch (error) {
-        console.error('Delete User (Admin) Error:', error.message)
-        res.status(500).json({ 
-            success: false,
-            message: 'Erreur lors de la suppression de l\'utilisateur',
-            code: 'DELETE_USER_ERROR'
         })
     }
 }
