@@ -1,6 +1,7 @@
-/* import LocalStrategy from 'passport-local'
+import LocalStrategy from 'passport-local'
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt'
-import User from './models/user.model.js'
+import User from '../models/user.model.js'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 
 // ============ CUSTOM COOKIE EXTRACTOR ============
 const cookieExtractor = (req) => {
@@ -57,8 +58,38 @@ export default function initializePassport(passport) {
             return done(error)
         }
     }
+    // ============ GOOGLE STRATEGY ============
+    const googleOptions = {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL
+    }
+    const verifyGoogle = async (accessToken, refreshToken, profile, done) => {
+        try {
+            // 1. Chercher si l'utilisateur existe déjà via son googleID
+            let user = await User.findOne({ googleID: profile.id })
+            if (user) {
+                return done(null, user) // Utilisateur trouvé, on continue !
+            }
+            // 2. Si l'utilisateur n'existe pas, on le crée
+            // On récupère l'email principal dans le tableau d'emails renvoyé par Google
+            user = await User.create({
+                googleID: profile.id,
+                username: profile.displayName.replace(/\s+/g, '').toLowerCase(), // Un pseudo sans espaces
+                name: profile.displayName,
+                email: profile.emails[0].value,
+                // Le mot de passe ne sera pas demandé grâce à required: function()
+            })
+
+            return done(null, user)
+        } catch (error) {
+            return done(error)
+        }
+
+    }
 
     // Enregistrement des stratégies
     passport.use('local', new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.use('jwt', new JWTStrategy(jwtOptions, verifyJwt))
-} */
+    passport.use('google', new GoogleStrategy(googleOptions, verifyGoogle))
+}
