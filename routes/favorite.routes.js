@@ -10,4 +10,4 @@ router.get('/', authenticateToken, getMyFavorites)
 // Ajouter/Retirer (On passe l'ID du livre dans l'URL)
 router.post('/toggle/:bookId', protectMutation, toggleFavorite)
 
-export default router;
+export default router

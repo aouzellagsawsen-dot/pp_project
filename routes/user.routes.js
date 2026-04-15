@@ -11,6 +11,6 @@ router.get('/profile', authenticateToken, getCurrentProfile)
 router.get('/profile/:userId', authenticateToken, authorizeOwner, getUserProfile)
 
 // Update user profile (authentication + authorization + CSRF)
-router.put('/profile/:userId', protectUserMutation, updateUserProfile)
+router.patch('/profile/:userId', protectUserMutation, updateUserProfile)
 
 export default router

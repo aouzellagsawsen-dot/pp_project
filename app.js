@@ -13,6 +13,8 @@ import userRoutes from './routes/user.routes.js'
 import adminRoutes from './routes/admin.routes.js'
 import bookRoutes from './routes/book.routes.js'
 import favoriteRoutes from './routes/favorite.routes.js'
+import notificationRoutes from './routes/notification.routes.js'
+import messagingRoutes from './routes/message.routes.js'
 import Book from './models/book.model.js'
 import User from './models/user.model.js'
 import { errorHandler } from './middleware/error.middleware.js'
@@ -37,7 +39,7 @@ app.set('view engine', 'ejs')
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // ============ DATABASE CONNECTION ============
-dbConnection
+dbConnection()
 
 // ============ PASSPORT SETUP ============
 initializePassport(passport)
@@ -85,6 +87,8 @@ app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/books', bookRoutes)
 app.use('/api/favorites', favoriteRoutes)
+app.use('/api/notify', notificationRoutes)
+app.use('/api/messages', messagingRoutes)
 
 // ============ CSRF ERROR HANDLER ============
 app.use(csrfHandler)

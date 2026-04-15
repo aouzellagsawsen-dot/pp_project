@@ -52,7 +52,6 @@ export const updateUserProfile = async (req, res) => {
     try {
         const { name, email, username, pdp } = req.body
         
-        // 1. On cherche l'utilisateur d'abord
         const user = await User.findById(req.params.userId)
         if (!user) {
             return res.status(404).json({
@@ -62,7 +61,6 @@ export const updateUserProfile = async (req, res) => {
             })
         }
 
-        // 2. Vérification de l'e-mail existant (si un nouvel e-mail est fourni)
         if (email && email !== user.email) {
             const existingUser = await User.findOne({ email: email })
             if (existingUser) {
@@ -75,7 +73,6 @@ export const updateUserProfile = async (req, res) => {
             user.email = email
         }
 
-        // 3. Vérification du username (si un nouveau username est fourni)
         if (username && username !== user.username) {
             const existingUsername = await User.findOne({ username: username })
             if (existingUsername) {
@@ -88,16 +85,9 @@ export const updateUserProfile = async (req, res) => {
             user.username = username
         }
 
-        // 4. Mise à jour du nom (si fourni)
-        if (name) {
-            user.name = name
-        }
+        if (name) user.name = name
+        if (pdp) user.pdp = pdp
 
-        if (pdp) {
-            user.pdp = pdp
-        }
-
-        // 5. On sauvegarde (C'EST ICI QUE TES VALIDATEURS MONGOOSE S'ACTIVENT !)
         const updatedUser = await user.save()
 
         res.json({
@@ -105,8 +95,10 @@ export const updateUserProfile = async (req, res) => {
             message: 'Profil mis à jour avec succès',
             user: updatedUser
         })
+        
     } catch (error) {
-        // Gestion spécifique des erreurs de validation Mongoose
+        // On garde le try/catch UNIQUEMENT pour intercepter et formater 
+        // joliment l'erreur spécifique de validation de Mongoose
         if (error.name === 'ValidationError') {
             console.error('Validation Error:', error.message)
             return res.status(400).json({
@@ -120,11 +112,9 @@ export const updateUserProfile = async (req, res) => {
             })
         }
 
-        console.error('Update Profile Error:', error.message)
-        res.status(500).json({ 
-            success: false,
-            message: 'Erreur lors de la mise à jour du profil',
-            code: 'UPDATE_PROFILE_ERROR'
-        })
+        // 🔥 LA MAGIE D'EXPRESS 5 : 
+        // Au lieu de faire next(error), on "jette" simplement l'erreur.
+        // Express 5 va l'attraper au vol et l'envoyer à ton errorHandler global !
+        throw error
     }
 }
