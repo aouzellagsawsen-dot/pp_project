@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -34,7 +35,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true 
-},
+    },
     password: {
         type: String,
         // Requis seulement si on n'a pas d'ID Google
@@ -55,6 +56,14 @@ const userSchema = new mongoose.Schema({
             message: 'Le mot de passe est obligatoire (8 caractères min, avec majuscule, minuscule et chiffre).'
         }
     },
+    resetPasswordToken: {
+    type: String,
+    required: false // C'est l'état par défaut, mais c'est bien de le visualiser
+    },
+    resetPasswordExpires: {
+    type: Date,
+    required: false
+   },
     pdp : {
         type : String,
         default : 'public/uploads/pdp/default-pdp.webp'
@@ -68,26 +77,41 @@ const userSchema = new mongoose.Schema({
 })
 
 // Hash password before saving
-userSchema.pre('save', async function(next) {
-    // If password is not modified, skip hashing
-    if (!this.isModified('password')) {
-        next()
-        return
-    }
-    
-    try {
-        const salt = await bcrypt.genSalt(10)
-        this.password = await bcrypt.hash(this.password, salt)
-    } catch (error) {
-        next(error)
-        return
-    }
-})
+userSchema.pre('save', async function() {
+    // 1. Si le mot de passe n'est pas modifié, on s'arrête là
+    if (!this.isModified('password')) return;
+
+    // 2. Hachage du mot de passe
+    // mais on peut le garder pour la sécurité.
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function(inputPassword) {
     return await bcrypt.compare(inputPassword, this.password)
 }
+
+
+userSchema.methods.getResetPasswordToken = function() {
+    // 1. Génération du jeton brut (Plain Text)
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // 2. Hachage du jeton pour le stockage en base de données
+    this.resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+    // 3. Définition de l'expiration (10 minutes converties en ms)
+    this.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
+
+    // 4. On retourne le jeton brut
+    return resetToken;
+};
+
+
+
 
 const User = mongoose.model('User', userSchema)
 export default User

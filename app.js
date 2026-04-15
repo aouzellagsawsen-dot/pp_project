@@ -100,7 +100,7 @@ app.use((err, req, res, next) => {
 
 // ============ GESTIONNAIRE D'ERREURS GLOBAL ============
 // Ce middleware DOIT être le tout dernier avant app.listen()
-app.use((err, req, res, next) => {
+/*app.use((err, req, res, next) => {
     // 1. On loggue l'erreur complète dans le terminal pour le développeur
     console.error('ERREUR SERVEUR :', err.stack);
 
@@ -117,7 +117,7 @@ app.use((err, req, res, next) => {
             : err.message,
         code: err.code || 'SERVER_ERROR'
     });
-})
+})*/
 
 // ============ START SERVER ============
 app.listen(PORT, () => {
