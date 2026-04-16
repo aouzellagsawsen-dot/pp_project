@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un Livre (Test Upload)</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        .hidden { display: none; }
+        button { padding: 10px 15px; background: #2c3e50; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Ajouter un nouveau livre</h2>
+
+    <form action="/api/books" method="POST" enctype="multipart/form-data">
+        
+        <div class="form-group">
+            <label>Titre :</label>
+            <input type="text" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label>Auteur :</label>
+            <input type="text" name="author" required>
+        </div>
+
+        <div class="form-group">
+            <label>Genre :</label>
+            <select name="genre" id="genreSelect" required>
+                <option value="">-- Choisir un genre --</option>
+                <option value="Classic Fiction">Classic Fiction</option>
+                <option value="Coming of Age">Coming of Age</option>
+                <option value="Dystopian">Dystopian</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Historical Fiction">Historical Fiction</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Others">Others</option>
+            </select>
+        </div>
+        
+        <div class="form-group" id="customGenre">
+            <label>Precise the genre </label>
+            <input type="text" name="customGenre" id="customGenre">
+        </div>
+
+        <div class="form-group">
+            <label>Résumé :</label>
+            <textarea name="description" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Couverture du livre (Image) :</label>
+            <input type="file" name="image" accept="image/*">
+        </div>
+
+        <button type="submit">Enregistrer le livre</button>
+    </form>
+
+
+</body>
+</html>
