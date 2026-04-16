@@ -27,8 +27,6 @@ export const authenticateToken = (req, res, next) => {
         throw error // Express 5 attrape ça direct !
     }
 
-    // Plus de try/catch ! Si verify échoue, ça "throw" automatiquement une erreur 
-    // JsonWebTokenError ou TokenExpiredError que l'on va gérer globalement.
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
     
     req.user = { 

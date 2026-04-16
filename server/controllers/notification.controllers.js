@@ -12,8 +12,7 @@ export const getNotifications = async (req, res) => {
         success: true,
         data: notifications
     });
-} // Plus de try/catch ! Si la base de données plante, Express l'envoie au errorHandler.
-
+} 
 
 // Marquer une notification comme lue
 export const markAsRead = async (req, res) => {
@@ -34,4 +33,4 @@ export const markAsRead = async (req, res) => {
     }
 
     res.status(200).json({ success: true, message: "Marquée comme lue" });
-} // Pareil, plus de try/catch en bas !
+}

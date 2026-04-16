@@ -59,7 +59,7 @@ export const addPhysicalBook = async (req, res) => {
         data: bookData, 
         copy: newPhysicalBook 
     });
-} // Plus de try/catch, Express 5 gère l'erreur (ex: erreur de validation mongoose)
+}
 
 // ============ SUPPRIMER UN LIVRE ============
 export const deleteBook = async (req, res) => {

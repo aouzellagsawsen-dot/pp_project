@@ -1,4 +1,16 @@
 export const errorHandler = (err, req, res, next) => {
+
+if (err.name === 'ValidationError') {
+    return res.status(400).json({
+        success: false,
+        message: "Erreur de validation des données",
+        errors: Object.keys(err.errors).map(field => ({
+            field,
+            message: err.errors[field].message
+        })),
+        code: 'VALIDATION_ERROR'
+    });
+}
     console.error('ERREUR SERVEUR :', err.stack);
 
     const statusCode = err.status || err.statusCode || 500;

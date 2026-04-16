@@ -91,5 +91,5 @@ export default function initializePassport(passport) {
     // Enregistrement des stratégies
     passport.use('local', new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.use('jwt', new JWTStrategy(jwtOptions, verifyJwt))
-/*     passport.use('google', new GoogleStrategy(googleOptions, verifyGoogle)) */
+    passport.use('google', new GoogleStrategy(googleOptions, verifyGoogle))
 }

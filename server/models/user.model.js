@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
    },
     pdp : {
         type : String,
-        default : 'public/uploads/pdp/default-pdp.webp'
+        default : '/uploads/pdp/default-pdp.webp'
     },
     isVerified: {
         type: Boolean,
