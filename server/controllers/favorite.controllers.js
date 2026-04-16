@@ -1,44 +1,38 @@
 import User from '../models/user.model.js';
 
-// AJOUTER ou RETIRER un favori (Système de Toggle)
+// ============ AJOUTER ou RETIRER un favori (Système de Toggle) ============
 export const toggleFavorite = async (req, res) => {
-    try {
-        const userId = req.user.id; // Récupéré via ton middleware authenticateToken
-        const { bookId } = req.params;
+    const userId = req.user.id; // Récupéré via ton middleware authenticateToken
+    const { bookId } = req.params;
 
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
 
-        // On vérifie si le livre est déjà dans les favoris
-        const isFavorite = user.favorites.includes(bookId);
+    // On vérifie si le livre est déjà dans les favoris
+    const isFavorite = user.favorites.includes(bookId);
 
-        if (isFavorite) {
-            // S'il y est, on le retire ($pull)
-            await User.findByIdAndUpdate(userId, { $pull: { favorites: bookId } });
-            return res.status(200).json({ success: true, message: "Retiré des favoris", action: "removed" });
-        } else {
-            // S'il n'y est pas, on l'ajoute ($addToSet évite les doublons par sécurité)
-            await User.findByIdAndUpdate(userId, { $addToSet: { favorites: bookId } });
-            return res.status(200).json({ success: true, message: "Ajouté aux favoris", action: "added" });
-        }
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Erreur serveur" });
+    if (isFavorite) {
+        // S'il y est, on le retire ($pull)
+        await User.findByIdAndUpdate(userId, { $pull: { favorites: bookId } });
+        return res.status(200).json({ success: true, message: "Retiré des favoris", action: "removed" });
+    } else {
+        // S'il n'y est pas, on l'ajoute ($addToSet évite les doublons par sécurité)
+        await User.findByIdAndUpdate(userId, { $addToSet: { favorites: bookId } });
+        return res.status(200).json({ success: true, message: "Ajouté aux favoris", action: "added" });
     }
 }
 
-// RÉCUPÉRER la liste des favoris (avec les détails des livres)
+// ============ RÉCUPÉRER la liste des favoris ============
 export const getMyFavorites = async (req, res) => {
-    try {
-        const userId = req.user.id;
+    const userId = req.user.id;
 
-        // .populate('favorites') transforme les IDs en objets complets (Titre, Auteur, Image...)
-        const user = await User.findById(userId).populate('favorites');
+    // .populate('favorites') transforme les IDs en objets complets (Titre, Auteur, Image...)
+    const user = await User.findById(userId).populate('favorites');
 
-        return res.status(200).json({ 
-            success: true, 
-            favorites: user.favorites 
-        });
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Erreur serveur" });
-    }
+    return res.status(200).json({ 
+        success: true, 
+        favorites: user.favorites 
+    });
 }

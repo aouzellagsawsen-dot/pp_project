@@ -1,18 +1,28 @@
 export const errorHandler = (err, req, res, next) => {
-    // 1. On loggue l'erreur complète dans le terminal pour le développeur
+
+if (err.name === 'ValidationError') {
+    return res.status(400).json({
+        success: false,
+        message: "Erreur de validation des données",
+        errors: Object.keys(err.errors).map(field => ({
+            field,
+            message: err.errors[field].message
+        })),
+        code: 'VALIDATION_ERROR'
+    });
+}
     console.error('ERREUR SERVEUR :', err.stack);
 
-    // 2. On détermine le code HTTP (500 par défaut si non spécifié)
     const statusCode = err.status || err.statusCode || 500;
 
-    // 3. On renvoie une réponse JSON toujours propre et structurée
+    const message = (process.env.NODE_ENV === 'production' && statusCode === 500)
+        ? 'Une erreur interne est survenue.' 
+        : err.message;
+
     res.status(statusCode).json({
         success: false,
-        // En mode développement, on affiche le vrai message d'erreur.
-        // En mode production, on cache les détails et on met un message générique.
-        message: process.env.NODE_ENV === 'production' 
-            ? 'Une erreur interne est survenue.' 
-            : err.message,
-        code: err.code || 'SERVER_ERROR'
+        message: message,
+        code: err.code || 'SERVER_ERROR',
+        ...(err.errors && { details: err.errors }) 
     })
 }

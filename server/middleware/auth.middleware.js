@@ -2,13 +2,10 @@ import jwt from 'jsonwebtoken'
 import { doubleCsrf } from 'csrf-csrf'
 
 // ============ CSRF PROTECTION ============
-// ============ CSRF PROTECTION ============
 const { generateCsrfToken, doubleCsrfProtection, } = doubleCsrf({
     getSecret: () => process.env.CSRF_SECRET,
     cookieName: "x-csrf-token", 
-    
     getSessionIdentifier: (req) => req.cookies?.accessToken || "utilisateur_non_connecte",
-
     cookieOptions: {
         httpOnly: true,
         sameSite: "strict",
@@ -24,65 +21,49 @@ export const authenticateToken = (req, res, next) => {
     const token = req.cookies.accessToken
 
     if (!token) {
-        return res.status(401).json({ 
-            success: false,
-            message: 'Aucun token fourni. Veuillez vous connecter.',
-            code: 'NO_TOKEN'
-        })
+        const error = new Error('Aucun token fourni. Veuillez vous connecter.')
+        error.statusCode = 401
+        error.code = 'NO_TOKEN'
+        throw error // Express 5 attrape ça direct !
     }
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
-        // On attache l'utilisateur à la requête
-        req.user = { 
-            id: decoded.userId, 
-            email: decoded.email 
-        }
-        next()
-    } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-            return res.status(403).json({ 
-                success: false,
-                message: 'Token expiré. Veuillez rafraîchir.',
-                code: 'TOKEN_EXPIRED'
-            })
-        }
-        return res.status(403).json({ 
-            success: false,
-            message: 'Token invalide',
-            code: 'INVALID_TOKEN'
-        })
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+    
+    req.user = { 
+        id: decoded.userId, 
+        email: decoded.email 
     }
+    
+    next() // Obligatoire : on passe le relais au contrôleur
 }
 
 // ============ AUTHORIZATION ============
 export const authorizeOwner = (req, res, next) => {
-    // Security check: user must be authenticated
     if (!req.user) {
-        return res.status(401).json({ success: false, message: 'Non authentifié', code: 'NOT_AUTHENTICATED' })
+        const error = new Error('Non authentifié')
+        error.statusCode = 401
+        error.code = 'NOT_AUTHENTICATED'
+        throw error
     }
 
     const requestedUserId = req.params.userId || req.body.userId
     const loggedInUserId = req.user.id.toString()
 
-    // Validate that requestedUserId is provided and matches logged-in user
     if (!requestedUserId) {
-        return res.status(400).json({ 
-            success: false,
-            message: 'User ID manquant',
-            code: 'MISSING_USER_ID'
-        })
+        const error = new Error('User ID manquant')
+        error.statusCode = 400
+        error.code = 'MISSING_USER_ID'
+        throw error
     }
 
     if (requestedUserId !== loggedInUserId) {
-        return res.status(403).json({ 
-            success: false,
-            message: 'Accès refusé : vous ne pouvez modifier que vos propres données',
-            code: 'FORBIDDEN_RESOURCE'
-        })
+        const error = new Error('Accès refusé : vous ne pouvez modifier que vos propres données')
+        error.statusCode = 403
+        error.code = 'FORBIDDEN_RESOURCE'
+        throw error
     }
 
-    next()
+    next() // Obligatoire : on passe le relais au contrôleur
 }
 
 // ============ EXPORTS CSRF ============
