@@ -6,7 +6,6 @@
   "scripts": {
     "start": "react-scripts start",
     "dev": "nodemon server.js",
-    "div": "nodemon app.js",
     "vite": "vite",
     "build": "vite build",
     "preview": "vite preview",
@@ -41,7 +40,8 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

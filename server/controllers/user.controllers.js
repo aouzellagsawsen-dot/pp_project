@@ -111,10 +111,6 @@ export const updateUserProfile = async (req, res) => {
                 code: 'VALIDATION_ERROR'
             })
         }
-
-        // 🔥 LA MAGIE D'EXPRESS 5 : 
-        // Au lieu de faire next(error), on "jette" simplement l'erreur.
-        // Express 5 va l'attraper au vol et l'envoyer à ton errorHandler global !
         throw error
     }
 }
