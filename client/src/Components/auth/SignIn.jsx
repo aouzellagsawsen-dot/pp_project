@@ -7,22 +7,68 @@ const LoginPage = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+
   const [showPassword, setShowPassword] = useState(false)
   
     const toggleVisibility = () =>{
       setShowPassword(!showPassword)
     }
 
-  const handleSubmit = (e) => {
-  e.preventDefault(); // Indispensable
-  console.log("Bouton cliqué !"); // Pour vérifier dans la console
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // try {
+  //   const response = await fetch('http://localhost:5000/api/login', { // Remplace par ton URL
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   });
+
+  //   const data = await response.json();
+
+  //   if (response.ok) {
+  //     localStorage.setItem('token', data.token);
+  //     localStorage.setItem('isLoggedIn', 'true');
+
+  //     if (setIsLoggedIn) setIsLoggedIn(true);
+
+  //     navigate('/welcome');
+  //   } else {
   
-  if (setIsLoggedIn) {
+  //     alert(data.message || "Erreur lors de la connexion");
+  //   }
+  // } catch (error) {
+  //   console.error("Erreur réseau :", error);
+  //   alert("Impossible de contacter le serveur.");
+  // }
+
+  try {
+  const response = await fetch('...');
+  const data = await response.json();
+
+  if (response.ok) {
+    // LE SERVEUR DIT OUI : on enregistre les infos
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('token', data.token); 
     setIsLoggedIn(true);
+    navigate('/welcome');
+  } else {
+    // LE SERVEUR DIT NON (ex: 401, 404, 500)
+    // On ne touche PAS au localStorage ici
+    setError("Identifiants incorrects");
   }
-  localStorage.setItem('isLoggedIn', 'true');
-  const destination = location.state?.from || "/welcome";
-  navigate('/welcome');
+} catch (error) {
+  // ERREUR TECHNIQUE (Coupure internet, crash serveur)
+  console.error("Erreur de connexion", error);
+}
+
+
+
 };
 
   return (
@@ -75,6 +121,8 @@ const LoginPage = ({ setIsLoggedIn }) => {
               type="email" 
               placeholder="you@example.com"
               className="w-full px-5 py-3.5 rounded-2xl bg-[#FFFBF2] border border-[#EFE7D6] focus:outline-none focus:ring-2 focus:ring-[#8D7B68]/20 transition-all placeholder:text-stone-300 text-sm"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -86,6 +134,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
                 type={showPassword ? "text" : "password"} 
                 placeholder="••••••••"
                 className="w-full px-5 py-3.5 rounded-2xl bg-[#FFFBF2] border border-[#EFE7D6] focus:outline-none focus:ring-2 focus:ring-[#8D7B68]/20 transition-all text-sm"
+              value={password} onChange={(e)=>{setPassword(e.target.value)}}
               />
               <button  type="button" onClick={toggleVisibility}>
           {showPassword ? <EyeOff size={20} className='text-[#7A6A5A]'></EyeOff> : <Eye size={20} className='text-[#7A6A5A]'></Eye>}

@@ -22,10 +22,22 @@ import History from './Components/dashboard/History';
 import Profile from './Components/dashboard/Profile';
 import Borrows from './Components/dashboard/Borrows';
 import BienvenuePage from './Components/homepage/BienvenuePage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import api from './api/axios';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState('');
+
+  // useEffect(() => {
+  //   api.get('/api/test')
+  //     .then(response => {
+  //       setMessage(response.data.message); 
+  //     })
+  //     .catch(error => {
+  //       console.error("Erreur de connexion avec le serveur :", error);
+  //     });
+  // }, []);
   return (
     <div className="flex flex-col min-h-screen">
       <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
