@@ -55,9 +55,10 @@ const Sign_up = ({ setIsLoggedIn }) => {
         username: formData.username,
         name: formData.name,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        confirmPassword: formData.confirmPassword
       });
-      
+
       localStorage.setItem('userName', formData.username);
       localStorage.setItem('isLoggedIn', 'true');
       
@@ -71,7 +72,6 @@ const Sign_up = ({ setIsLoggedIn }) => {
     } catch (err) {
       // --- EN CAS D'ERREUR ---
       console.error("Registration error:", err);
-      // Le code s'arrête ici, il n'y aura pas de redirection, l'utilisateur verra l'erreur !
       setError(err.response?.data?.message || "An error occured during registration.");
     } finally {
       setIsLoading(false);
@@ -148,9 +148,9 @@ const Sign_up = ({ setIsLoggedIn }) => {
         </div>
 
         <div>
-        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='confirmPassword'>Confirm Password</label>
+        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="confirmPassword">Confirm Password</label>
         <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password" value={formData.confirmPassword}
-            onChange={handleChange} id='confirmPassword'/>
+            onChange={handleChange} id="confirmPassword"/>
         </div>
 
         <div>

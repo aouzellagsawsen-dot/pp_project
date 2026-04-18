@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Feather, Sparkles, LogIn, ChevronLeft, EyeOff, Eye } from 'lucide-react';
-
+import api from '../../api/axios';
 const LoginPage = ({ setIsLoggedIn }) => {
   
   const navigate = useNavigate();
@@ -9,9 +9,9 @@ const LoginPage = ({ setIsLoggedIn }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(''); // <--- AJOUTÉ : Pour afficher les erreurs à l'utilisateur
+  const [isLoading, setIsLoading] = useState(false);
   
     const toggleVisibility = () =>{
       setShowPassword(!showPassword)
@@ -48,22 +48,18 @@ const LoginPage = ({ setIsLoggedIn }) => {
   // }
 
   try {
-  const response = await fetch('...');
+  const response = await fetch('http://localhost:5000/api/login');
   const data = await response.json();
 
   if (response.ok) {
-    // LE SERVEUR DIT OUI : on enregistre les infos
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('token', data.token); 
     setIsLoggedIn(true);
     navigate('/welcome');
   } else {
-    // LE SERVEUR DIT NON (ex: 401, 404, 500)
-    // On ne touche PAS au localStorage ici
     setError("Identifiants incorrects");
   }
 } catch (error) {
-  // ERREUR TECHNIQUE (Coupure internet, crash serveur)
   console.error("Erreur de connexion", error);
 }
 
@@ -160,6 +156,11 @@ const LoginPage = ({ setIsLoggedIn }) => {
           </button>
         </form>
 
+{error && (
+  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-xl text-sm mb-4">
+    {error}
+  </div>
+)}
         <div className="mt-8 text-center text-sm text-stone-500"> 
           New here? 
           <Link to="/signup" className="text-[#8D7B68] font-semibold hover:underline ml-1">
