@@ -1,0 +1,95 @@
+import React, { useEffect, useState } from 'react';
+import { BookOpen, Heart, Bell, MessageSquare, User, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom'; // Ajoute useNavigate ici
+
+const Header = ({ isLoggedIn, setIsLoggedIn }) => { // Récupère setIsLoggedIn ici
+  const navigate = useNavigate(); // Initialise le hook de navigation
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn'); // Supprime la trace dans le navigateur
+    setIsLoggedIn(false); // Remet l'état global à "déconnecté"
+    navigate('/'); // Redirige vers l'accueil
+  };
+
+  const [currentUserName, setCurrentUserName] = useState("Invité");
+
+useEffect(() => {
+  const name = localStorage.getItem('userName');
+  if (name) {
+    setCurrentUserName(name);
+  }
+}, []);
+
+  return (
+    <header className="w-full bg-[#FDF5E6] border-b border-stone-200 text-[#5D4037] backdrop-blur-md shadow-sm sticky top-0 z-50">
+      <div className="max-w-360 mx-auto px-12 h-20 flex items-center justify-between">
+        
+        {/* Logo Section */}
+        <Link to={isLoggedIn ? "/welcome" : "/"}
+         className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity">
+          <BookOpen className="w-8 h-8 text-[#8D7B68]" strokeWidth={1.5} />
+          <h1 className="text-3xl font-serif font-medium tracking-tight">Alinéa</h1>
+        </Link>
+
+        {/* Navigation Links */}
+        <nav className="hidden md:flex flex-1 font-serif justify-center text-[#5D4037] items-center gap-10">
+          <Link to="/catalog" className="hover:text-[#8D7B68] transition-colors">Explore Books</Link>
+          <Link to="/About" className="hover:text-[#8D7B68] transition-colors">About</Link>
+          
+          {isLoggedIn && (
+            <Link to="/AddNewBook" className="hover:text-[#8D7B68] transition-colors">Add Book</Link>
+          )}
+        </nav>
+
+        {/* User Controls */}
+        <div className="flex items-center gap-5 shrink-0">
+          {isLoggedIn ? (
+            <>
+              <div className="flex items-center gap-2 pr-5 border-r border-stone-300">
+                <Link to="/favorites" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all text-[#5D4037]">
+                  <Heart size={22} strokeWidth={1.5} />
+                </Link>
+
+                <Link to ="/notifications" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative">
+                  <Bell size={22} strokeWidth={1.5} />
+                  <span className="absolute top-2 right-2 bg-[#8B5E3C] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#FDF5E6]">
+                    2
+                  </span>
+                </Link>
+
+                <Link to ="/Message" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative">
+                  <MessageSquare size={22} strokeWidth={1.5} />
+                  <span className="absolute top-2 right-2 bg-[#8B5E3C] w-2 h-2 rounded-full border border-[#FDF5E6]"></span>
+                </Link>
+              </div>
+
+              <div className="flex items-center gap-3 pl-2">
+                <Link to="/dashboard" className="flex items-center gap-3 group">
+                  <div className="w-9 h-9 bg-stone-200 rounded-full flex items-center justify-center group-hover:ring-2 group-hover:ring-[#8D7B68] transition-all overflow-hidden">
+                    <User size={20} className="text-stone-500" />
+                  </div>
+                  <span className="text-sm font-medium italic">{currentUserName}</span>
+                </Link>
+                
+                {/* Bouton LogOut */}
+                <button 
+                  onClick={handleLogout}
+                  className="p-2 text-stone-400 hover:text-red-600 transition-colors"
+                  title="Sign Out"
+                >
+                  <LogOut size={20} />
+                </button>
+              </div>
+            </>
+          ) : (
+            <Link to="/signup" className="px-6 py-2 bg-[#4a3728] text-white rounded-full font-serif hover:bg-[#5D4037] shadow-md">
+              Join the community
+            </Link>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
