@@ -18,52 +18,34 @@ const LoginPage = ({ setIsLoggedIn }) => {
     }
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault(); 
+    setError('')
+    setIsLoading(true);
 
-  // try {
-  //   const response = await fetch('http://localhost:5000/api/login', { // Remplace par ton URL
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   });
+    try {
+      // ✅ Utilise directement 'email' et 'password' (tes useState)
+      const response = await api.post('/api/auth/login', {
+        email: email, 
+        password: password,
+      });
 
-  //   const data = await response.json();
+      localStorage.setItem('userName', response.data.user.name);
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      if (setIsLoggedIn) {
+        setIsLoggedIn(true);
+      }
+      
+      const destination = location.state?.from || "/welcome";
+      navigate(destination);
 
-  //   if (response.ok) {
-  //     localStorage.setItem('token', data.token);
-  //     localStorage.setItem('isLoggedIn', 'true');
-
-  //     if (setIsLoggedIn) setIsLoggedIn(true);
-
-  //     navigate('/welcome');
-  //   } else {
-  
-  //     alert(data.message || "Erreur lors de la connexion");
-  //   }
-  // } catch (error) {
-  //   console.error("Erreur réseau :", error);
-  //   alert("Impossible de contacter le serveur.");
-  // }
-
-  try {
-  const response = await fetch('http://localhost:5000/api/login');
-  const data = await response.json();
-
-  if (response.ok) {
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('token', data.token); 
-    setIsLoggedIn(true);
-    navigate('/welcome');
-  } else {
-    setError("Identifiants incorrects");
-  }
-} catch (error) {
-  console.error("Erreur de connexion", error);
-}
-
-};
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err.response?.data?.message || "An error occured during login.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans text-[#5C544B] relative overflow-hidden">
