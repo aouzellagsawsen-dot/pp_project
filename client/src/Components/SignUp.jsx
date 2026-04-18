@@ -78,6 +78,10 @@ const Sign_up = ({ setIsLoggedIn }) => {
     }
   };
 
+const handleGoogleAuth = () => {
+    window.location.href = 'http://localhost:5000/api/auth/google'; // Mets bien le port de ton backend
+};
+
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
       
@@ -167,7 +171,8 @@ const Sign_up = ({ setIsLoggedIn }) => {
       </div>
 
       <div>
-        <button type="button" className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer">
+        <button type="button" className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer"
+        onClick={handleGoogleAuth}>
           <img className="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"></img>
           <span className='font-medium'>Sign up with Google</span>
         </button>

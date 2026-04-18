@@ -63,8 +63,6 @@ const LoginPage = ({ setIsLoggedIn }) => {
   console.error("Erreur de connexion", error);
 }
 
-
-
 };
 
   return (
