@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
 import { Link, useLocation, useNavigate} from 'react-router-dom';
-
+import api from '../api/axios';
 const Sign_up = ({ setIsLoggedIn }) => {
-  const [nameInput, setNameInput] = useState('');
+
+  const [formData, setFormData] = useState({
+    username: '',
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
+
+
+  const [nameInput, setNameInput] = useState('');
+  
 
   useEffect(() => {
       window.scrollTo(0, 0);
@@ -17,21 +32,51 @@ const Sign_up = ({ setIsLoggedIn }) => {
     setShowPassword(!showPassword)
   }
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
+  };
 
-  const handleSubmit = (e) => {
-  e.preventDefault(); // Indispensable
- 
-  const nameToSave = username.value || username; 
-  
-  localStorage.setItem('userName', nameToSave);
-  if (setIsLoggedIn) {
-    setIsLoggedIn(true);
-  }
-  
-  localStorage.setItem('isLoggedIn', 'true');
-  const destination = location.state?.from || "/welcome";
-  navigate(destination);
-};
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    setError('');
+
+    if (formData.password !== formData.confirmPassword) {
+      return setError('Les mots de passe ne correspondent pas.');
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await api.post('/api/auth/register', {
+        username: formData.username,
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      });
+      
+      localStorage.setItem('userName', formData.username);
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      if (setIsLoggedIn) {
+        setIsLoggedIn(true);
+      }
+      
+      const destination = location.state?.from || "/welcome";
+      navigate(destination);
+
+    } catch (err) {
+      // --- EN CAS D'ERREUR ---
+      console.error("Registration error:", err);
+      // Le code s'arrête ici, il n'y aura pas de redirection, l'utilisateur verra l'erreur !
+      setError(err.response?.data?.message || "An error occured during registration.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
@@ -68,25 +113,34 @@ const Sign_up = ({ setIsLoggedIn }) => {
         <h1 className='text-[#5C544B] text-4xl font-serif font-semibold text-[32px] tracking-tight text-center'>Join Our Community</h1>
         <p className='text-[#7A6A5A] text-[16px] font-medium text-center italic'>- Start sharing and discovering amazing books -</p>
 
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-sm font-sans">
+            {error}
+          </div>
+        )}
+
         <div>
-        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="username" value="username" required>Username</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your username" id="username"></input>
+        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="username" required>Username</label>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your username" id="username" value={formData.username} onChange={handleChange}></input>
         </div>
         
         <div>
-        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" value="name" required>Full Name</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name"></input>
+        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" required>Full Name</label>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name" value={formData.name}
+            onChange={handleChange}></input>
         </div>
 
         <div>
-        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="email" value="email" required>Email</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] h-5 w-full text-[#7A6A5A]' type="email" placeholder=" Enter your email" id="email"/>
+        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="email" required>Email</label>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] h-5 w-full text-[#7A6A5A]' type="email" placeholder=" Enter your email" id="email" value={formData.email}
+            onChange={handleChange}/>
         </div>
 
         <div>
-        <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password" value="password">Password</label>
+        <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password">Password</label>
         <div className='flex gap-2'>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type={showPassword ? "text" : "password"} placeholder=" ......" id="password"/>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type={showPassword ? "text" : "password"} placeholder=" ......" id="password" value={formData.password}
+              onChange={handleChange}/>
         <button  type="button" onClick={toggleVisibility}>
           {showPassword ? <EyeOff size={20} className='text-[#7A6A5A]'></EyeOff> : <Eye size={20} className='text-[#7A6A5A]'></Eye>}
         </button>
@@ -94,8 +148,9 @@ const Sign_up = ({ setIsLoggedIn }) => {
         </div>
 
         <div>
-        <label className='font-sans text-[#7A6A5A] font-medium'>Confirm Password</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password"/>
+        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='confirmPassword'>Confirm Password</label>
+        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password" value={formData.confirmPassword}
+            onChange={handleChange} id='confirmPassword'/>
         </div>
 
         <div>
@@ -105,14 +160,15 @@ const Sign_up = ({ setIsLoggedIn }) => {
 
        <div>
         <button type="submit"
-        className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl cursor-pointer'>
-          <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>Create Account</span>
+        className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl cursor-pointer'
+        disabled={isLoading}>
+          <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>{isLoading ? 'Creating Account...' : 'Create Account'}</span>
         </button>
       </div>
 
       <div>
-        <button type="button" class="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer">
-          <img class="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"></img>
+        <button type="button" className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer">
+          <img className="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"></img>
           <span className='font-medium'>Sign up with Google</span>
         </button>
       </div>
