@@ -25,6 +25,7 @@ import Borrows from './Components/dashboard/Borrows';
 import BienvenuePage from './Components/homepage/BienvenuePage';
 import { useEffect, useState } from 'react';
 import api from './api/axios';
+import PublicProfile from './Components/dashboard/PublicProfile';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -64,6 +65,7 @@ export default function App() {
             <Route path="history" element={<History />} />
             <Route path="profile" element={<Profile />} />
           </Route>
+          <Route path="/dashboard/publicprofile" element={<PublicProfile />} />
         </Routes>
       </main>
       <Footer isLoggedIn={isLoggedIn}/>
