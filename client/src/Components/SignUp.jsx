@@ -55,7 +55,8 @@ const Sign_up = ({ setIsLoggedIn }) => {
         username: formData.username,
         name: formData.name,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        confirmPassword: formData.confirmPassword // <-- AJOUTEZ CETTE LIGNE
       });
       
       localStorage.setItem('userName', formData.username);

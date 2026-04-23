@@ -12,7 +12,7 @@ export const registerValidation = [
     body('username').trim().notEmpty().withMessage("L'nom d'utilisateur est requis"),
     body('email').isEmail().withMessage('Email invalide').normalizeEmail(),
     body('password').isLength({ min: 8 }).withMessage('Le mot de passe doit faire au moins 8 caractères').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/).withMessage('Le mot de passe doit contenir majuscules, minuscules et chiffres'),
-    body('passwordConfirm').custom((value, { req }) => {
+    body('confirmPassword').custom((value, { req }) => {
         if (value !== req.body.password) {
             throw new Error('Les mots de passe ne correspondent pas');
         }
@@ -24,11 +24,19 @@ export const registerValidation = [
 export const register = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        const error = new Error('Erreur de validation');
+        /* const error = new Error('Erreur de validation');
         error.statusCode = 400;
         error.errors = errors.array(); // On peut attacher le tableau d'erreurs d'express-validator !
-        throw error;
-    }
+        throw error; */
+        console.log("Détails des erreurs :", errors.array()); 
+  
+  // Renvoie une réponse claire au front-end
+  return res.status(400).json({ 
+      message: "Erreur de validation", 
+      erreurs: errors.array() 
+  });
+}
+
 
     const { name, username, email, password } = req.body
 
