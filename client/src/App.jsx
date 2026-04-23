@@ -12,6 +12,7 @@ import BookDescription from './Components/BookDescription';
 import Message from './Components/Message';
 import About from './Components/About';
 import ForgotPassword from './Components/auth/ForgotPassword';
+import ResetPassword from './Components/auth/ResetPassword';  
 import ContactUs from './Components/ContactUs';
 import Favorites from './Components/Favorites';
 import ExplorePage from './Components/Catalog/ExplorePage';
@@ -28,16 +29,13 @@ import api from './api/axios';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState('');
-
-  // useEffect(() => {
-  //   api.get('/api/test')
-  //     .then(response => {
-  //       setMessage(response.data.message); 
-  //     })
-  //     .catch(error => {
-  //       console.error("Erreur de connexion avec le serveur :", error);
-  //     });
-  // }, []);
+ 
+  useEffect(() => {
+    const savedStatus = localStorage.getItem('isLoggedIn');
+    if (savedStatus === 'true') {
+      setIsLoggedIn(true);
+    }
+  }, []);
   return (
     <div className="flex flex-col min-h-screen">
       <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
@@ -50,6 +48,7 @@ export default function App() {
           <Route path="/Message" element={<Message />} />
           <Route path="/About" element={<About />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/SignUp" element={<SignUp setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/terms" element={<TermsOfUse/>} />

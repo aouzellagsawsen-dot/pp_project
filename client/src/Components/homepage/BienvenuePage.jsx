@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, PlusCircle, LayoutDashboard, MessageSquare } from 'lucide-react';
 
 const BienvenuePage = () => {
   const navigate = useNavigate();
   const userName = localStorage.getItem('userName') || "Reader";
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-[#F1EAD7] px-6">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Send, ChevronLeft, CheckCircle2, Feather } from 'lucide-react';
 
@@ -20,6 +20,9 @@ const ContactPage = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans text-[#5C544B] relative overflow-hidden">

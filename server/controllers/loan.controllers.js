@@ -175,3 +175,25 @@ export const rejectLoan = async (req, res) => {
         data: loan
     });
 }
+
+    // ============ 4. VOIR LES DEMANDES EN ATTENTE ============
+export const getPendingRequests = async (req, res) => {
+    try {
+        const lenderId = req.user.id; // L'ID du propriétaire connecté
+
+        // On cherche tous les emprunts "pending" destinés à ce propriétaire
+        const pendingLoans = await Loan.find({ 
+            lender: lenderId, 
+            status: 'pending' 
+        })
+        .populate('physicalBook') // Récupère le titre et l'image du livre
+        .populate('borrower', 'name email'); // Récupère le nom de celui qui demande
+
+        res.status(200).json({
+            success: true,
+            data: pendingLoans
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}

@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Heart } from 'lucide-react'
 
 const Favorites = () => {
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   return (
     <div className='min-h-screen bg-[#f1ead7]'>
       <div className='pl-67 flex flex-col w-full'>
