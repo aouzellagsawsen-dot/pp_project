@@ -58,7 +58,7 @@ const Sign_up = ({ setIsLoggedIn }) => {
         password: formData.password,
         confirmPassword: formData.confirmPassword // <-- AJOUTEZ CETTE LIGNE
       });
-      
+
       localStorage.setItem('userName', formData.username);
       localStorage.setItem('isLoggedIn', 'true');
       
@@ -72,12 +72,15 @@ const Sign_up = ({ setIsLoggedIn }) => {
     } catch (err) {
       // --- EN CAS D'ERREUR ---
       console.error("Registration error:", err);
-      // Le code s'arrête ici, il n'y aura pas de redirection, l'utilisateur verra l'erreur !
       setError(err.response?.data?.message || "An error occured during registration.");
     } finally {
       setIsLoading(false);
     }
   };
+
+const handleGoogleAuth = () => {
+    window.location.href = 'http://localhost:5000/api/auth/google'; // Mets bien le port de ton backend
+};
 
   return (
     <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
@@ -149,9 +152,9 @@ const Sign_up = ({ setIsLoggedIn }) => {
         </div>
 
         <div>
-        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='confirmPassword'>Confirm Password</label>
+        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="confirmPassword">Confirm Password</label>
         <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password" value={formData.confirmPassword}
-            onChange={handleChange} id='confirmPassword'/>
+            onChange={handleChange} id="confirmPassword"/>
         </div>
 
         <div>
@@ -168,7 +171,8 @@ const Sign_up = ({ setIsLoggedIn }) => {
       </div>
 
       <div>
-        <button type="button" className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer">
+        <button type="button" className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer"
+        onClick={handleGoogleAuth}>
           <img className="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"></img>
           <span className='font-medium'>Sign up with Google</span>
         </button>

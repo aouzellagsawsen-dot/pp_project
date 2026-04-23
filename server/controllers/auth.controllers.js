@@ -261,7 +261,7 @@ export const googleCall = (req, res) => {
         });
 
         // Maintenant l'utilisateur arrive au dashboard AVEC ses cookies d'accès
-        res.redirect('http://localhost:5000/api/auth/forgotpassword');
+        res.redirect('http://localhost:5173/welcome');
 }
 
 // ============ FORGOT PASSWORD ============
