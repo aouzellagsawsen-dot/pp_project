@@ -12,7 +12,7 @@ export const registerValidation = [
     body('username').trim().notEmpty().withMessage("L'nom d'utilisateur est requis"),
     body('email').isEmail().withMessage('Email invalide').normalizeEmail(),
     body('password').isLength({ min: 8 }).withMessage('Le mot de passe doit faire au moins 8 caractères').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/).withMessage('Le mot de passe doit contenir majuscules, minuscules et chiffres'),
-    body('passwordConfirm').custom((value, { req }) => {
+    body('confirmPassword').custom((value, { req }) => {
         if (value !== req.body.password) {
             throw new Error('Les mots de passe ne correspondent pas');
         }
@@ -253,7 +253,7 @@ export const googleCall = (req, res) => {
         });
 
         // Maintenant l'utilisateur arrive au dashboard AVEC ses cookies d'accès
-        res.redirect('http://localhost:5000/api/auth/forgotpassword');
+        res.redirect('http://localhost:5173/welcome');
 }
 
 // ============ FORGOT PASSWORD ============
