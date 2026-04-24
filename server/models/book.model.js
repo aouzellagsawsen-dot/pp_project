@@ -38,7 +38,10 @@ const bookSchema = new mongoose.Schema({
         default : `/uploads/covers/default-cover.png`
 
     },
-}, {
+    quotes: {
+        type: [String],
+        default: []}
+    }, {
         timestamps : true
     }
 )

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Download,Quote } from 'lucide-react'
-
-
+import api from '../api/axios'
 
 const Add_a_new_book = () => {
 
@@ -17,39 +16,68 @@ const Add_a_new_book = () => {
 
   const [bookData, setbookData] = useState(initialState)
 
-  const [FormData, setFormData] = useState(initialState)
+  const [formData, setformData] = useState(initialState)
 
   const handleCancel = () => {
     // if(window.confirm("Are you sure ? All unsaved changes will be lost.")){
-      setFormData(initialState)
+      setformData(initialState)
       setIsOpen(false)
     }
 
   const handleChange = (e) => {
   const {name,value} = e.target 
-  setFormData({
-    ...FormData,
+  setformData({
+    ...formData,
     [name]:value
   })
 }
 
   const [preview, setpreview] = useState(null)
 
+  const [selectedFile, setSelectedFile] = useState(null);
  const handlePreview = (event) => {
     const file = event.target.files[0]    
     
   if (file){      //s'assurer que le user a sélectionné un fichier
-
+    setSelectedFile(file);
    const reader = new FileReader()
-    reader.onload = () => {
-    setpreview(reader.result)
-  }
-  reader.readAsDataURL(file)
+    reader.onload = () => setpreview(reader.result)
+    reader.readAsDataURL(file)
     }
+}
 
- }
+const handleSubmit = async (e) => {
+  e.preventDefault(); 
+  setisLoading(true);
 
+  const dataToSend = new FormData();
+  
+  dataToSend.append('title', formData.title);
+  dataToSend.append('author', formData.author);
+  dataToSend.append('genre', formData.genre);
+  dataToSend.append('description', formData.description);
+  dataToSend.append('quotes', JSON.stringify(formData.quotes));
+  
+  if (selectedFile) {
+    dataToSend.append('image', selectedFile); 
+  }
 
+  try {
+    // Plus besoin de préciser http://localhost:5000 ni withCredentials !
+    const response = await api.post('/api/books', dataToSend);
+
+    if (response.data.success) {
+      alert("Added book with success !");
+      handleCancel(); 
+    }
+  } catch (error) {
+    console.error("Error while sending:", error);
+    const errorMessage = error.response?.data?.message || "Impossible to contact the server.";
+    alert("Error: " + errorMessage);
+  } finally {
+    setisLoading(false);
+  }
+};
 const [isLoading, setisLoading] = useState(false)
 
 
@@ -78,23 +106,23 @@ return (
           </label>
         </div>
 
-        <form className='rounded-2xl space-y-5 p-6 col-span-2 min-w-0'>
+        <form className='rounded-2xl space-y-5 p-6 col-span-2 min-w-0' onSubmit={handleSubmit}>
 
           <div className='flex gap-4'>
             <div>
             <label className='font-sans text-[#7A6A5A] font-medium'>Book Title</label>
-            <input onChange={handleChange} name="title" value={FormData.title} type="text" placeholder='Enter title' className='bg-[#FFFBF2] border border-[#EFE7D6] font-sans focus:outline-none w-full py-1 rounded-lg placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <input onChange={handleChange} name="title" value={formData.title} type="text" placeholder='Enter title' className='bg-[#FFFBF2] border border-[#EFE7D6] font-sans focus:outline-none w-full py-1 rounded-lg placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
 
             <div>
             <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='author name'>Author name</label>
-            <input onChange={handleChange} name="author" value={FormData.author} id="author name" type="text" placeholder='Enter author name' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <input onChange={handleChange} name="author" value={formData.author} id="author name" type="text" placeholder='Enter author name' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
           </div>
 
             <div>
               <label className='text-[#7A6A5A] font-medium'>Genre</label>
-            <select name="genre" value={FormData.genre} onChange={handleChange} className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
+            <select name="genre" value={formData.genre} onChange={handleChange} className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5'>
               <option value="" selected hidden disabled>Select a genre</option>
               <option value="Classic Fiction">Classic Fiction</option>
               <option value="Coming of Age">Coming of Age</option>
@@ -110,7 +138,7 @@ return (
 
             <div>
             <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='description'>Description</label>
-            <textarea onChange={handleChange} name="description" value={FormData.description} id="description" placeholder='Tell us about the book ...' className='font-sans bg-[#FFFBF2] border border-[#EFE7D6] min-h-32 rounded-lg focus:outline-none w-full placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
+            <textarea onChange={handleChange} name="description" value={formData.description} id="description" placeholder='Tell us about the book ...' className='font-sans bg-[#FFFBF2] border border-[#EFE7D6] min-h-32 rounded-lg focus:outline-none w-full placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
 
           <div className='flex flex-col gap-2'>
@@ -120,30 +148,31 @@ return (
             <label className='uppercase font-sans text-[#7A6A5A] font-bold'>Famous quotes</label>
             </div> 
               
-            <input value={FormData.quotes[0]} 
+            <input value={formData.quotes[0]} 
               onChange={(e) => {
-                const newQuotes = [...FormData.quotes];
+                const newQuotes = [...formData.quotes];
                 newQuotes[0] = e.target.value;
-                setFormData({...FormData, quotes: newQuotes});
+                setformData({...formData, quotes: newQuotes});
               }} 
               placeholder='Enter a memorable line ...' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none placeholder:pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
-            <input value={FormData.quotes[1]} 
+            <input value={formData.quotes[1]} 
             onChange={(e) => {
-                const newQuotes = [...FormData.quotes];
+                const newQuotes = [...formData.quotes];
                 newQuotes[1] = e.target.value;
-                setFormData({...FormData, quotes: newQuotes});
+                setformData({...formData, quotes: newQuotes});
               }} 
             placeholder='Enter another line ...' className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
           </div>
 
-           </form>
-      
-           <div className="flex justify-end items-center gap-5 pt-1 col-span-2 col-start-2 pr-6">
+<div className="flex justify-end items-center gap-5 pt-1 col-span-2 col-start-2 pr-6">
             <button onClick={handleCancel} type='button' className='text-[#8D7B68] hover:text-[#d6c1aa] cursor-pointer'>Cancel</button>
-            <button type='submit' className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer'>
-              Add a book
+            <button type='submit' className='text-[#FFFFFF] rounded-xl bg-[#8D7B68] py-2 px-6 hover:bg-[#685847] cursor-pointer' disabled={isLoading}>
+              {isLoading ? 'Adding...' : 'Add a book'}
             </button>
             </div>
+           </form>
+      
+           
       </div>
        
     </div>

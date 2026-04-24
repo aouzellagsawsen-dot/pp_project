@@ -3,10 +3,20 @@ import PhysicalBook from "../models/book_copy.model.js"
 
 // ============ AJOUTER UN LIVRE ============
 export const addPhysicalBook = async (req, res) => {
-    let { title, author, genre, customGenre, description } = req.body;
+    let { title, author, genre, customGenre, description, quotes } = req.body;
 
     if (genre !== 'Others') {
         customGenre = undefined;
+    }
+    let finalQuotes = [];
+    if (quotes) {
+        // 1. On retransforme le texte du FormData en vrai tableau Javascript
+        const parsedQuotes = typeof quotes === 'string' ? JSON.parse(quotes) : quotes;
+        
+        // 2. On nettoie : on garde uniquement les citations qui ne sont pas vides
+        if (Array.isArray(parsedQuotes)) {
+            finalQuotes = parsedQuotes.filter(q => q && q.trim() !== "");
+        }
     }
 
     // 1. RECHERCHE DU LIVRE EXISTANT
@@ -34,7 +44,8 @@ export const addPhysicalBook = async (req, res) => {
             genre,
             customGenre,
             description,
-            cover
+            cover,
+            quotes: finalQuotes
         });
 
         targetBookId = newBook._id;

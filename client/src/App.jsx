@@ -23,12 +23,15 @@ import Profile from './Components/dashboard/Profile';
 import Borrows from './Components/dashboard/Borrows';
 import BienvenuePage from './Components/homepage/BienvenuePage';
 import { useEffect, useState } from 'react';
-import api from './api/axios';
+import api, { fetchAndSetCsrfToken } from './api/axios';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
+    fetchAndSetCsrfToken();
+  }, []);
   // useEffect(() => {
   //   api.get('/api/test')
   //     .then(response => {

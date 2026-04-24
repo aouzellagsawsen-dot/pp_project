@@ -53,7 +53,7 @@ dbConnection()
 initializePassport(passport)
 
 // ============ ROUTING ===============
-app.use('/api/auth', authLimiter, authRoutes)
+app.use('/api/auth', authRoutes) // faut ajouter authLimiter apres 
 app.use('/api/users', userRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/books', bookRoutes)
