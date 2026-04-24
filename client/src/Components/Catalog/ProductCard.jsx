@@ -17,7 +17,7 @@ const handleColor = () => {
   return (
     <div className='bg-[#FAF6F0] hover:bg-white/33 transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl rounded-2xl'>
         <div className='relative aspect-3/4 w-full'>
-            <img src={book.photo} className='absolute inset-0 w-full h-full object-cover rounded-xl'></img>
+        <img src={book.cover?.startsWith('/') ? `http://localhost:5000${book.cover}` : book.cover} className='absolute inset-0 w-full h-full object-cover rounded-xl' alt={book.title} />
             <div className='flex justify-between'>
                 <span className={`border absolute top-3 left-3 py-0.5 px-1 h-8 w-auto rounded-full text-white text-bold font-sans flex justify-center items-center text-xs
                 ${StatusColors[book.status]} w-fit`}>
