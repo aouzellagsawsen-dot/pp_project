@@ -34,16 +34,7 @@ export default function App() {
   useEffect(() => {
     fetchAndSetCsrfToken();
   }, []);
-  // useEffect(() => {
-  //   api.get('/api/test')
-  //     .then(response => {
-  //       setMessage(response.data.message); 
-  //     })
-  //     .catch(error => {
-  //       console.error("Erreur de connexion avec le serveur :", error);
-  //     });
-  // }, []);
- 
+  
   useEffect(() => {
     const savedStatus = localStorage.getItem('isLoggedIn');
     if (savedStatus === 'true') {
