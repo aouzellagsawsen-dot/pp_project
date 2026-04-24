@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Feather, Sparkles, LogIn, ChevronLeft, EyeOff, Eye } from 'lucide-react';
-import api from '../../api/axios';
+import api, { fetchAndSetCsrfToken } from '../../api/axios';
 const LoginPage = ({ setIsLoggedIn }) => {
   
   const navigate = useNavigate();
@@ -17,17 +17,19 @@ const LoginPage = ({ setIsLoggedIn }) => {
       setShowPassword(!showPassword)
     }
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault(); 
     setError('')
     setIsLoading(true);
 
     try {
-      // ✅ Utilise directement 'email' et 'password' (tes useState)
       const response = await api.post('/api/auth/login', {
         email: email, 
         password: password,
       });
+
+      // 🪄 LA LIGNE MAGIQUE EST ICI : On met à jour le token CSRF tout de suite !
+      await fetchAndSetCsrfToken();
 
       localStorage.setItem('userName', response.data.user.name);
       localStorage.setItem('isLoggedIn', 'true');

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Download,Quote } from 'lucide-react'
+import api from '../api/axios'
 
 const Add_a_new_book = () => {
 
@@ -46,45 +47,37 @@ const Add_a_new_book = () => {
 }
 
 const handleSubmit = async (e) => {
-  e.preventDefault(); // Empêche le rechargement de la page
+  e.preventDefault(); 
   setisLoading(true);
 
   const dataToSend = new FormData();
-  dataToSend.append('title', FormData.title);
-  dataToSend.append('author', FormData.author);
-  dataToSend.append('genre', FormData.genre);
-  dataToSend.append('description', FormData.description);
+  
+  dataToSend.append('title', formData.title);
+  dataToSend.append('author', formData.author);
+  dataToSend.append('genre', formData.genre);
+  dataToSend.append('description', formData.description);
+  dataToSend.append('quotes', JSON.stringify(formData.quotes));
   
   if (selectedFile) {
-    dataToSend.append('cover', selectedFile); // 'cover' doit correspondre au nom dans ton middleware multer au back
+    dataToSend.append('image', selectedFile); 
   }
 
   try {
-    const response = await fetch('http://localhost:5000/api/books', { // Remplace par ton URL réelle
-      method: 'POST',
-      body: dataToSend,
-      headers: { 'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true
-    });
+    // Plus besoin de préciser http://localhost:5000 ni withCredentials !
+    const response = await api.post('/api/books', dataToSend);
 
-    const result = await response.json();
-
-    if (result.success) {
+    if (response.data.success) {
       alert("Added book with success !");
       handleCancel(); 
-    } else {
-      alert("Error: " + result.message);
     }
   } catch (error) {
     console.error("Error while sending:", error);
-    alert("Impossible to contact the server.");
+    const errorMessage = error.response?.data?.message || "Impossible to contact the server.";
+    alert("Error: " + errorMessage);
   } finally {
     setisLoading(false);
   }
 };
-
-
 const [isLoading, setisLoading] = useState(false)
 
 

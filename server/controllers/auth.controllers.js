@@ -24,11 +24,19 @@ export const registerValidation = [
 export const register = async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        const error = new Error('Erreur de validation');
+        /* const error = new Error('Erreur de validation');
         error.statusCode = 400;
         error.errors = errors.array(); // On peut attacher le tableau d'erreurs d'express-validator !
-        throw error;
-    }
+        throw error; */
+        console.log("Détails des erreurs :", errors.array()); 
+  
+  // Renvoie une réponse claire au front-end
+  return res.status(400).json({ 
+      message: "Erreur de validation", 
+      erreurs: errors.array() 
+  });
+}
+
 
     const { name, username, email, password } = req.body
 
