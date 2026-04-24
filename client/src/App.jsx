@@ -12,6 +12,7 @@ import BookDescription from './Components/BookDescription';
 import Message from './Components/Message';
 import About from './Components/About';
 import ForgotPassword from './Components/auth/ForgotPassword';
+import ResetPassword from './Components/auth/ResetPassword';  
 import ContactUs from './Components/ContactUs';
 import Favorites from './Components/Favorites';
 import ExplorePage from './Components/Catalog/ExplorePage';
@@ -24,6 +25,7 @@ import Borrows from './Components/dashboard/Borrows';
 import BienvenuePage from './Components/homepage/BienvenuePage';
 import { useEffect, useState } from 'react';
 import api, { fetchAndSetCsrfToken } from './api/axios';
+import PublicProfile from './Components/dashboard/PublicProfile';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,6 +43,13 @@ export default function App() {
   //       console.error("Erreur de connexion avec le serveur :", error);
   //     });
   // }, []);
+ 
+  useEffect(() => {
+    const savedStatus = localStorage.getItem('isLoggedIn');
+    if (savedStatus === 'true') {
+      setIsLoggedIn(true);
+    }
+  }, []);
   return (
     <div className="flex flex-col min-h-screen">
       <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
@@ -53,6 +62,7 @@ export default function App() {
           <Route path="/Message" element={<Message />} />
           <Route path="/About" element={<About />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/SignUp" element={<SignUp setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/terms" element={<TermsOfUse/>} />
@@ -68,6 +78,7 @@ export default function App() {
             <Route path="history" element={<History />} />
             <Route path="profile" element={<Profile />} />
           </Route>
+          <Route path="/dashboard/publicprofile" element={<PublicProfile />} />
         </Routes>
       </main>
       <Footer isLoggedIn={isLoggedIn}/>
