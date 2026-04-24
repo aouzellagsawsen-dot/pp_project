@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Star, MapPin, Heart, ChevronLeft } from 'lucide-react';
+import axios from 'axios';
 import booksData from "./Books.json";
 
 const fadeInUp = {
@@ -19,87 +20,107 @@ const BookDescription = ({ isLoggedIn }) => {
   // On cherche le livre correspondant dans ton JSON
   const book = booksData.find((b) => String(b.id) === String(id));
 
-  const handleContact = () => {
-    // On redirige vers la messagerie en passant l'ID et le nom du owner dans l'URL
-  if (book && book.owner) {
-    navigate(`/Message?userId=${book.owner.id}&userName=${book.owner.name}`);
-  }
-};
-
   const [isReserved, setIsReserved] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showLetter, setShowLetter] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!book) return <div className="p-20 text-center font-serif">Livre introuvable...</div>;
 
-  useEffect(() => {
-  window.scrollTo(0, 0);
-}, []);
-
-const SealedLetter = ({ isVisible }) => (
-  <AnimatePresence>
-    {isVisible && (
-      <motion.div
-        initial={{ y: 100, x: "-50%", opacity: 0, scale: 0.8 }}
-        animate={{ y: -150, x: "-50%", opacity: 1, scale: 1 }}
-        exit={{ y: -300, x: "-50%", opacity: 0, scale: 1.1, filter: "blur(8px)" }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-        className="fixed bottom-10 left-1/2 z-50 pointer-events-none"
-      >
-        <div className="relative bg-[#E8DFCA] w-64 h-40 rounded-sm shadow-2xl border border-[#D4C5A9] flex items-center justify-center">
-          {/* Les plis de l'enveloppe en CSS */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1/2 border-b border-[#D4C5A9] origin-top bg-[#F0E6D2]" 
-                 style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
-          </div>
-          
-          {/* Le Sceau de Cire (Wax Seal) */}
-          <motion.div 
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.4, type: "spring" }}
-            className="w-12 h-12 bg-[#6B2D21] rounded-full shadow-lg flex items-center justify-center border border-[#4A1F17] z-10"
-          >
-             <div className="text-[#F2E8D9] text-[8px] font-serif font-bold text-center leading-tight select-none">
-               B.D<br/>2026
-             </div>
-          </motion.div>
-
-          <p className="absolute bottom-4 font-serif italic text-[#8D7B68] text-xs">Request Sent</p>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
-
-const [showLetter, setShowLetter] = useState(false);
-
-  const handleReserve = () => {
-    // 1. Déclenche l'animation
-    setShowLetter(true);
-    setIsReserved(true);
-
-    // 2. Cache l'enveloppe après 3 secondes
-    setTimeout(() => {
-      setShowLetter(false);
-    }, 3000);
-    
-    // Logique pour ton backend / localStorage ici...
+  const handleContact = () => {
+    // On redirige vers la messagerie en passant l'ID et le nom du owner dans l'URL
+    if (book && book.owner) {
+      navigate(`/Message?userId=${book.owner.id}&userName=${book.owner.name}`);
+    }
   };
 
-  const handleActionWithAuth = (action) => {
-  if (!isLoggedIn) {
-    alert("Please login to perform this action");
-    return;
-  }
-  action();
-};
+  const handleProtectedAction = (action) => {
+    if (!isLoggedIn) {
+      alert("Veuillez vous connecter pour effectuer cette action.");
+      return;
+    }
+    action();
+  };
+
+  const handleReserve = async () => {
+    // Remplace l'URL par celle de ton API locale ou de production
+    const API_URL = "http://localhost:5000/api"; 
+    const token = localStorage.getItem("token"); // Adapte selon comment tu stockes ton token
+
+    if (!isLoggedIn || !token) {
+      alert("Veuillez vous connecter pour réserver un livre.");
+      return;
+    }
+
+    try {
+      // On appelle la fonction requestLoan du backend
+      const response = await axios.post(
+        `${API_URL}/loans/request/${book.id}`, 
+        {}, // Pas de body nécessaire
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        // 1. Déclenche l'animation uniquement si le backend dit "OK"
+        setShowLetter(true);
+        setIsReserved(true);
+
+        // 2. Cache l'enveloppe après 3 secondes
+        setTimeout(() => {
+          setShowLetter(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la réservation :", error);
+      alert(error.response?.data?.message || "Une erreur est survenue lors de la demande.");
+    }
+  };
+
+  const SealedLetter = ({ isVisible }) => (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ y: 100, x: "-50%", opacity: 0, scale: 0.8 }}
+          animate={{ y: -150, x: "-50%", opacity: 1, scale: 1 }}
+          exit={{ y: -300, x: "-50%", opacity: 0, scale: 1.1, filter: "blur(8px)" }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
+          className="fixed bottom-10 left-1/2 z-50 pointer-events-none"
+        >
+          <div className="relative bg-[#E8DFCA] w-64 h-40 rounded-sm shadow-2xl border border-[#D4C5A9] flex items-center justify-center">
+            {/* Les plis de l'enveloppe en CSS */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1/2 border-b border-[#D4C5A9] origin-top bg-[#F0E6D2]" 
+                   style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
+            </div>
+            
+            {/* Le Sceau de Cire (Wax Seal) */}
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4, type: "spring" }}
+              className="w-12 h-12 bg-[#6B2D21] rounded-full shadow-lg flex items-center justify-center border border-[#4A1F17] z-10"
+            >
+               <div className="text-[#F2E8D9] text-[8px] font-serif font-bold text-center leading-tight select-none">
+                 B.D<br/>2026
+               </div>
+            </motion.div>
+
+            <p className="absolute bottom-4 font-serif italic text-[#8D7B68] text-xs">Request Sent</p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <main className="w-full min-h-screen bg-[#F1EAD7]">
       <SealedLetter isVisible={showLetter} />
       <div className="max-w-7xl mx-auto px-8 py-20 font-sans text-[#4A3F35]">
         
-        {/* --- BOUTON RETOUR (Placé à l'intérieur du conteneur centré) --- */}
+        {/* --- BOUTON RETOUR --- */}
         <button onClick={() => navigate(-1)} className="mb-10 flex items-center gap-2 text-stone-500 hover:text-[#8D7B68] transition-colors group">
           <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> 
           <span className="text-sm font-medium">Back to explore</span>
@@ -137,7 +158,7 @@ const [showLetter, setShowLetter] = useState(false);
             </div>
           </div>
 
-          {/* --- DROITE : INFOS (8 colonnes sur 12) --- */}
+          {/* --- DROITE : INFOS --- */}
           <div className="md:col-span-8">
             <div className="flex gap-2 mb-6">
               <span className="bg-[#D5E5D5] text-[#4A674A] text-[10px] px-3 py-1 rounded-md font-bold tracking-wider uppercase">
@@ -206,7 +227,7 @@ const [showLetter, setShowLetter] = useState(false);
               {book.quotes.map((quote, idx) => (
                 <div key={idx} className="bg-white/60 p-8 rounded-3xl border border-white/40 shadow-sm relative overflow-hidden group">
                   <div className="absolute top-0 left-0 w-1 h-full bg-[#8D7B68]/20 group-hover:bg-[#8D7B68] transition-colors" />
-                  <p className="text-[#4A3F35] font-serif 'italic' leading-relaxed text-lg 'italic'">"{quote}"</p>
+                  <p className="text-[#4A3F35] font-serif italic leading-relaxed text-lg">"{quote}"</p>
                 </div>
               ))}
             </div>
@@ -216,4 +237,5 @@ const [showLetter, setShowLetter] = useState(false);
     </main>
   );
 };  
+
 export default BookDescription;

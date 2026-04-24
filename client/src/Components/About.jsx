@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { BookOpen, Users, Globe, Leaf, Heart, ArrowRight, Star, BarChart3, TrendingUp, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -41,6 +41,9 @@ const Values = [
 ];
 
 const AboutPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="min-h-screen bg-[#F2E8D9] font-serif text-[#4a3728] overflow-x-hidden">
       

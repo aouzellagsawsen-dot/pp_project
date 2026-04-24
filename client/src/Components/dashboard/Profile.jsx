@@ -28,7 +28,7 @@ const Profile = () => {
         </div>
       </div>
       <div className='bg-[#FAF6F0] rounded-2xl h-35 flex flex-col justify-center items-center border border-gray-200 overflow-hidden'>
-        <Link className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'>
+        <Link  to="/dashboard/publicprofile" className='w-full flex justify-between items-center cursor-pointer hover:bg-[#8D7B68]/5 border-b border-gray-300 p-1.5'>
           <span className='font-sans text-[15px]'>My public profile</span>
           <ChevronRight className='text-[#8D7B68]' size={17}></ChevronRight>
         </Link>

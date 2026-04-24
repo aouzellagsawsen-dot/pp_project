@@ -16,6 +16,7 @@ import bookRoutes from './routes/book.routes.js'
 import favoriteRoutes from './routes/favorite.routes.js'
 import notificationRoutes from './routes/notification.routes.js'
 import messagingRoutes from './routes/message.routes.js'
+import loanRoutes from './routes/loan.routes.js'
 import { errorHandler } from './middleware/error.middleware.js'
 import { csrfHandler } from './middleware/csrf.middleware.js'
 import { Server } from 'socket.io'
@@ -60,6 +61,7 @@ app.use('/api/books', bookRoutes)
 app.use('/api/favorites', favoriteRoutes)
 app.use('/api/notify', notificationRoutes)
 app.use('/api/messages', messagingRoutes)
+app.use('/api/loans', loanRoutes)
 
 const server = http.createServer(app); 
 

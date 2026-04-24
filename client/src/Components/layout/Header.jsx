@@ -3,22 +3,16 @@ import { BookOpen, Heart, Bell, MessageSquare, User, LogOut } from 'lucide-react
 import { Link, useNavigate } from 'react-router-dom'; // Ajoute useNavigate ici
 
 const Header = ({ isLoggedIn, setIsLoggedIn }) => { // Récupère setIsLoggedIn ici
-  const navigate = useNavigate(); // Initialise le hook de navigation
+  const navigate = useNavigate();
+ const currentUserName = localStorage.getItem('userName') || "Invité";
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn'); // Supprime la trace dans le navigateur
-    setIsLoggedIn(false); // Remet l'état global à "déconnecté"
-    navigate('/'); // Redirige vers l'accueil
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userName'); // Nettoyage complet
+    setIsLoggedIn(false);
+    navigate('/');
   };
 
-  const [currentUserName, setCurrentUserName] = useState("Invité");
-
-useEffect(() => {
-  const name = localStorage.getItem('userName');
-  if (name) {
-    setCurrentUserName(name);
-  }
-}, []);
 
   return (
     <header className="w-full bg-[#FDF5E6] border-b border-stone-200 text-[#5D4037] backdrop-blur-md shadow-sm sticky top-0 z-50">

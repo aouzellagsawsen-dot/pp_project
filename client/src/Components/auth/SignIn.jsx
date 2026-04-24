@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Feather, Sparkles, LogIn, ChevronLeft, EyeOff, Eye } from 'lucide-react';
 import api, { fetchAndSetCsrfToken } from '../../api/axios';
@@ -48,6 +48,9 @@ const handleSubmit = async (e) => {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans text-[#5C544B] relative overflow-hidden">
