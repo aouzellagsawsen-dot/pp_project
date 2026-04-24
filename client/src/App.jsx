@@ -26,6 +26,7 @@ import BienvenuePage from './Components/homepage/BienvenuePage';
 import { useEffect, useState } from 'react';
 import api, { fetchAndSetCsrfToken } from './api/axios';
 import PublicProfile from './Components/dashboard/PublicProfile';
+import { FavoritesProvider } from './Components/contexts/FavoritesContext';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +43,7 @@ export default function App() {
     }
   }, []);
   return (
+    <FavoritesProvider>
     <div className="flex flex-col min-h-screen">
       <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <main className="flex-1">
@@ -71,8 +73,10 @@ export default function App() {
           </Route>
           <Route path="/dashboard/publicprofile" element={<PublicProfile />} />
         </Routes>
+        
       </main>
       <Footer isLoggedIn={isLoggedIn}/>
     </div>
+    </FavoritesProvider>
   );
 }

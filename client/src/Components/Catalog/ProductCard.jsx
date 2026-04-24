@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Star,Heart } from 'lucide-react'
+import { useFavorites } from '../contexts/FavoritesContext'
+
 
 const StatusColors = {
     available: "bg-[green]",
@@ -8,9 +10,15 @@ const StatusColors = {
 }
 
 const ProductCard = ({book}) => {
+    const { toggleFavorite, isBookFavorite } = useFavorites();
+const isLiked = isBookFavorite(book._id);
+
     const [color, setcolor] = useState("white")
 
-const handleColor = () => {
+const handleColor = (e) => {
+    e.preventDefault();  
+    e.stopPropagation();
+    toggleFavorite(book);
     if(color==="white") setcolor("#7A6A5A")
     else setcolor("white")
 }
