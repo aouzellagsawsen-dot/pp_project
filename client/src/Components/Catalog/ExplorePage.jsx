@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Search, ChevronDown } from 'lucide-react'
 import ProductCard from './ProductCard'
 import { Link } from 'react-router-dom'
-import API from '../../api/axios.js' 
+import api from '../../api/axios.js'
 
 const ExplorePage = () => {
     // 1. États pour les données du Back
@@ -19,7 +19,7 @@ const ExplorePage = () => {
         const fetchBooks = async () => {
             try {
                 // On appelle la route allBooks de ton controller
-                const response = await API.get('/books/all'); 
+                const response = await api.get('/api/books/list'); 
                 
                 if (response.data.success) {
                     // On remplit notre state avec les vrais livres de la DB
