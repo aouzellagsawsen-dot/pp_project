@@ -1,43 +1,62 @@
-import { Book, MessageCircle, Star, User} from 'lucide-react'
+import { Book, MessageCircle, Star } from 'lucide-react'
 import React from 'react'
 
 const PublicProfile = () => {
   return (
-    <div className='bg-[#f1ead7] min-h-screen flex flex-col items-center'>
-
-        <div className='bg-[#FAF6F0] rounded-2xl h-35 flex mt-5 mx-auto px-85'>
-
-            <div className='flex m-6 ml-3.5'>
-                <div className='rounded-full overflow-hidden flex justify-center items-center border-amber-50 border-[3px] w-17 h-17'>
-                    <img src="" alt="profile picture" className='w-full h-full object-cover'></img>
-                </div>
-            </div>
-
-            <div className='flex flex-col gap-4'>
-            <h1 className='text-[20px]'>new_user</h1>
-             <p className='text-[#7A6A5A] text-[17px]'>Biography</p>
-             <div className='flex'>
-                <div className='flex flex-col'>
-                    <h2>12</h2>
-                    <p className='text-[#7A6A5A] text-[14px]'>Books shared</p>
-                </div>
-                {/*<div className='flex'>
-                    <Star></Star>
-                    <h2>4.8</h2>
-                </div>*/}
-             </div>
-             <button className='flex gap-2 bg-[#7A6A5A] rounded-2xl text-white justify-center'>
-                <MessageCircle size={15} className='ml-3 mt-1'></MessageCircle>
-                <span className='font-sans font-semibold'>Send a message</span>
-             </button>
-             </div>
+    <div className='bg-[#f1ead7] min-h-screen p-8 flex flex-col items-center'>
+     
+      <div className='bg-[#FAF6F0] rounded-3xl p-8 flex gap-8 w-full max-w-4xl shadow-sm'>
+        
+        <div className='relative'>
+          <div className='w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-sm'>
+            <img 
+              src="" 
+              alt="profile picture"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
-        <div className='w-full max-w-4xl mt-12'>
-            <div className='flex items-center gap-3 border-b border-[#dcd3bc] pb-4'>
-             <Book className='text-[#7A6A5A] mt-2 mr-2.5' size={28}></Book>   
-            <h1 className='font-serif font-light text-4xl text-[#5C544B] tracking-tight pb-1'>Books shared by ?</h1>
+
+        <div className='flex flex-col gap-4'>
+          <div>
+            <h1 className='text-4xl font-serif text-[#3d3125]'>Username</h1>
+            <p className='text-[#8b7a67] mt-2 text-lg'>
+              Biography
+            </p>
+          </div>
+
+          {/* Stats : Livres et Rating */}
+          <div className='flex gap-12'>
+            <div className='flex flex-col'>
+              <span className='text-2xl text-[#3d3125]'>12</span>
+              <span className='text-[#8b7a67] text-sm'>Books Shared</span>
             </div>
+            <div className='flex flex-col'>
+              <div className='flex items-center gap-1'>
+                <Star className='fill-[#8b7a67] text-[#8b7a67]' size={24} />
+                <span className='text-2xl text-[#3d3125]'>4.8</span>
+              </div>
+              <span className='text-[#8b7a67] text-sm'>Rating</span>
+            </div>
+          </div>
+
+          {/* Bouton Message */}
+          <button className='flex items-center gap-2 bg-[#8b7a67] hover:bg-[#7a6a5a] transition-colors rounded-full px-6 py-2.5 w-fit text-white cursor-pointer'>
+            <MessageCircle size={20} />
+            <span className='font-medium'>Send Message</span>
+          </button>
         </div>
+      </div>
+
+      {/* Titre de la section du bas */}
+      <div className='w-full max-w-4xl mt-12'>
+        <div className='flex items-center gap-3 border-b border-[#dcd3bc] pb-4'>
+            <Book className='text-[#8b7a67]' size={27}></Book>
+          <h2 className='font-serif text-3xl text-[#5C544B]'>
+            Books shared by ?
+          </h2>
+        </div>
+      </div>
     </div>
   )
 }

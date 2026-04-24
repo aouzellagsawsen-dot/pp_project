@@ -16,7 +16,7 @@ const Profile = () => {
         <div className='flex flex-col gap-2 ml-3.5'>
         <h1 className='text-[20px]'>new_user</h1>
         <p className='text-[#7A6A5A] text-[14px]'>new_user@email.com</p>
-        <button className='flex items-center gap-2 border text-[#7A6A5A] rounded-2xl'>
+        <button className='flex items-center gap-2 border text-[#7A6A5A] rounded-2xl cursor-pointer hover:bg-[#8D7B68]/5'>
           <Settings size={17} className='ml-3'></Settings>
           <span className='font-[8px] font-sans mr-3'>Edit the profile</span>
           </button>
