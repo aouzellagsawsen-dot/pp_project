@@ -142,7 +142,7 @@ export const updateBook = async (req, res) => {
 }
 
 // ============ LISTER TOUS LES LIVRES ============
-export const allBooks = async (req, res) => {
+/* export const allBooks = async (req, res) => {
     // 1. On va chercher tous les livres dans la DB
     // .sort({ createdAt: -1 }) permet d'afficher les plus récents en premier !
     const books = await Book.find().sort({ createdAt: -1 });
@@ -152,7 +152,7 @@ export const allBooks = async (req, res) => {
         success: true,
         data: books
     });
-}
+}*/
 
 // ============ RÉCUPÉRER UN SEUL LIVRE PAR ID ============
 export const getBookById = async (req, res) => {
@@ -172,4 +172,41 @@ export const getBookById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
+}
+
+// ============ LISTER TOUS LES LIVRES ============
+export const allBooks = async (req, res) => {
+
+    const books = await Book.find().sort({ createdAt: -1 });
+
+    const booksWithStatus = await Promise.all(books.map(async (book) => {
+        
+        const copies = await PhysicalBook.find({ bookInfos: book._id });
+
+
+        const availableCopy = copies.find(copy => copy.status === 'Available');
+
+        let finalStatus = 'borrowed';
+        let copyIdToReserve = null;
+
+        if (availableCopy) {
+            finalStatus = 'available';
+            copyIdToReserve = availableCopy._id;
+        } else if (copies.length === 0) {
+            finalStatus = 'unavailable';
+        }
+
+        // On fusionne tout !
+        return {
+            ...book.toObject(),
+            status: finalStatus,
+            copyToReserve: copyIdToReserve
+        };
+    }));
+
+    // 3. On envoie au Front
+    res.status(200).json({
+        success: true,
+        data: booksWithStatus
+    });
 }
