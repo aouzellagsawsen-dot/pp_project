@@ -153,3 +153,23 @@ export const allBooks = async (req, res) => {
         data: books
     });
 }
+
+// ============ RÉCUPÉRER UN SEUL LIVRE PAR ID ============
+export const getBookById = async (req, res) => {
+    try {
+        const bookId = req.params.id;
+        
+        const book = await Book.findById(bookId);
+        
+        if (!book) {
+            return res.status(404).json({ success: false, message: "Livre introuvable." });
+        }
+        
+        res.status(200).json({ 
+            success: true, 
+            data: book 
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}

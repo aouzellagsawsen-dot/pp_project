@@ -40,7 +40,9 @@ const bookSchema = new mongoose.Schema({
     },
     quotes: {
         type: [String],
-        default: []}
+        default: []
+    }
+    
     }, {
         timestamps : true
     }

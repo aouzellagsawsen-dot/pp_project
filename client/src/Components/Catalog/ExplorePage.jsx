@@ -87,7 +87,7 @@ const ExplorePage = () => {
                                 <option value="Mystery">Mystery</option>
                                 <option value="Romance">Romance</option>
                                 <option value="Science Fiction">Science Fiction</option>
-                                <option value="Other">Other</option>
+                                <option value="Others">Other</option>
                             </select>
                             <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-gray-700">
                                 <ChevronDown size={16} />

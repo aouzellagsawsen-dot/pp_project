@@ -1,7 +1,7 @@
 import express from 'express'
 import { uploadCover } from '../middleware/upload.middleware.js'
 import { protectMutation } from '../middleware/auth.middleware.js'
-import { addPhysicalBook, allBooks, deleteBook, updateBook } from '../controllers/book.controllers.js'
+import { addPhysicalBook, getBookById, allBooks, deleteBook, updateBook } from '../controllers/book.controllers.js'
 import { approveLoan, rejectLoan, requestLoan } from '../controllers/loan.controllers.js'
 
 const router = express.Router()
@@ -17,6 +17,7 @@ router.patch('/:id', protectMutation, uploadCover.single('image'), updateBook)
 
 // lister tous les livres
 router.get('/list', allBooks)
+router.get('/:id', getBookById);
 
 // Le borrower fait la demande sur une copie spécifique
 router.post('/copy/:copyId/request-loan', protectMutation, requestLoan)
