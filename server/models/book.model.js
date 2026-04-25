@@ -33,6 +33,11 @@ const bookSchema = new mongoose.Schema({
         minLength : 2,
         maxLength : 50,
     },
+    description: {
+        type: String,
+        trim: true,
+        maxLength: 1000
+    },
     cover : {
         type : String,
         default : `/uploads/covers/default-cover.png`
