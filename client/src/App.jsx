@@ -29,19 +29,18 @@ import PublicProfile from './Components/dashboard/PublicProfile';
 import { FavoritesProvider } from './Components/contexts/FavoritesContext';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
+  
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     fetchAndSetCsrfToken();
   }, []);
-  
-  useEffect(() => {
-    const savedStatus = localStorage.getItem('isLoggedIn');
-    if (savedStatus === 'true') {
-      setIsLoggedIn(true);
-    }
-  }, []);
+
+
   return (
     <FavoritesProvider>
     <div className="flex flex-col min-h-screen">
