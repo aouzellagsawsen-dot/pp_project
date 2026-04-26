@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NotificationCard from './NotificationCard'
 import { Check } from 'lucide-react'
 
 const NotificationPanel = () => {
-
+useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
     const [notifications, setNotifications] = useState([
         {
             id:1,

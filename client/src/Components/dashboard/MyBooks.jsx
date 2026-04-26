@@ -3,7 +3,7 @@ import BookCard from './BookCard'
 
 const MyBooks = () => {
   return (
-    <div>MyBooks</div>
+    <div></div>
   )
 }
 

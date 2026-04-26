@@ -1,7 +1,13 @@
 import { Book, MessageCircle, Star } from 'lucide-react'
-import React from 'react'
-
+import React, { useEffect } from 'react'
+import api from '../../api/axios'
 const PublicProfile = () => {
+  
+  useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
+  const userName = localStorage.getItem('userName') || "Reader";
   return (
     <div className='bg-[#f1ead7] min-h-screen p-8 flex flex-col items-center'>
      
@@ -10,7 +16,7 @@ const PublicProfile = () => {
         <div className='relative'>
           <div className='w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-sm'>
             <img 
-              src="" 
+              src={userName.pdp} 
               alt="profile picture"
               className="w-full h-full object-cover"
             />
@@ -19,7 +25,7 @@ const PublicProfile = () => {
 
         <div className='flex flex-col gap-4'>
           <div>
-            <h1 className='text-4xl font-serif text-[#3d3125]'>Username</h1>
+            <h1 className='text-4xl font-serif text-[#3d3125]'>{userName}</h1>
             <p className='text-[#8b7a67] mt-2 text-lg'>
               Biography
             </p>
@@ -53,7 +59,7 @@ const PublicProfile = () => {
         <div className='flex items-center gap-3 border-b border-[#dcd3bc] pb-4'>
             <Book className='text-[#8b7a67]' size={27}></Book>
           <h2 className='font-serif text-3xl text-[#5C544B]'>
-            Books shared by ?
+            Books shared by {userName}
           </h2>
         </div>
       </div>
