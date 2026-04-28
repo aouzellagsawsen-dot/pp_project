@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { User,Plus,Heart,Star,Box,Book,BookOpen,Clock,Settings } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-
+import { useFavorites } from '../contexts/FavoritesContext'
+import api from '../../api/axios'
 const Page = () => {
 
   const [tab, settab] = useState('Borrows')
@@ -23,6 +24,33 @@ useEffect(() => {
       window.scrollTo(0, 0);
     }, []);
   
+    const {favorites} = useFavorites();
+
+    const [stats, setStats] = useState({sharedBooks:0,ongoing: 0 });
+        const [loading, setLoading] = useState(true);
+
+  //    useEffect(() => {
+  //    api.get("/api/loans/on-going")
+  //      .then(response => response.json())
+  //     .then(data => setStats(data))
+  //      .catch(err => console.error("Recuperation Error", err));
+  //  }, []);
+
+  //  useEffect(() => {
+  //       const fetchOngoing = async () => {
+  //           try {
+  //               const res = await api.get('/api/loans/on-going');
+  //               if (res.data.success) {
+  //                   setStats(res.data.count);
+  //               }
+  //           } catch (err) {
+  //               console.error("Error loading favorites...", err);
+  //           } finally {
+  //               setLoading(false);
+  //           }
+  //       };
+  //       fetchOngoing();
+  //   }, []);
    
    return (
     <div className='bg-[#f1ead7] min-h-screen flex flex-col items-center'>
@@ -33,8 +61,8 @@ useEffect(() => {
           <User className='text-[white] w-7 h-7' size={20}></User>
         </div>
         <div className='flex flex-col ml-5'>
-          <p className='text-[#8D7B68] text-[13px] mb-0.5'>Hello</p>
-          <h1 className='text-[28px]'>{userName}</h1>
+          <p className='text-[#8D7B68] text-[13px] mb-0.5'>Hello👋</p>
+          <h1 className='text-[28px]'>{userName} ! </h1>
           <p className='text-[#8D7B68] mt-0.5 text-[14px]'>Your space of reading is waiting for you</p>
           </div>
         </div>
@@ -50,19 +78,25 @@ useEffect(() => {
             <div className='rounded-xl bg-[#8D7B68]/[0.14] w-7 flex justify-center px-1 py-2'>
             <Book className='text-[#8D7B68] mx-0.5' size={17}></Book>
             </div>
-            <p className='text-[#7A6A5A]'>Shared books</p>
+            <div className='text-[#7A6A5A]'>
+              <div className='text-[black] text-[30px] font-sans'>{stats.sharedBooks}</div>
+              <span> Shared books</span></div>
           </div>
           <div className='flex flex-col bg-[#FFF8E7] rounded-[20px] p-5 gap-3 col-span-1'>
             <div className='rounded-xl bg-[#8D7B68]/[0.14] w-7 flex justify-center px-1 py-2'>
             <Box className='text-[#8D7B68] mx-0.5' size={17}></Box>
             </div>
-            <p className='text-[#7A6A5A]'>Ongoing</p>
+            <div className='text-[#7A6A5A]'>
+              <div className='text-[black] text-[30px] font-sans'>{stats.ongoing}</div>
+              <span> Ongoing</span></div>
           </div>
           <div className='flex flex-col bg-white/60 rounded-[20px] p-5 gap-3 col-span-1'>
           <div className='rounded-xl bg-[#8D7B68]/[0.14] w-7 flex justify-center px-1 py-2'>
             <Heart className='text-[#8D7B68] mx-0.5' size={17}></Heart>
             </div>
-            <p className='text-[#7A6A5A]'>Favorites</p>
+            <div className='text-[#7A6A5A]'>
+              <div className='text-[black] text-[30px] font-sans'>{favorites.length}</div>
+              <span> Favorites</span></div>
           </div>
           <div className='flex flex-col bg-[#FFF8E7] rounded-[20px] p-5 gap-3 col-span-1'>
             <div className='rounded-xl bg-[#8D7B68]/[0.14] w-7 flex justify-center px-1 py-2'>

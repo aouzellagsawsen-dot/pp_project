@@ -15,7 +15,7 @@ export const FavoritesProvider = ({ children }) => {
                     setFavorites(res.data.favorites);
                 }
             } catch (err) {
-                console.error("Erreur chargement favoris", err);
+                console.error("Error loading favorites...", err);
             } finally {
                 setLoading(false);
             }
@@ -36,7 +36,7 @@ export const FavoritesProvider = ({ children }) => {
             }
         } catch (err) {
             console.error("Erreur toggle favoris", err);
-            alert("Veuillez vous connecter pour liker un livre");
+            alert("Please login to add a book.");
         }
     };
 

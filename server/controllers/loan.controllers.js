@@ -197,3 +197,38 @@ export const getPendingRequests = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 }
+
+export const getMyBorrowedBooks = async (req, res) => {
+   
+    const userId = req.user.id; // L'utilisateur connecté (celui qui emprunte)
+
+    const activeLoans = await Loan.find({
+        borrower: userId,
+        status: 'active'
+    })
+    .populate({
+        path: 'physicalBook',
+        populate: {
+            path: 'bookInfos'
+        }
+    });
+
+    const formattedBooks = activeLoans.map(loan => {
+        if (!loan.physicalBook || !loan.physicalBook.bookInfos) return null;
+
+        return {
+            ...loan.physicalBook.bookInfos.toObject(),
+            loanId: loan._id,                          
+            copyId: loan.physicalBook._id,            
+            startDate: loan.startDate,                
+            dueDate: loan.dueDate,
+            count : loan.physicalBook.length                    
+        };
+    }).filter(item => item !== null);
+
+    res.status(200).json({
+        success: true,
+        data: formattedBooks
+    });
+}
+
