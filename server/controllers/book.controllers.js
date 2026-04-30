@@ -141,19 +141,6 @@ export const updateBook = async (req, res) => {
     });
 }
 
-// ============ LISTER TOUS LES LIVRES ============
-/* export const allBooks = async (req, res) => {
-    // 1. On va chercher tous les livres dans la DB
-    // .sort({ createdAt: -1 }) permet d'afficher les plus récents en premier !
-    const books = await Book.find().sort({ createdAt: -1 });
-
-    // 2. On renvoie du JSON au Front ! Fini le res.render('books-list')
-    res.status(200).json({
-        success: true,
-        data: books
-    });
-}*/
-
 // ============ RÉCUPÉRER UN SEUL LIVRE PAR ID ============
 export const getBookById = async (req, res) => {
     try {
@@ -208,5 +195,31 @@ export const allBooks = async (req, res) => {
     res.status(200).json({
         success: true,
         data: booksWithStatus
+    });
+}
+
+// ============ LISTER LES LIVRES D'UN UTILISATEUR ============
+export const getMyAddedBooks = async (req, res) => {
+    const userId = req.user.id;
+
+    const myBooks = await PhysicalBook.find({ ownerId: userId })
+        .populate('bookInfos')
+        .sort({ createdAt: -1 })
+
+    const formattedBooks = myBooks.map(copy => {
+        if (!copy.bookInfos) return null
+
+        return {
+            ...copy.bookInfos.toObject(),
+            copyId: copy._id,
+            status: copy.status,
+            addedAt: copy.createdAt
+        };
+    }).filter(book => book !== null);
+
+    res.status(200).json({
+        success: true,
+        count: formattedBooks.length,
+        data: formattedBooks
     });
 }

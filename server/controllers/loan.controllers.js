@@ -176,7 +176,7 @@ export const rejectLoan = async (req, res) => {
     });
 }
 
-    // ============ 4. VOIR LES DEMANDES EN ATTENTE ============
+// ============ 4. VOIR LES DEMANDES EN ATTENTE ============
 export const getPendingRequests = async (req, res) => {
     try {
         const lenderId = req.user.id; // L'ID du propriétaire connecté
@@ -198,9 +198,9 @@ export const getPendingRequests = async (req, res) => {
     }
 }
 
+// ============ 5. VOIR LES DEMANDES EN ATTENTE ============
 export const getMyBorrowedBooks = async (req, res) => {
-   
-    const userId = req.user.id; // L'utilisateur connecté (celui qui emprunte)
+    const userId = req.user.id;
 
     const activeLoans = await Loan.find({
         borrower: userId,
@@ -221,14 +221,13 @@ export const getMyBorrowedBooks = async (req, res) => {
             loanId: loan._id,                          
             copyId: loan.physicalBook._id,            
             startDate: loan.startDate,                
-            dueDate: loan.dueDate,
-            count : loan.physicalBook.length                    
+            dueDate: loan.dueDate               
         };
     }).filter(item => item !== null);
 
     res.status(200).json({
         success: true,
-        data: formattedBooks
+        data: formattedBooks,
+        count: formattedBooks.length
     });
 }
-

@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { BookOpen, Heart, Bell, MessageSquare, User, LogOut } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom'; // Ajoute useNavigate ici
+import { Link, useNavigate } from 'react-router-dom';
+import api from '../../api/axios'
 
-const Header = ({ isLoggedIn, setIsLoggedIn }) => { // Récupère setIsLoggedIn ici
+const Header = ({ isLoggedIn, setIsLoggedIn }) => { 
   const navigate = useNavigate();
- const currentUserName = localStorage.getItem('userName') || "Invité";
+  const currentUserName = localStorage.getItem('userName') || "Invité";
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userName'); // Nettoyage complet
-    setIsLoggedIn(false);
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+
+      await api.post('/api/auth/logout'); 
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion côté serveur:", error);
+    } finally {
+
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userName');
+      setIsLoggedIn(false);
+
+      window.location.href = '/'; 
+    }
   };
-
 
   return (
     <header className="w-full bg-[#FDF5E6] border-b border-stone-200 text-[#5D4037] backdrop-blur-md shadow-sm sticky top-0 z-50">
@@ -68,7 +77,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => { // Récupère setIsLoggedIn 
                 {/* Bouton LogOut */}
                 <button 
                   onClick={handleLogout}
-                  className="p-2 text-stone-400 hover:text-red-600 transition-colors"
+                  className="p-2 text-stone-400 hover:text-red-600 transition-colors cursor-pointer"
                   title="Sign Out"
                 >
                   <LogOut size={20} />

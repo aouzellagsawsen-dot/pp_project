@@ -39,8 +39,6 @@ app.use(express.urlencoded({ extended: true }))
 // ============ SECURITY & MIDDLEWARES ============
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })) 
-
-app.use('/api', globalLimiter)
 app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(passport.initialize())
 
@@ -55,7 +53,7 @@ initializePassport(passport)
 
 // ============ ROUTING ===============
 app.use('/api/auth', authRoutes) // faut ajouter authLimiter apres 
-app.use('/api/users', userRoutes)
+app.use('/api/users', userRoutes) // faut ajouter globalLimiter apres
 app.use('/api/admin', adminRoutes)
 app.use('/api/books', bookRoutes)
 app.use('/api/favorites', favoriteRoutes)
@@ -70,7 +68,7 @@ const io = new Server(server, {
         origin: 'http://localhost:5173',
         credentials: true
     }
-});
+})
 
 io.on('connection', (socket) => {
     console.log(`⚡ Utilisateur connecté : ${socket.id}`)
