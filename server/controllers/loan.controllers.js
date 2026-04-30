@@ -198,6 +198,7 @@ export const getPendingRequests = async (req, res) => {
     }
 }
 
+// ============ 5. VOIR LES DEMANDES EN ATTENTE ============
 export const getMyBorrowedBooks = async (req, res) => {
     const userId = req.user.id;
 
@@ -220,13 +221,13 @@ export const getMyBorrowedBooks = async (req, res) => {
             loanId: loan._id,                          
             copyId: loan.physicalBook._id,            
             startDate: loan.startDate,                
-            dueDate: loan.dueDate,
-            count : loan.physicalBook.length                    
+            dueDate: loan.dueDate               
         };
     }).filter(item => item !== null);
 
     res.status(200).json({
         success: true,
-        data: formattedBooks
+        data: formattedBooks,
+        count: formattedBooks.length
     });
 }
