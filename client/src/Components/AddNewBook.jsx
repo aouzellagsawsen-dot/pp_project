@@ -137,6 +137,10 @@ return (
             </div>
 
             <div>
+              <label className='text-[#7A6A5A] font-medium'>Other genre</label>
+              <input placeholder='Type in the genre if you selected other' className='bg-[#FFFBF2] border border-[#EFE7D6] rounded-lg w-full py-1 focus:outline-none text-[#7A6A5A] pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans'/>
+            </div>
+            <div>
             <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='description'>Description</label>
             <textarea onChange={handleChange} name="description" value={formData.description} id="description" placeholder='Tell us about the book ...' className='font-sans bg-[#FFFBF2] border border-[#EFE7D6] min-h-32 rounded-lg focus:outline-none w-full placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'/>
             </div>
