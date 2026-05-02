@@ -3,7 +3,9 @@ import BookCard from './BookCard'
 
 const Borrows = () => {
   return (
-    <div></div>
+    <div>
+      
+    </div>
   )
 }
 

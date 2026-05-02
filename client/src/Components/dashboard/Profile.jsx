@@ -3,10 +3,57 @@ import { User,Settings,ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Profile = () => {
+const userName = localStorage.getItem('userName') || "Reader";
+const email = localStorage.getItem('Email') || "reader@gmail.com";
 
   const [ModelOpen, setModelOpen] = useState(false)
 
-  const [formData, setformData] = useState(...formData)
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    bio: ""
+  });
+
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+// Dans votre composant Profile
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Envoi des données au backend
+      const response = await fetch('http://localhost:5000/api/profile', {
+        method: 'PUT', // ou 'PATCH'
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': 'Bearer votre_token_jwt' (si vous utilisez une authentification)
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise à jour du profil');
+      }
+
+      const updatedUser = await response.json();
+
+      // Mise à jour de l'état local avec la réponse du serveur
+      setUserData(updatedUser);
+      setIsModalOpen(false); // Fermer la modale
+    } catch (error) {
+      console.error('Erreur :', error);
+      alert('Impossible de sauvegarder les modifications.');
+    }
+  };
+  
+
+  const [formData, setFormData] = useState({ ...userData })
 
   useEffect(() => {
         window.scrollTo(0, 0);
@@ -24,8 +71,8 @@ const Profile = () => {
           <User className='text-[white] w-7 h-7' size={20}></User>
         </div>
         <div className='flex flex-col gap-2 ml-3.5'>
-        <h1 className='text-[20px]'>new_user</h1>
-        <p className='text-[#7A6A5A] text-[14px]'>new_user@email.com</p>
+        <h1 className='text-[20px]'>{userName}</h1>
+        <p className='text-[#7A6A5A] text-[14px]'>{email}</p>
 
         <button onClick={()=> setModelOpen(true)} className='flex items-center gap-2 border text-[#7A6A5A] rounded-2xl cursor-pointer hover:bg-[#8D7B68]/5'>
           <Settings size={17} className='ml-3'></Settings>
@@ -72,29 +119,32 @@ const Profile = () => {
 
             <h2 className='font-serif text-2xl text-[#8D7B68] pb-4'>Edit the profile</h2>
 
-            <div>
+            <form onSubmit={handleSave}>
 
               <div>
                 <label className='font-sans text-[#7A6A5A] font-medium'>Username</label>
                 <input className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'
-                placeholder='Enter your username' type="text"
+                placeholder='Enter your username' type="text" value={formData.username}
+                  onChange={handleChange} name="username"
                 ></input>
               </div>
 
               <div>
                 <label className='font-sans text-[#7A6A5A] font-medium'>Email</label>
                 <input className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'
-                placeholder='Enter your email' type="email"
+                placeholder='Enter your email' type="email" value={formData.email}
+                  onChange={handleChange} name="email"
                 ></input>
               </div>
 
               <div>
                 <label className='font-sans text-[#7A6A5A] font-medium'>Bio</label>
                 <textarea className='w-full bg-[#FFFBF2] border border-[#EFE7D6] font-sans rounded-lg focus:outline-none py-1 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans text-[#7A6A5A] pl-1.5'
-                placeholder='Insert your bio here ...'
+                placeholder='Insert your bio here ...' value={formData.bio}
+                  onChange={handleChange} name="bio"
                 ></textarea>
               </div>
-            </div>
+            </form>
 
             <div className='flex gap-3'>
             <button type='button' className='text-[#8D7B68] hover:text-[#d6c1aa] cursor-pointer' onClick={handleCancel}>Cancel</button>
