@@ -1,14 +1,16 @@
 import User from '../models/user.model.js'
 
 // ============ GET CURRENT USER PROFILE ============
-export const getCurrentProfile = (req, res) => {
+export const getCurrentProfile = async (req, res) => {
+    const user = await User.findById(req.user.id).select('-password')
 
     res.json({
         success: true,
         message: 'Votre profil',
         user: {
-            id: req.user.id,
-            email: req.user.email
+            name: user.name,
+            email: user.email,
+            bio: user.bio
         }
     })
 }
