@@ -1,37 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import ProductCard from '../Catalog/ProductCard';
 import api from '../../api/axios';
+import BookCard from './BookCard';
 
 const MyBooks = () => {
-  // const [books, setBooks] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [books, setBooks] = useState([]);
+   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const fetchMyBooks = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await api.get('/api/books/shared-books'); 
-  //       setBooks(Array.isArray(response.data) ? response.data : []);
-  //     } catch (error) {
-  //       console.error("Erreur lors du chargement de vos livres :", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+   useEffect(() => {
+    const fetchMyBooks = async () => {
+       setLoading(true);
+       try {
+         const response = await api.get('/api/books/shared-books'); 
+        if (response.data && response.data.success) {
+          setBooks(response.data.data); 
+        }
+       } catch (error) {
+         console.error("Erreur lors du chargement de vos livres :", error);
+       } finally {
+         setLoading(false);
+       }
+     };
 
-  //   fetchMyBooks();
-  // }, []);
+     fetchMyBooks();
+   }, []);
   return (
-    <div>
-      {/* {loading ? (
-        <p>Chargement en cours...</p>
+    <div className='max-w-6xl p-6 w-full'>
+       {loading ? (
+        <p>Loading...</p>
       ) : Array.isArray(books) && books.length > 0 ? (
         books.map((book) => (
-          <ProductCard book={book} />
+          <BookCard book={book} />
         ))
       ) : (
-        <p>Aucun livre trouvé dans cette section.</p>
-      )} */}
+        <p>No books found in this section.</p>
+      )} 
     </div>
   )
 }

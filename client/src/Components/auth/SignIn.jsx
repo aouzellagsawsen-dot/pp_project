@@ -33,7 +33,7 @@ const handleSubmit = async (e) => {
 
       localStorage.setItem('userName', response.data.user.name);
       localStorage.setItem('isLoggedIn', 'true');
-      
+
       if (setIsLoggedIn) {
         setIsLoggedIn(true);
       }

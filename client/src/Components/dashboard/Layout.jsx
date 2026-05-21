@@ -68,7 +68,7 @@ const Page = () => {
               <p className='text-[#8D7B68] mt-0.5 text-[14px]'>Your space of reading is waiting for you</p>
             </div>
           </div>
-          <Link className='bg-[#7A6A5A] text-[white] font-semibold flex rounded-2xl py-2.75 px-5.5 gap-2 m-5 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl' to="/AddNewBook">
+          <Link className='bg-[#7A6A5A] text-[white] font-semibold flex rounded-2xl py-2.75 px-5.5 gap-2 m-5 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl mr-26' to="/AddNewBook">
             <Plus size={20}></Plus>
             <span>Add a book</span>
           </Link>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NotificationCard from './NotificationCard'
 import { Check } from 'lucide-react'
-import api from "../api/axios"; 
+import api from "../../api/axios"; 
 
 const NotificationPanel = () => {
     const [notifications, setNotifications] = useState([]);
@@ -11,7 +11,7 @@ useEffect(() => {
     window.scrollTo(0, 0);
     const fetchNotifications = async () => {
       try {
-        const response = await api.get("/api/notifications");
+        const response = await api.get("/api/notify");
         if (response.data.success) {
           setNotifications(response.data.data);
         }
