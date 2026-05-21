@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NotificationCard from './NotificationCard'
 import { Check } from 'lucide-react'
-import api from "../api/axios"; 
+import api from "../../api/axios"; 
 
 const NotificationPanel = () => {
     const [notifications, setNotifications] = useState([]);

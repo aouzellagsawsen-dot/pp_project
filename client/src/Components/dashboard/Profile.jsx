@@ -67,6 +67,7 @@ const Profile = () => {
     }));
   };
 
+<<<<<<< Updated upstream
 // Dans votre composant Profile
   // const handleSave = async (e) => {
   //   e.preventDefault();
@@ -102,6 +103,8 @@ const Profile = () => {
         window.scrollTo(0, 0);
       }, []);
 
+=======
+>>>>>>> Stashed changes
   // 4. Sauvegarde des données vers le Back-end
   const handleSave = async (e) => {
     e.preventDefault();
