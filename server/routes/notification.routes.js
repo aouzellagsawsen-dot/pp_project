@@ -4,7 +4,7 @@ import { protectMutation } from '../middleware/auth.middleware.js' // Ton middle
 
 const router = express.Router()
 
-router.get('/', getNotifications)
+router.get('/', protectMutation, getNotifications)
 router.patch('/:id/read', protectMutation, markAsRead)
 
 export default router

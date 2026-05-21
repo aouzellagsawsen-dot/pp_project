@@ -24,6 +24,8 @@ const BookDescription = ({ isLoggedIn }) => {
         const response = await api.get(`/api/books/${id}`);
         if (response.data.success) {
           setBook(response.data.data);
+          if (response.data.data.isCurrentlyRequested) {
+          setIsReserved(true);}
         } else {
           setBook(response.data);
         }
@@ -35,6 +37,20 @@ const BookDescription = ({ isLoggedIn }) => {
     };
     fetchBook();
   }, [id]);
+
+  const handleReservation = async () => {
+    if (isReserved) return;
+    try {
+      // APPEL API : Crée la demande d'emprunt et génère la notification côté serveur
+      const response = await api.post(`/api/loans/request`, { bookId: book._id });
+      if (response.data.success) {
+        setIsReserved(true);
+        alert("Demande de réservation envoyée avec succès !");
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Erreur lors de la réservation");
+    }
+  };
 
   if (loading) return <div className="p-20 text-center font-serif text-[#8D7B68] text-xl">Chargement...</div>;
   if (!book) return <div className="p-20 text-center font-serif text-[#8D7B68]">Livre introuvable.</div>;
@@ -135,7 +151,7 @@ const BookDescription = ({ isLoggedIn }) => {
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4 mb-14">
               <button 
-                onClick={() => setIsReserved(!isReserved)} 
+                onClick={handleReservation}
                 className={`flex-1 font-sans text-sm font-bold tracking-[0.15em] py-4 rounded-xl shadow-md transition-all uppercase ${
                   isReserved 
                    ? 'bg-[#8A7967]/60 text-white/90 cursor-default' 
