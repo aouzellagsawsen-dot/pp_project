@@ -1,9 +1,9 @@
 "use client"; 
 import { motion } from "framer-motion";
-import booksData from "../Books.json";
-import { ChevronLeft, ChevronRight, Heart, Star } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../../api/axios.js";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -12,33 +12,36 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: "easeOut" }
 };
 
-// Fonction pour gérer le clic sur le bouton de favoris
-const HeartButton = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  //ici rajouter l'envoie des informations a la base de données
-  return (
-    <button 
-      onClick={(e) => {
-        e.preventDefault(); 
-        setIsFavorite(!isFavorite);
-      }} 
-      className={`absolute top-4 right-4 z-10 bg-white/90 p-2.5 rounded-full transition-all duration-300 shadow-sm 
-        ${isFavorite ? 'text-[#4a3728] scale-110' : 'text-gray-400 hover:text-[#4a3728]'}`}
-    >
-      <Heart size={18} fill={isFavorite ? "currentColor" : "none"} />
-    </button>
-  );
-  }
-
 export default function FeaturedBooks() {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 3; 
-  const totalItems = booksData.length;
+  const itemsPerPage = 3;
+
+  useEffect(() => {
+    const fetchFeaturedBooks = async () => {
+      try {
+        const response = await api.get('/api/books/list'); 
+        if (response.data.success) {
+          
+          setBooks(response.data.data);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des featured books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedBooks();
+  }, []);
+
+  const totalItems = books.length;
 
   // Fonction pour aller au suivant (avec boucle)
   const nextSlide = () => {
     if (currentIndex >= totalItems - itemsPerPage) {
-      setCurrentIndex(0); // Retour au début
+      setCurrentIndex(0); 
     } else {
       setCurrentIndex(currentIndex + 1);
     }
@@ -47,11 +50,19 @@ export default function FeaturedBooks() {
   // Fonction pour aller au précédent (avec boucle)
   const prevSlide = () => {
     if (currentIndex === 0) {
-      setCurrentIndex(totalItems - itemsPerPage); // Aller à la fin
+      setCurrentIndex(Math.max(0, totalItems - itemsPerPage));
     } else {
       setCurrentIndex(currentIndex - 1);
     }
   };
+
+  if (loading) {
+    return (
+      <section className="w-full bg-[#F1EAD7] py-20 flex items-center justify-center">
+        <p className="font-serif italic text-[#4a3728]">Loading featured books...</p>
+      </section>
+    );
+  }
  
  return (
     <section className="w-full bg-[#F1EAD7] text-[#4a3728] py-20 space-y-20">
@@ -79,73 +90,63 @@ export default function FeaturedBooks() {
       animate={{ x: `-${currentIndex * (100 / itemsPerPage)}%` }}
       transition={{ type: "spring", stiffness: 120, damping: 20 }}
     >
-      {booksData.map((book) => (
-        <Link 
-    key={book.id} 
-    to={`/book/${book.id}`} 
-    className="min-w-[calc(33.333%-1rem)] block no-underline group/card"
-  >
-    <motion.div className="bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 h-full cursor-pointer">
-      
-      <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
-        
-        {/* Badge Statut Dynamique */}
-        <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm ${
-          book.status === 'AVAILABLE NOW' || book.status === 'Available' 
-            ? 'bg-[#8D7B68]' 
-            : 'bg-[#D2B48C]/90'
-        }`}>
-          {book.status}
-        </div>
-        
-        {/* Bouton Favoris (Composant HeartButton défini plus haut) */}
-        <HeartButton />
-        
-        {/* L'image du livre */}
-        <img 
-          src={book.photo} 
-          alt={book.title} 
-          className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" 
-        />
-      </div>
+      {books.map((book) => {
+  // 1. On sécurise le chemin de l'image avec l'adresse du backend
+  const bookCover = book.cover || book.photo;
+  const imageSrc = bookCover?.startsWith('/') 
+    ? `http://localhost:5000${bookCover}` 
+    : bookCover;
 
-      {/* INFOS TEXTUELLES */}
-      <div className="px-3 space-y-2">
-        {/* Titre */}
-        <h3 className="text-2xl font-serif font-medium text-[#4a3728] truncate">
-          {book.title}
-        </h3>
+  return (
+    <Link 
+      key={book._id} 
+      to={`/book/${book._id}`} 
+      className="min-w-[calc(33.333%-1rem)] block no-underline group/card"
+    >
+      <motion.div className="bg-[#FAF7F2] rounded-[2.5rem] p-5 shadow-sm border border-[#4a3728]/5 hover:shadow-xl transition-all duration-500 h-full cursor-pointer">
         
-        {/* Auteur */}
-        <p className="text-[#4a3728]/60 italic text-sm">
-          {book.author}
-        </p>
-        
-        {/* RATING (Étoiles) */}
-        <div className="flex items-center gap-1.5 pt-1">
-          {[...Array(5)].map((_, i) => (
-            <Star 
-              key={i} 
-              size={14} 
-              className={i < Math.floor(book.rating) 
-                ? "fill-[#4a3728] text-[#4a3728]" 
-                : "text-gray-300"
-              } 
-            />
-          ))}
-          <span className="text-[12px] opacity-50 ml-1">({book.rating})</span>
+        <div className="relative h-80 w-full rounded-[1.8rem] overflow-hidden mb-6">
+          
+          {/* Badge Statut Dynamique */}
+          <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-sans font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm ${
+            book.status === 'AVAILABLE NOW' || book.status === 'Available' 
+              ? 'bg-[#8D7B68]' 
+              : 'bg-[#D2B48C]/90'
+          }`}>
+            {book.status}
+          </div>
+          
+          {/* L'image du livre MODIFIÉE ICI */}
+          <img 
+            src={imageSrc || "https://placehold.co/400x600?text=No+Cover"}
+            alt={book.title} 
+            className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" 
+          />
         </div>
-        
-        {/* GENRE (Badge bas) */}
-        <div className="pt-4">
-          <span className="inline-block bg-[#EFEAD8]/50 text-[#8D7B68] text-[10px] font-bold px-5 py-2.5 rounded-xl uppercase tracking-widest border border-[#4a3728]/5">
-            {book.genre}
-          </span>
+
+        {/* INFOS TEXTUELLES */}
+        <div className="px-3 space-y-2">
+          {/* Titre */}
+          <h3 className="text-2xl font-serif font-medium text-[#4a3728] truncate">
+            {book.title}
+          </h3>
+          
+          {/* Auteur */}
+          <p className="text-[#4a3728]/60 italic text-sm">
+            {book.author}
+          </p>
+          
+          {/* GENRE (Badge bas) */}
+          <div className="pt-4">
+            <span className="inline-block bg-[#EFEAD8]/50 text-[#8D7B68] text-[10px] font-bold px-5 py-2.5 rounded-xl uppercase tracking-widest border border-[#4a3728]/5">
+              {book.genre}
+            </span>
+          </div>
         </div>
-      </div>
-    </motion.div>
-  </Link>
-))}
+      </motion.div>
+    </Link>
+  );
+})}
     </motion.div>
   </div>
 
