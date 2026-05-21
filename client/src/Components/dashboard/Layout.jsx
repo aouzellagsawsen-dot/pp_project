@@ -102,13 +102,13 @@ const Page = () => {
               <span> Favorites</span>
             </div>
           </div>
-          <div className='flex flex-col bg-[#FFF8E7] rounded-[20px] p-5 gap-3 col-span-1'>
+          {/*<div className='flex flex-col bg-[#FFF8E7] rounded-[20px] p-5 gap-3 col-span-1'>
             <div className='rounded-xl bg-[#8D7B68]/[0.14] w-7 flex justify-center px-1 py-2'>
               <Star className='text-[#8D7B68] mx-0.5' size={17}></Star>
             </div>
-            {/* À adapter plus tard si tu as un système de notation */}
+            {/* À adapter plus tard si tu as un système de notation 
             <p className='text-[#7A6A5A]'>Average rating</p>
-          </div>
+          </div>*/}
         </div>
 
         <div className='mt-8 flex gap-6'>

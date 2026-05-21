@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Profile = () => {
 const userName = localStorage.getItem('userName') || "Reader";
-const email = localStorage.getItem('Email') || "reader@gmail.com";
+const email = localStorage.getItem('email') || "Reader";
 
   const [ModelOpen, setModelOpen] = useState(false)
 
@@ -23,34 +23,34 @@ const handleChange = (e) => {
   };
 
 // Dans votre composant Profile
-  const handleSave = async (e) => {
-    e.preventDefault();
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      // Envoi des données au backend
-      const response = await fetch('http://localhost:5000/api/profile', {
-        method: 'PUT', // ou 'PATCH'
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': 'Bearer votre_token_jwt' (si vous utilisez une authentification)
-        },
-        body: JSON.stringify(formData),
-      });
+  //   try {
+  //     // Envoi des données au backend
+  //     const response = await fetch('http://localhost:5000/api/profile', {
+  //       method: 'PUT', // ou 'PATCH'
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         // 'Authorization': 'Bearer votre_token_jwt' (si vous utilisez une authentification)
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Erreur lors de la mise à jour du profil');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Erreur lors de la mise à jour du profil');
+  //     }
 
-      const updatedUser = await response.json();
+  //     const updatedUser = await response.json();
 
-      // Mise à jour de l'état local avec la réponse du serveur
-      setUserData(updatedUser);
-      setIsModalOpen(false); // Fermer la modale
-    } catch (error) {
-      console.error('Erreur :', error);
-      alert('Impossible de sauvegarder les modifications.');
-    }
-  };
+  //     // Mise à jour de l'état local avec la réponse du serveur
+  //     setUserData(updatedUser);
+  //     setIsModalOpen(false); // Fermer la modale
+  //   } catch (error) {
+  //     console.error('Erreur :', error);
+  //     alert('Impossible de sauvegarder les modifications.');
+  //   }
+  // };
   
 
   const [formData, setFormData] = useState({ ...userData })
