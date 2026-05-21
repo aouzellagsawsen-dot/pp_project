@@ -97,9 +97,6 @@ const Profile = () => {
   //   }
   // };
   
-
-  const [formData, setFormData] = useState({ ...userData })
-
   useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
