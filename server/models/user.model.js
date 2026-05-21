@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema({
     },
     resetPasswordToken: {
     type: String,
-    required: false // C'est l'état par défaut, mais c'est bien de le visualiser
+    required: false
     },
     resetPasswordExpires: {
     type: Date,
@@ -75,7 +75,13 @@ const userSchema = new mongoose.Schema({
     favorites: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Book'
-    }]
+    }],
+    bio: {
+        type: String,
+        trim: true,
+        maxlength: 200,
+        default: "Book lover and avid reader. Always looking for my next great read!"
+    }
 }, {
     timestamps: true
 })
