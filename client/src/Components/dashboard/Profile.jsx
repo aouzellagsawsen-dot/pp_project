@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 
 const Profile = () => {
+
   // 1. États du composant
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+
 
   // Données affichées sur la page
   const [userData, setUserData] = useState({
@@ -65,12 +67,49 @@ const Profile = () => {
     }));
   };
 
+// Dans votre composant Profile
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // Envoi des données au backend
+  //     const response = await fetch('http://localhost:5000/api/profile', {
+  //       method: 'PUT', // ou 'PATCH'
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         // 'Authorization': 'Bearer votre_token_jwt' (si vous utilisez une authentification)
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Erreur lors de la mise à jour du profil');
+  //     }
+
+  //     const updatedUser = await response.json();
+
+  //     // Mise à jour de l'état local avec la réponse du serveur
+  //     setUserData(updatedUser);
+  //     setIsModalOpen(false); // Fermer la modale
+  //   } catch (error) {
+  //     console.error('Erreur :', error);
+  //     alert('Impossible de sauvegarder les modifications.');
+  //   }
+  // };
+  
+
+  const [formData, setFormData] = useState({ ...userData })
+
+  useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
   // 4. Sauvegarde des données vers le Back-end
   const handleSave = async (e) => {
     e.preventDefault();
 
     try {
-      // ⚠️ Remplace par ta vraie route PUT ou PATCH du back-end
+      //  Remplace par ta vraie route PUT ou PATCH du back-end
       const response = await api.put('/api/users/profile', formData);
 
       // Si la mise à jour a réussi côté serveur

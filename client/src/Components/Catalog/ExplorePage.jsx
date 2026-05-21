@@ -54,7 +54,7 @@ const ExplorePage = () => {
 
     return (
         <div className='flex justify-center flex-col items-center min-h-screen bg-[#f1ead7]'>
-            <div className='pl-67 flex flex-col w-full'>
+            <div className='pl-95 flex flex-col w-full'>
                 <div className='w-full max-w-3xl px-1 mb-6 pt-5'>
                     <h1 className='font-serif font-semibold text-4xl text-[#5C544B] tracking-tight pb-1'>Explore Our Collection</h1>
                     <p className='italic font-sans text-[#5C544B]'>Discover your next favorite book from our community library</p>
@@ -110,7 +110,7 @@ const ExplorePage = () => {
             </div>
 
             {/* Grid des Livres provenant du Back */}
-            <div className='max-w-6xl mt-9 mb-5 space-y-4 grid grid-cols-4 gap-6 w-full relative items-stretch px-6'>
+            <div className='max-w-6xl mt-9 mb-5 space-y-4 grid grid-cols-4 gap-6 w-full relative items-stretch px-1'>
                 {filteredBooks.length > 0 ? (
                     filteredBooks.map((book) => (
                         <Link 
