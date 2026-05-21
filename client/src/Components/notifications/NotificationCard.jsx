@@ -10,10 +10,12 @@ const NotificationCard = ({notification}) => {
 
     const GetNotifIcon = () => {
         switch(notification.type){
-            case "borrow" : 
+            case "loan_request": 
                 return <Bell className='text-[orange]'></Bell>
-            case "reminder" : 
-                return <Box className='text-[green]'></Box>
+            case "loan_approved": 
+                return <Check className='text-[green]'></Check>
+            case "loan_rejected": 
+                return <Box className='text-[red]'></Box>
             case "message" : 
                return <MessageCircle className='text-[blue]'></MessageCircle>
             case "review" : 
@@ -30,7 +32,7 @@ const NotificationCard = ({notification}) => {
             await api.patch(`/api/notifications/${notification._id}/read`);
             
             // Étape 2 : Redirection ciblée si c'est une demande d'emprunt
-            if (notification.type === "borrow") {
+            if (notification.type === "loan_request") {
                 navigate('/admin'); 
             }
     } catch (error) {

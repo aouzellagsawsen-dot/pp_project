@@ -42,7 +42,7 @@ const BookDescription = ({ isLoggedIn }) => {
     if (isReserved) return;
     try {
       // APPEL API : Crée la demande d'emprunt et génère la notification côté serveur
-      const response = await api.post(`/api/loans/request`, { bookId: book._id });
+      const response = await api.post(`/api/loans/request/${book.copyId}`);
       if (response.data.success) {
         setIsReserved(true);
         alert("Demande de réservation envoyée avec succès !");

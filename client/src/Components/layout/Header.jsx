@@ -7,6 +7,26 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const currentUserName = localStorage.getItem('userName') || "Invité";
 
+  const [unreadCount, setUnreadCount] = useState(0);
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchNotifications = async () => {
+        try {
+          const response = await api.get('/api/notifications');
+          if (response.data.success) {
+            // On compte uniquement celles qui ne sont pas lues
+            const unread = response.data.data.filter(notif => !notif.isRead).length;
+            setUnreadCount(unread);
+          }
+        } catch (error) {
+          console.error("Erreur lors de la récupération des notifications pour le Header:", error);
+        }
+      };
+      
+      fetchNotifications();
+    }
+  }, [isLoggedIn]);
+
   const handleLogout = async () => {
     try {
 
@@ -55,9 +75,11 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
 
                 <Link to ="/notifications" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative">
                   <Bell size={22} strokeWidth={1.5} />
-                  <span className="absolute top-2 right-2 bg-[#8B5E3C] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#FDF5E6]">
-                    2
-                  </span>
+                  {unreadCount > 0 && (
+                    <span className="absolute top-2 right-2 bg-[#8B5E3C] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#FDF5E6]">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
                 </Link>
 
                 <Link to ="/Message" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative">

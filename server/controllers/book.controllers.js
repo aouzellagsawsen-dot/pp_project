@@ -165,7 +165,8 @@ export const getBookById = async (req, res) => {
         const result = {
             ...book,
             status: physicalCopy ? physicalCopy.status : 'Unavailable',
-            ownerId: physicalCopy ? physicalCopy.ownerId : null // Contient { _id, name, username } grâce au populate
+            ownerId: physicalCopy ? physicalCopy.ownerId : null, // Contient { _id, name, username } grâce au populate
+            copyId: physicalCopy ? physicalCopy._id : null
         };
         
         res.status(200).json({ 
