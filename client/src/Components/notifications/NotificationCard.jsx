@@ -8,32 +8,35 @@ const NotificationCard = ({notification}) => {
     
     if(!notification) return null 
 
+    const getNotifTitle = () => {
+        switch(notification.type){
+            case "loan_request": return "Nouvelle demande d'emprunt";
+            case "loan_approved": return "Demande acceptée !";
+            case "loan_rejected": return "Demande refusée";
+            case "message": return "Nouveau message";
+            default: return "Notification";
+                         
+        }
+    }
     const GetNotifIcon = () => {
         switch(notification.type){
-            case "loan_request": 
-                return <Bell className='text-[orange]'></Bell>
-            case "loan_approved": 
-                return <Check className='text-[green]'></Check>
-            case "loan_rejected": 
-                return <Box className='text-[red]'></Box>
-            case "message" : 
-               return <MessageCircle className='text-[blue]'></MessageCircle>
-            case "review" : 
-                return <Star className='text-[brown]'></Star>
-            default:
-                return <Bell />;
-                         
+            case "loan_request": return <Bell className='text-[orange]' />
+            case "loan_approved": return <Check className='text-[green]' />
+            case "loan_rejected": return <Box className='text-[red]' />
+            case "message" : return <MessageCircle className='text-[blue]' />
+            case "review" : return <Star className='text-[brown]' />
+            default: return <Bell />;
         }
     }
 
     const handleNotificationClick = async () => {
     try {
       // Étape 1 : Marquer la notification comme lue dans le backend via l'instance 'api'
-            await api.patch(`/api/notifications/${notification._id}/read`);
+            await api.patch(`/api/notify/${notification._id}/read`);
             
             // Étape 2 : Redirection ciblée si c'est une demande d'emprunt
             if (notification.type === "loan_request") {
-                navigate('/admin'); 
+                navigate('/adminpanel'); 
             }
     } catch (error) {
       console.error("Erreur lors du traitement du clic notification", error);
@@ -51,7 +54,7 @@ const NotificationCard = ({notification}) => {
       </div>
       <div className='flex flex-col flex-1'>
         <div className='flex justify-between items-center w-full mb-1'>
-          <h1 className='font-sans font-semibold text-[#4A3F35]'>{notification.title || "Notification"}</h1>
+          <h1 className='font-sans font-semibold text-[#4A3F35]'>{getNotifTitle()}</h1>
           {!notification.isRead && (
             <span className='bg-[#8D7B68] text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full'>
               New
@@ -59,8 +62,8 @@ const NotificationCard = ({notification}) => {
           )}
         </div>    
         <p className='font-sans text-[#7A6A5A] text-sm mb-2 leading-relaxed'>
-          {notification.text} 
-          {notification.sender && ` (Par: ${notification.sender.username})`}
+          {notification.sender && <span className="font-semibold">{notification.sender.username} </span>}
+            {notification.content}
         </p>
         <p className='font-sans text-[#A09080] text-xs'>
           {new Date(notification.createdAt || notification.date).toLocaleDateString()}

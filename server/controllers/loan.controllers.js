@@ -186,7 +186,12 @@ export const getPendingRequests = async (req, res) => {
             lender: lenderId, 
             status: 'pending' 
         })
-        .populate('physicalBook') // Récupère le titre et l'image du livre
+        .populate({
+            path: 'physicalBook',
+            populate: {
+                path: 'bookInfos'
+            }
+        }) // Récupère le titre et l'image du livre
         .populate('borrower', 'name email'); // Récupère le nom de celui qui demande
 
         res.status(200).json({

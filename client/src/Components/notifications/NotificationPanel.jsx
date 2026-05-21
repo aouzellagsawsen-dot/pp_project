@@ -11,7 +11,7 @@ useEffect(() => {
     window.scrollTo(0, 0);
     const fetchNotifications = async () => {
       try {
-        const response = await api.get("/api/notifications");
+        const response = await api.get("/api/notify");
         if (response.data.success) {
           setNotifications(response.data.data);
         }

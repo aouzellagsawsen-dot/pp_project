@@ -1,10 +1,9 @@
 import express from 'express'
 import { getNotifications, markAsRead } from '../controllers/notification.controllers.js'
-import { protectMutation } from '../middleware/auth.middleware.js' // Ton middleware de protection
-
+import { authenticateToken } from '../middleware/auth.middleware.js'
 const router = express.Router()
 
-router.get('/', protectMutation, getNotifications)
-router.patch('/:id/read', protectMutation, markAsRead)
+router.get('/', authenticateToken, getNotifications)
+router.patch('/:id/read', authenticateToken, markAsRead)
 
 export default router

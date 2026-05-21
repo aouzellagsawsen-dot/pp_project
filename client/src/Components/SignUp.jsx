@@ -62,8 +62,7 @@ const Sign_up = ({ setIsLoggedIn }) => {
       localStorage.setItem('userName', formData.username);
       localStorage.setItem('isLoggedIn', 'true');
 
-      localStorage.setItem('token', response.data.token);
-      
+    
       if (setIsLoggedIn) {
         setIsLoggedIn(true);
       }
