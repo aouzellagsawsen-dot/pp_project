@@ -146,15 +146,32 @@ export const getBookById = async (req, res) => {
     try {
         const bookId = req.params.id;
         
-        const book = await Book.findById(bookId);
+        const book = await Book.findById(bookId).lean();
         
         if (!book) {
             return res.status(404).json({ success: false, message: "Livre introuvable." });
         }
+
+        let physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId, status: 'Available' })
+            .populate('ownerId', 'name username'); 
+
+        // Si aucune copie n'est dispo, on prend la première copie existante (même empruntée)
+        if (!physicalCopy) {
+            physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId })
+                .populate('ownerId', 'name username');
+        }
+        
+        // 3. On fusionne les données pour que le Front-end reçoive tout dans un seul objet "data"
+        const result = {
+            ...book,
+            status: physicalCopy ? physicalCopy.status : 'Unavailable',
+            ownerId: physicalCopy ? physicalCopy.ownerId : null, // Contient { _id, name, username } grâce au populate
+            copyId: physicalCopy ? physicalCopy._id : null
+        };
         
         res.status(200).json({ 
             success: true, 
-            data: book 
+            data: result
         });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

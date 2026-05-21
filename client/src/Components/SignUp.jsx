@@ -56,14 +56,13 @@ const Sign_up = ({ setIsLoggedIn }) => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        confirmPassword: formData.confirmPassword // <-- AJOUTEZ CETTE LIGNE
+        confirmPassword: formData.confirmPassword 
       });
 
       localStorage.setItem('userName', formData.username);
       localStorage.setItem('isLoggedIn', 'true');
 
-      localStorage.setItem('token', response.data.token);
-      
+    
       if (setIsLoggedIn) {
         setIsLoggedIn(true);
       }

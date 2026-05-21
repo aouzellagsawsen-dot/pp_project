@@ -1,46 +1,75 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Bell,MessageCircle,Star,Box,Check} from 'lucide-react'
+import api from "../../api/axios"; 
 
 const NotificationCard = ({notification}) => {
+    const navigate = useNavigate();
     
     if(!notification) return null 
 
-    const GetNotifIcon = () => {
+    const getNotifTitle = () => {
         switch(notification.type){
-            case "borrow" : 
-                return <Bell className='text-[orange]'></Bell>
-            case "reminder" : 
-                return <Box className='text-[green]'></Box>
-            case "message" : 
-               return <MessageCircle className='text-[blue]'></MessageCircle>
-            case "review" : 
-                return <Star className='text-[brown]'></Star>
-            default:
-                return <Bell></Bell>;
+            case "loan_request": return "Nouvelle demande d'emprunt";
+            case "loan_approved": return "Demande acceptée !";
+            case "loan_rejected": return "Demande refusée";
+            case "message": return "Nouveau message";
+            default: return "Notification";
                          
         }
     }
+    const GetNotifIcon = () => {
+        switch(notification.type){
+            case "loan_request": return <Bell className='text-[orange]' />
+            case "loan_approved": return <Check className='text-[green]' />
+            case "loan_rejected": return <Box className='text-[red]' />
+            case "message" : return <MessageCircle className='text-[blue]' />
+            case "review" : return <Star className='text-[brown]' />
+            default: return <Bell />;
+        }
+    }
+
+    const handleNotificationClick = async () => {
+    try {
+      // Étape 1 : Marquer la notification comme lue dans le backend via l'instance 'api'
+            await api.patch(`/api/notify/${notification._id}/read`);
+            
+            // Étape 2 : Redirection ciblée si c'est une demande d'emprunt
+            if (notification.type === "loan_request") {
+                navigate('/adminpanel'); 
+            }
+    } catch (error) {
+      console.error("Erreur lors du traitement du clic notification", error);
+    }
+  };
 
    return (
     
-    <div className='flex items-start bg-white/60 w-180 h-35 rounded-2xl cursor-pointer hover:bg-white/33 p-6 gap-4 shadow-sm'>
-             
-        <div className='rounded-full flex justify-center items-center w-12 h-12 bg-[#e8dcd1] shrink-0'>{GetNotifIcon()}</div>
-        <div className='flex flex-col flex-1 w-full'>
-            <div className='flex justify-between items-center w-full'>
-             <h1 className='font-sans mb-1 pt-3 align-baseline'>{notification.title}</h1>
-             {notification.isNew && <span className='p-auto h-9 w-auto bg-[#8D7B68] rounded-full text-white text-bold font-sans flex justify-center items-center text-xs'>
-                 <span className='px-2'>New</span>
-                 </span>}
+    <div 
+      onClick={handleNotificationClick}
+      className={`flex items-start bg-white/70 w-full rounded-2xl cursor-pointer hover:bg-white/90 p-6 gap-4 shadow-sm border border-[#E8DCD1]/40 transition-all ${!notification.isRead ? 'border-l-4 border-l-[#8D7B68]' : ''}`}
+    >
+      <div className='rounded-full flex justify-center items-center w-12 h-12 bg-[#e8dcd1] shrink-0'>
+        {GetNotifIcon()}
+      </div>
+      <div className='flex flex-col flex-1'>
+        <div className='flex justify-between items-center w-full mb-1'>
+          <h1 className='font-sans font-semibold text-[#4A3F35]'>{getNotifTitle()}</h1>
+          {!notification.isRead && (
+            <span className='bg-[#8D7B68] text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full'>
+              New
+            </span>
+          )}
         </div>    
-            
-        <p className='w-full font-sans mb-2 text-[#7A6A5A] text-light'>{notification.text}</p>
-        <p className='w-full font-sans mb-2 text-[#7A6A5A] text-sm'>{notification.date}</p>
-        </div>
+        <p className='font-sans text-[#7A6A5A] text-sm mb-2 leading-relaxed'>
+          {notification.sender && <span className="font-semibold">{notification.sender.username} </span>}
+            {notification.content}
+        </p>
+        <p className='font-sans text-[#A09080] text-xs'>
+          {new Date(notification.createdAt || notification.date).toLocaleDateString()}
+        </p>
+      </div>
     </div>
-
-   
-
     
   )
 }

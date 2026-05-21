@@ -1,73 +1,60 @@
 import React, { useEffect, useState } from 'react'
 import NotificationCard from './NotificationCard'
 import { Check } from 'lucide-react'
+import api from "../../api/axios"; 
 
 const NotificationPanel = () => {
+    const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(true);
+    
 useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
-    const [notifications, setNotifications] = useState([
-        {
-            id:1,
-            type:"borrow",
-            title:"Borrow Request Approved",
-            text:'Your request to borrow "Pride and prejudice" has been approved.',
-            date:"2026-02-17 08:00",
-            isNew:false,
-            },
-        {
-            id:2,
-            type:"reminder",
-            title:"Return Reminder",
-            text:'Please return "1984" by February 20, 2026.',
-            date:"Yesterday 8:32",
-            isNew:false,
-            },
-        {
-            id:3,
-            type:"message",
-            title:"New Message",
-            text:"Sarah Johnson sent you a message.",
-            date:"Today 10:30",
-            isNew:true,
-            },
-        {
-            id:4,
-            type:"review",
-            title:"New Review",
-            text:"Someone left a review on your book.",
-            date:"2026-02-16 12:00",
-            isNew:true,
-            }
-    ])
+    window.scrollTo(0, 0);
+    const fetchNotifications = async () => {
+      try {
+        const response = await api.get("/api/notify");
+        if (response.data.success) {
+          setNotifications(response.data.data);
+        }
+      } catch (error) {
+        console.error("Erreur récup notifications", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNotifications();
+  }, []);
 
-     const markAllAsRead = () => {
-        const updateNotifs = () => notifications.map(n=>({ ...n,isNew:false}))
-            setNotifications(updateNotifs)
-     }
+  const markAllAsRead = async () => {
+    try {
+      // Optionnel : appel API pour tout mettre à jour en bdd ici
+      setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
     return (
-    <>
-    <div className='bg-[#f1ead7] min-h-screen flex flex-col justify-center items-center'>
-
-       <div className='w-full max-w-3xl px-1 pt-10 flex justify-between'> 
-        <h1 className='pl-5 font-serif font-semibold text-4xl text-[#5C544B] pb-1'>Notifications</h1>
-        
-        <button onClick={markAllAsRead} className='p-auto mr-5 border rounded-full text-[#8D7B68] hover:bg-[#8D7B68] hover:text-white flex justify-center items-center cursor-pointer'>
-            <Check className='w-4 h-4 mr-px'></Check>
-            <span className='p-2'>Mark all as read</span>
+    <div className='bg-[#f1ead7] min-h-screen flex flex-col items-center pt-10 pb-20'>
+      <div className='w-full max-w-3xl px-4 flex justify-between items-center mb-8'> 
+        <h1 className='font-serif font-semibold text-4xl text-[#5C544B]'>Notifications</h1>
+        <button onClick={markAllAsRead} className='px-4 py-2 border rounded-full border-[#8D7B68] text-[#8D7B68] hover:bg-[#8D7B68] hover:text-white flex items-center gap-2 cursor-pointer transition-all text-sm font-medium'>
+          <Check className='w-4 h-4' />
+          <span>Mark all as read</span>
         </button>
-        </div> 
+      </div> 
     
-    <div className='max-w-3xl m-auto space-y-4'>
-        {notifications.map((notification)=>{
-            return <NotificationCard key={notification.id} notification={notification}/>
-        })}   
-        </div>
-
+      <div className='w-full max-w-3xl px-4 space-y-4'>
+        {loading ? (
+          <p className="text-center italic opacity-60 font-serif">Loading notifications...</p>
+        ) : notifications.length === 0 ? (
+          <p className="text-center italic opacity-60 font-serif">No notifications.</p>
+        ) : (
+          notifications.map((notification) => (
+            <NotificationCard key={notification._id} notification={notification} />
+          ))
+        )}   
+      </div>
     </div>
-
-    </>
   )
 }
 

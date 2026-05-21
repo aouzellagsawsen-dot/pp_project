@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import api from "../api/axios"; 
 
 const QUOTES = [
   { text: "A reader lives a thousand lives before he dies.", author: "George R.R. Martin" },
@@ -15,9 +15,6 @@ const AdminPanel = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Constantes API (à adapter selon ton environnement)
-  const API_URL = "http://localhost:5000/api";
-  const token = localStorage.getItem("token");
 
   // 1. Carrousel de citations (toutes les 12 secondes)
   useEffect(() => {
@@ -36,9 +33,7 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await axios.get(`${API_URL}/loans/pending-requests`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await api.get("/api/loans/pending-requests");
         setPendingRequests(response.data.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des demandes", error);
@@ -47,19 +42,13 @@ const AdminPanel = () => {
       }
     };
     
-    if (token) {
       fetchRequests();
-    } else {
-      setIsLoading(false); // Arrête le chargement si pas de token
-    }
-  }, [token]);
+  }, []);
 
   // 4. Fonction pour ACCEPTER
   const handleApprove = async (loanId) => {
     try {
-      await axios.put(`${API_URL}/loans/approve/${loanId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.put(`/api/loans/approve/${loanId}`);
       setPendingRequests((prev) => prev.filter(req => req._id !== loanId));
       // Optionnel : tu pourrais remplacer l'alert par un joli toast de notification
       alert("Demande acceptée ! Le livre est maintenant emprunté.");
@@ -71,9 +60,7 @@ const AdminPanel = () => {
   // 5. Fonction pour REFUSER
   const handleReject = async (loanId) => {
     try {
-      await axios.put(`${API_URL}/loans/reject/${loanId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.put(`/api/loans/reject/${loanId}`);
       setPendingRequests((prev) => prev.filter(req => req._id !== loanId));
       alert("Demande refusée.");
     } catch (error) {
@@ -157,10 +144,10 @@ const AdminPanel = () => {
                 >
                   <div>
                     <h3 className="text-xl font-medium text-[#2C2621] mb-1">
-                      {request.physicalBook?.title || "Unknown Book"}
+                      {request.physicalBook?.bookInfos?.title || "Livre inconnu"}
                     </h3>
                     <p className="text-sm italic opacity-70">
-                      Requested by <span className="font-semibold">{request.borrower?.name || "A mysterious reader"}</span>
+                      Requested by <span className="font-semibold">{request.borrower?.username || request.borrower?.name || "A mysterious reader"}</span>
                     </p>
                   </div>
                   

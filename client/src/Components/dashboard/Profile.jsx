@@ -66,41 +66,14 @@ const Profile = () => {
       [name]: value
     }));
   };
-
-// Dans votre composant Profile
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     // Envoi des données au backend
-  //     const response = await fetch('http://localhost:5000/api/profile', {
-  //       method: 'PUT', // ou 'PATCH'
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         // 'Authorization': 'Bearer votre_token_jwt' (si vous utilisez une authentification)
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Erreur lors de la mise à jour du profil');
-  //     }
-
-  //     const updatedUser = await response.json();
-
-  //     // Mise à jour de l'état local avec la réponse du serveur
-  //     setUserData(updatedUser);
-  //     setIsModalOpen(false); // Fermer la modale
-  //   } catch (error) {
-  //     console.error('Erreur :', error);
-  //     alert('Impossible de sauvegarder les modifications.');
-  //   }
-  // };
   
+<<<<<<< HEAD
   useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
 
+=======
+>>>>>>> 3140af94db46242c88dcad2ff36f3025cb97d5d4
   // 4. Sauvegarde des données vers le Back-end
   const handleSave = async (e) => {
     e.preventDefault();

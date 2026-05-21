@@ -24,6 +24,8 @@ const BookDescription = ({ isLoggedIn }) => {
         const response = await api.get(`/api/books/${id}`);
         if (response.data.success) {
           setBook(response.data.data);
+          if (response.data.data.isCurrentlyRequested) {
+          setIsReserved(true);}
         } else {
           setBook(response.data);
         }
@@ -36,14 +38,30 @@ const BookDescription = ({ isLoggedIn }) => {
     fetchBook();
   }, [id]);
 
+  const handleReservation = async () => {
+    if (isReserved) return;
+    try {
+      // APPEL API : Crée la demande d'emprunt et génère la notification côté serveur
+      const response = await api.post(`/api/loans/request/${book.copyId}`);
+      if (response.data.success) {
+        setIsReserved(true);
+        alert("Demande de réservation envoyée avec succès !");
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Erreur lors de la réservation");
+    }
+  };
+
   if (loading) return <div className="p-20 text-center font-serif text-[#8D7B68] text-xl">Chargement...</div>;
   if (!book) return <div className="p-20 text-center font-serif text-[#8D7B68]">Livre introuvable.</div>;
 
   // Vérifie si le livre actuel est dans les favoris
   const isFavorite = isBookFavorite(book._id);
 
-  // Construction des thèmes (on utilise le genre principal et le genre custom s'il existe)
-  const themes = [book.genre, book.customGenre].filter(Boolean);
+  const themes = book.genre === 'Others' ? [book.customGenre] : [book.genre];
+
+  const ownerId = book.ownerId?._id || book.ownerId; 
+  const ownerName = book.ownerId?.username || book.ownerId?.name || "Membre Alinéa";
 
   return (
     <main className="w-full min-h-screen bg-[#F4EFE6] selection:bg-[#8D7B68] selection:text-white">
@@ -73,13 +91,15 @@ const BookDescription = ({ isLoggedIn }) => {
                   <Landmark size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-[#86796D] tracking-widest uppercase">Collection</p>
-                  <p className="font-serif font-bold text-[#4A3F35] text-sm">Longbourn Estate</p> {/* Remplace par book.owner.name si dispo */}
-                </div>
+                   <p className="text-[10px] font-bold text-[#86796D] tracking-widest uppercase">Collection</p>
+                   {/* 2. MODIFICATION : Affichage dynamique du nom */}
+                   <p className="font-serif font-bold text-[#4A3F35] text-sm truncate max-w-[120px]">
+                     {ownerName} </p> 
+                 </div>
               </div>
-              <Link to="/Message" className="px-4 py-2 border border-[#8D7B68] text-[#8D7B68] text-xs font-bold tracking-widest rounded-lg hover:bg-[#8D7B68] hover:text-white transition-all">
-                CONTACT
-              </Link>
+              <Link to={`/Message?userId=${ownerId}&userName=${encodeURIComponent(ownerName)}&bookTitle=${encodeURIComponent(book.title)}`} 
+                className="px-4 py-2 border border-[#8D7B68] text-[#8D7B68] text-xs font-bold tracking-widest rounded-lg hover:bg-[#8D7B68] hover:text-white transition-all" >
+                 CONTACT </Link>
             </div>
           </div>
 
@@ -131,7 +151,7 @@ const BookDescription = ({ isLoggedIn }) => {
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4 mb-14">
               <button 
-                onClick={() => setIsReserved(!isReserved)} 
+                onClick={handleReservation}
                 className={`flex-1 font-sans text-sm font-bold tracking-[0.15em] py-4 rounded-xl shadow-md transition-all uppercase ${
                   isReserved 
                    ? 'bg-[#8A7967]/60 text-white/90 cursor-default' 
