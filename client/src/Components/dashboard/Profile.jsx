@@ -66,14 +66,11 @@ const Profile = () => {
       [name]: value
     }));
   };
-  
-<<<<<<< HEAD
+
   useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
 
-=======
->>>>>>> 3140af94db46242c88dcad2ff36f3025cb97d5d4
   // 4. Sauvegarde des données vers le Back-end
   const handleSave = async (e) => {
     e.preventDefault();

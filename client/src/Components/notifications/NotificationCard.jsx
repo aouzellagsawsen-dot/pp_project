@@ -31,13 +31,24 @@ const NotificationCard = ({notification}) => {
 
     const handleNotificationClick = async () => {
     try {
-      // Étape 1 : Marquer la notification comme lue dans le backend via l'instance 'api'
-            await api.patch(`/api/notify/${notification._id}/read`);
-            
-            // Étape 2 : Redirection ciblée si c'est une demande d'emprunt
-            if (notification.type === "loan_request") {
-                navigate('/adminpanel'); 
+        await api.put(`/api/notify/${notification._id}/read`);
+      if (notification.type === "loan_request") {
+            navigate('/adminpanel'); 
+        } 
+        else if (notification.type === "message") {
+            const senderId = notification.sender?._id;
+            const senderName = notification.sender?.username;
+
+            if (senderId && senderName) {
+                
+                navigate(`/messages?userId=${senderId}&userName=${senderName}`);
+            } else {
+                navigate('/messages');
             }
+        } 
+        else if (notification.type === "loan_approved" || notification.type === "loan_rejected") {
+          navigate('/catalog'); 
+      }
     } catch (error) {
       console.error("Erreur lors du traitement du clic notification", error);
     }

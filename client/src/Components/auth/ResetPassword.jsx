@@ -36,7 +36,7 @@ const ResetPassword = () => {
 
     try {
       // Utilisation de ton instance Axios
-      const response = await api.put(`/api/resetpassword/${token}`, { password });
+      const response = await api.put(`/api/auth/resetpassword/${token}`, { password });
 
       // Si l'appel réussit
       setSuccess(response.data.message || "Password updated successfully! Redirecting...");

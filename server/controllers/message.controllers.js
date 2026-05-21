@@ -38,6 +38,16 @@ export const sendMessage = async (req, res) => {
         text: text
     });
 
+    const shortText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
+    
+    await Notification.create({
+        recipient: receiverId,
+        sender: senderId,
+        type: "message",
+        content: `vous a envoyé un message : "${shortText}"`,
+        isRead: false
+    });
+
     res.status(201).json({
         success: true,
         message: "Message envoyé avec succès.",

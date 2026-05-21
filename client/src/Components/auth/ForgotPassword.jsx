@@ -1,11 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; // ✅ CORRECTION : Ajout de useState
 import { Link } from 'react-router-dom';
-import { BookOpen, Feather, ChevronLeft, Send } from 'lucide-react';
+import { BookOpen, ChevronLeft, Send } from 'lucide-react';
+import api from '../../api/axios.js';
 
 const ForgotPassword = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // 1. Déclaration des états
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+
+  // 2. Fonction déclenchée à la soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage({ type: '', text: '' }); 
+    setIsLoading(true);
+
+    try {
+      // Appel de la route backend validée : /api/auth/forgotpassword
+      const response = await api.post('/api/auth/forgotpassword', { email });
+      
+      setMessage({ 
+        type: 'success', 
+        text: response.data.message || "A magic link has been sent to your email address." 
+      });
+      setEmail(''); // On vide le champ en cas de succès
+      
+    } catch (error) {
+      const errorText = error.response?.data?.message || "Something went wrong. Please try again.";
+      setMessage({ type: 'error', text: errorText });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans text-[#5C544B]">
       
@@ -23,19 +54,37 @@ const ForgotPassword = () => {
           </p>
         </div>
 
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+         {message.text && (
+          <div className={`mb-6 p-4 rounded-2xl text-sm text-center border ${
+            message.type === 'success' 
+              ? 'bg-green-50 text-green-600 border-green-100' 
+              : 'bg-red-50 text-red-600 border-red-100'
+          }`}>
+            {message.text}
+          </div>
+        )}
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label className="text-sm font-semibold ml-1">Email Address</label>
             <input 
               type="email" 
               placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
+              required
               className="w-full px-5 py-3.5 rounded-2xl bg-[#FFFBF2] border border-[#EFE7D6] focus:outline-none focus:ring-2 focus:ring-[#8D7B68]/20 transition-all text-sm"
             />
           </div>
 
-          <button className="w-full py-4 bg-[#8D7B68] text-white rounded-3xl font-semibold hover:bg-[#7A6A59] transition-all shadow-lg shadow-[#8D7B68]/25 flex items-center justify-center gap-2">
+           <button 
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-4 bg-[#8D7B68] text-white rounded-3xl font-semibold hover:bg-[#7A6A59] transition-all shadow-lg shadow-[#8D7B68]/25 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          >
             <Send size={18} />
-            Send Reset Link
+            {isLoading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
       </div>
