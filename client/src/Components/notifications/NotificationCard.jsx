@@ -31,7 +31,7 @@ const NotificationCard = ({notification}) => {
 
     const handleNotificationClick = async () => {
     try {
-        await api.put(`/api/notify/${notification._id}/read`);
+        await api.patch(`/api/notify/${notification._id}/read`);
       if (notification.type === "loan_request") {
             navigate('/adminpanel'); 
         } 

@@ -54,7 +54,7 @@ export default function App() {
           <Route path="/Message" element={<Message />} />
           <Route path="/About" element={<About />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
-          <Route path="/ResetPassword" element={<ResetPassword />} />
+          <Route path="/ResetPassword/:token" element={<ResetPassword />} />
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/SignUp" element={<SignUp setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/terms" element={<TermsOfUse/>} />

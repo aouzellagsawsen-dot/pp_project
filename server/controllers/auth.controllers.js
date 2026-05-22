@@ -288,7 +288,7 @@ export const forgotPass = async (req, res) => {
         await user.save({ validateBeforeSave: false });
 
         // 4. Create the reset URL (pointing to your React frontend)
-        const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+        const resetUrl = `${process.env.FRONTEND_URL}/ResetPassword/${resetToken}`;
 
         // 5. Craft the email message
         const message = `You are receiving this email because you (or someone else) has requested a password reset for your account.\n\nPlease click on the link below to complete the process:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;

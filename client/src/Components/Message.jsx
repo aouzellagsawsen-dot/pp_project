@@ -122,14 +122,22 @@ const MessagesPage = () => {
   // ==========================================
   // 3. ENVOYER UN MESSAGE
   // ==========================================
+ // ==========================================
+  // 3. ENVOYER UN MESSAGE (VERSION CORRIGÉE)
+  // ==========================================
   const handleSendMessage = async () => {
     if (!inputValue.trim() || !activeConvId) return;
 
     // Trouver le destinataire (l'autre participant)
     const currentChat = conversations.find(c => c._id === activeConvId);
-    const receiver = currentChat?.participants.find(p => p._id !== currentUserId);
+    
+    // On ajoute un "?" sécuritaire au cas où participants serait indéfini
+    const receiver = currentChat?.participants?.find(p => p._id !== currentUserId);
 
-    if (!receiver) return;
+    if (!receiver) {
+      console.error("Destinataire introuvable dans la conversation actuelle.");
+      return;
+    }
 
     try {
       const textToSend = inputValue;
@@ -151,16 +159,23 @@ const MessagesPage = () => {
           // Sinon, on ajoute simplement le message à l'écran
           setMessages(prev => [...prev, newMsg]);
           
-          // On remonte cette conversation en haut de la liste de gauche
+          // On remonte cette conversation en haut de la liste de gauche (AVEC SÉCURITÉ)
           setConversations(prev => {
             const updated = prev.map(c => 
               c._id === activeConvId ? { ...c, updatedAt: new Date().toISOString() } : c
             );
-            return updated.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+            
+            // Tri sécurisé avec .getTime() et une valeur par défaut de 0
+            return updated.sort((a, b) => {
+              const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+              const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+              return dateB - dateA;
+            });
           });
         }
       }
     } catch (error) {
+      // Affichage exact de l'erreur dans la console pour le debug
       console.error("Erreur lors de l'envoi du message :", error);
       alert("Impossible d'envoyer le message.");
     }
