@@ -1,5 +1,6 @@
 import Conversation from '../models/conversation.model.js';
 import Message from '../models/message.model.js';
+import Notification from '../models/notification.model.js';
 
 // ============ 1. ENVOYER UN MESSAGE ============
 export const sendMessage = async (req, res) => {
@@ -10,28 +11,25 @@ export const sendMessage = async (req, res) => {
     if (!text) {
         const error = new Error("Le message ne peut pas être vide.");
         error.statusCode = 400;
-        throw error; // Express 5 attrape et envoie ça au errorHandler global
+        throw error;
     }
 
-    // 1. Chercher s'il existe DÉJÀ une conversation entre ces deux utilisateurs
-    // L'opérateur $all de MongoDB vérifie que le tableau contient bien ces deux IDs
+    // 1. Chercher s'il existe DÉJÀ une conversation
     let conversation = await Conversation.findOne({
         participants: { $all: [senderId, receiverId] }
     });
 
-    // 2. S'il n'y en a pas, on crée la "boîte" de conversation
+    // 2. Création ou mise à jour
     if (!conversation) {
         conversation = await Conversation.create({
             participants: [senderId, receiverId]
         });
     } else {
-        // Petite astuce : on met à jour la date de la conversation pour qu'elle remonte 
-        // tout en haut de la boîte de réception côté Front !
         conversation.updatedAt = Date.now();
         await conversation.save();
     }
 
-    // 3. On crée le message et on le lie à la conversation
+    // 3. Création du message
     const newMessage = await Message.create({
         conversationId: conversation._id,
         sender: senderId,
@@ -40,10 +38,12 @@ export const sendMessage = async (req, res) => {
 
     const shortText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
     
+    // 4. Création de la notification (qui va marcher maintenant !)
     await Notification.create({
         recipient: receiverId,
         sender: senderId,
         type: "message",
+        relatedId: conversation._id, // 2. 👉 BONUS : On utilise ton schéma à 100% !
         content: `vous a envoyé un message : "${shortText}"`,
         isRead: false
     });
