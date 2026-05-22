@@ -62,7 +62,10 @@ const Sign_up = ({ setIsLoggedIn }) => {
       localStorage.setItem('userName', formData.username);
       localStorage.setItem('isLoggedIn', 'true');
 
-    
+     if (response.data && response.data.user) {
+        localStorage.setItem('userId', response.data.user._id || response.data.user.id);
+      }
+      
       if (setIsLoggedIn) {
         setIsLoggedIn(true);
       }
