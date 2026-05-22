@@ -20,7 +20,7 @@ const notificationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // ID de l'objet lié (le Loan ou la Conversation) pour que le front puisse cliquer dessus
+
     relatedId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true

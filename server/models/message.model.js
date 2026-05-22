@@ -20,7 +20,7 @@ const messageSchema = new mongoose.Schema({
         default: false
     }
 }, {
-    timestamps: true // Le 'createdAt' servira à afficher l'heure exacte du message
+    timestamps: true
 });
 
 const Message = mongoose.model('Message', messageSchema);

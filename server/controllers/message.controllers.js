@@ -14,12 +14,10 @@ export const sendMessage = async (req, res) => {
         throw error;
     }
 
-    // 1. Chercher s'il existe DÉJÀ une conversation
     let conversation = await Conversation.findOne({
         participants: { $all: [senderId, receiverId] }
     });
 
-    // 2. Création ou mise à jour
     if (!conversation) {
         conversation = await Conversation.create({
             participants: [senderId, receiverId]
@@ -29,7 +27,6 @@ export const sendMessage = async (req, res) => {
         await conversation.save();
     }
 
-    // 3. Création du message
     const newMessage = await Message.create({
         conversationId: conversation._id,
         sender: senderId,
@@ -38,12 +35,11 @@ export const sendMessage = async (req, res) => {
 
     const shortText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
     
-    // 4. Création de la notification (qui va marcher maintenant !)
     await Notification.create({
         recipient: receiverId,
         sender: senderId,
         type: "message",
-        relatedId: conversation._id, // 2. 👉 BONUS : On utilise ton schéma à 100% !
+        relatedId: conversation._id,
         content: `vous a envoyé un message : "${shortText}"`,
         isRead: false
     });
@@ -59,12 +55,11 @@ export const sendMessage = async (req, res) => {
 export const getConversations = async (req, res) => {
     const userId = req.user.id;
 
-    // On cherche toutes les conversations où notre utilisateur est présent
     const conversations = await Conversation.find({
         participants: { $in: [userId] }
     })
-    .populate('participants', 'username avatar') // On récupère les infos des participants
-    .sort({ updatedAt: -1 }); // On trie de la plus récente à la plus ancienne
+    .populate('participants', 'username avatar')
+    .sort({ updatedAt: -1 });
 
     res.status(200).json({
         success: true,
@@ -75,11 +70,9 @@ export const getConversations = async (req, res) => {
 // ============ 3. RÉCUPÉRER LES MESSAGES D'UNE CONVERSATION ============
 export const getMessages = async (req, res) => {
     const conversationId = req.params.conversationId;
-
-    // On va chercher tous les messages de cette boîte
     const messages = await Message.find({ conversationId: conversationId })
-        .populate('sender', 'username avatar') // Utile pour savoir si la bulle est "envoyée" ou "reçue" côté Front
-        .sort({ createdAt: 1 }); // Tri chronologique (le plus vieux en haut, le plus récent en bas)
+        .populate('sender', 'username avatar')
+        .sort({ createdAt: 1 });
 
     res.status(200).json({
         success: true,

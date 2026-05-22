@@ -27,7 +27,6 @@ export const requestLoan = async (req, res) => {
         throw error
     }
 
-    // On crée la demande d'emprunt dans l'historique
     const newLoan = await Loan.create({
         physicalBook: copy._id,
         borrower: borrowerId,
@@ -37,13 +36,12 @@ export const requestLoan = async (req, res) => {
     copy.status = 'Requested'
     await copy.save()
 
-    // 🔥 NOUVEAU : Création de la notification pour le PROPRIÉTAIRE
     await Notification.create({
-        recipient: copy.ownerId,     // Le propriétaire reçoit l'alerte
-        sender: borrowerId,          // L'emprunteur déclenche l'alerte
+        recipient: copy.ownerId,
+        sender: borrowerId,
         type: 'loan_request',
         content: "requested to borrow one of your books.",
-        relatedId: newLoan._id       // Lien vers la demande pour le front
+        relatedId: newLoan._id
     });
 
     res.status(201).json({ 
@@ -60,7 +58,6 @@ export const approveLoan = async (req, res) => {
 
     const { dueDate } = req.body;
 
-    // On récupère le prêt en incluant les infos du livre physique
     const loan = await Loan.findById(loanId).populate('physicalBook');
 
     if (!loan) {
@@ -69,7 +66,6 @@ export const approveLoan = async (req, res) => {
         throw error;
     }
 
-    // Vérification de sécurité : Seul le propriétaire peut accepter
     if (loan.lender.toString() !== lenderId) {
         const error = new Error("You are not authorized to approve this request.");
         error.statusCode = 403;
@@ -82,11 +78,9 @@ export const approveLoan = async (req, res) => {
         throw error;
     }
 
-    // 1. Mise à jour du document Loan
     loan.status = 'active';
     loan.startDate = Date.now();
-    
-    // Calcul de la date de retour (ex: 30 jours plus tard)
+
     let returnDate = new Date();
     if (dueDate) {
         returnDate = new Date(dueDate);
@@ -97,7 +91,6 @@ export const approveLoan = async (req, res) => {
 
     await loan.save();
 
-    // 2. Mise à jour du statut du livre physique
     const copy = loan.physicalBook;
     copy.status = 'Borrowed'; 
     copy.borrowerId = loan.borrower; 
@@ -109,13 +102,12 @@ export const approveLoan = async (req, res) => {
         year: 'numeric'
     });
 
-    // Création de la notification pour l'EMPRUNTEUR
     await Notification.create({
-        recipient: loan.borrower,    // L'emprunteur reçoit la bonne nouvelle
-        sender: lenderId,            // Le propriétaire est l'expéditeur
+        recipient: loan.borrower,
+        sender: lenderId,
         type: 'loan_approved',
         content: `approved your loan request! Please return the book by ${formattedDate}.`,
-        relatedId: loan._id          // Lien vers le prêt actif
+        relatedId: loan._id
     });
 
     res.status(200).json({ 
@@ -130,7 +122,6 @@ export const rejectLoan = async (req, res) => {
     const loanId = req.params.loanId; 
     const lenderId = req.user.id;
 
-    // On récupère le prêt en incluant les infos du livre physique
     const loan = await Loan.findById(loanId).populate('physicalBook');
 
     if (!loan) {
@@ -139,7 +130,6 @@ export const rejectLoan = async (req, res) => {
         throw error;
     }
 
-    // Vérification de sécurité : Seul le propriétaire peut refuser
     if (loan.lender.toString() !== lenderId) {
         const error = new Error("You are not authorized to approve this request.");
         error.statusCode = 403;
@@ -152,33 +142,29 @@ export const rejectLoan = async (req, res) => {
         throw error;
     }
 
-    // 1. Mise à jour du document Loan
     loan.status = 'rejected';
-    // On ne met pas de date de début ou de fin puisqu'il est refusé !
+
     await loan.save();
 
-    // 2. Mise à jour du statut du livre physique
     const copy = loan.physicalBook;
     
-    // On compte s'il y a d'autres personnes en salle d'attente pour ce même livre
     const remainingRequests = await Loan.countDocuments({
         physicalBook: copy._id,
         status: 'pending'
     });
 
-    // S'il n'y a plus personne en attente, le livre redevient disponible pour tout le monde
+
     if (remainingRequests === 0) {
         copy.status = 'Available'; 
         await copy.save();
     }
 
-    // 3. Création de la notification pour l'EMPRUNTEUR
     await Notification.create({
-        recipient: loan.borrower,    // L'emprunteur reçoit la mauvaise nouvelle
-        sender: lenderId,            // Le propriétaire est l'expéditeur
+        recipient: loan.borrower, 
+        sender: lenderId,     
         type: 'loan_rejected',
         content: "unfortunately declined your loan request.",
-        relatedId: loan._id          // Lien vers le prêt (qui est maintenant 'rejected')
+        relatedId: loan._id
     });
 
     res.status(200).json({ 
@@ -191,9 +177,8 @@ export const rejectLoan = async (req, res) => {
 // ============ 4. VOIR LES DEMANDES EN ATTENTE ============
 export const getPendingRequests = async (req, res) => {
     try {
-        const lenderId = req.user.id; // L'ID du propriétaire connecté
+        const lenderId = req.user.id;
 
-        // On cherche tous les emprunts "pending" destinés à ce propriétaire
         const pendingLoans = await Loan.find({ 
             lender: lenderId, 
             status: 'pending' 
@@ -203,8 +188,8 @@ export const getPendingRequests = async (req, res) => {
             populate: {
                 path: 'bookInfos'
             }
-        }) // Récupère le titre et l'image du livre
-        .populate('borrower', 'name email'); // Récupère le nom de celui qui demande
+        })
+        .populate('borrower', 'name email');
 
         res.status(200).json({
             success: true,

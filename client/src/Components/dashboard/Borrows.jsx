@@ -32,7 +32,6 @@ const Borrows = () => {
         <p>Loading...</p>
       ) : Array.isArray(books) && books.length > 0 ? (
         books.map((book) => (
-          // key est obligatoire dans une boucle en React
           <BookCard book={book} />
         ))
       ) : (

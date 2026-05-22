@@ -24,12 +24,15 @@ useEffect(() => {
     fetchNotifications();
   }, []);
 
-  const markAllAsRead = async () => {
+const markAllAsRead = async () => {
     try {
-      // Optionnel : appel API pour tout mettre à jour en bdd ici
-      setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+      const response = await api.patch("/api/notify/read-all");
+      
+      if (response.data.success) {
+        setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors du marquage des notifications :", error);
     }
   };
 

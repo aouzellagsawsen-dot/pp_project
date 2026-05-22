@@ -91,7 +91,6 @@ export default function FeaturedBooks() {
       transition={{ type: "spring", stiffness: 120, damping: 20 }}
     >
       {books.map((book) => {
-  // 1. On sécurise le chemin de l'image avec l'adresse du backend
   const bookCover = book.cover || book.photo;
   const imageSrc = bookCover?.startsWith('/') 
     ? `http://localhost:5000${bookCover}` 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { sendMessage, getConversations, getMessages } from '../controllers/message.controllers.js';
-import { protectMutation } from '../middleware/auth.middleware.js'; // Ton middleware d'authentification
+import { protectMutation } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 

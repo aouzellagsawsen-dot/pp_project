@@ -4,13 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Star, Heart, ChevronLeft, Landmark } from 'lucide-react';
 import api from "../api/axios"; 
-import { useFavorites } from './contexts/FavoritesContext'; // Import du context
+import { useFavorites } from './contexts/FavoritesContext';
 
 const BookDescription = ({ isLoggedIn }) => {
   const { id } = useParams(); 
   const navigate = useNavigate();
-  
-  // Utilisation du context pour les favoris
+
   const { toggleFavorite, isBookFavorite } = useFavorites();
 
   const [book, setBook] = useState(null);
@@ -41,7 +40,6 @@ const BookDescription = ({ isLoggedIn }) => {
   const handleReservation = async () => {
     if (isReserved) return;
     try {
-      // APPEL API : Crée la demande d'emprunt et génère la notification côté serveur
       const response = await api.post(`/api/loans/request/${book.copyId}`);
       if (response.data.success) {
         setIsReserved(true);
@@ -55,7 +53,6 @@ const BookDescription = ({ isLoggedIn }) => {
   if (loading) return <div className="p-20 text-center font-serif text-[#8D7B68] text-xl">Chargement...</div>;
   if (!book) return <div className="p-20 text-center font-serif text-[#8D7B68]">Livre introuvable.</div>;
 
-  // Vérifie si le livre actuel est dans les favoris
   const isFavorite = isBookFavorite(book._id);
 
   const themes = book.genre === 'Others' ? [book.customGenre] : [book.genre];

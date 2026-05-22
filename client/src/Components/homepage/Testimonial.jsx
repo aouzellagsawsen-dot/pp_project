@@ -1,8 +1,7 @@
 import React from 'react';
-import database from '../../data/db.json'; // On importe le JSON généré
+import database from '../../data/db.json'; 
 
 const Testimonial = () => {
-  // On récupère les témoignages du fichier JSON
   const { testimonials } = database;
 
   return (

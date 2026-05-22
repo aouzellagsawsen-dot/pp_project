@@ -10,7 +10,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(''); // <--- AJOUTÉ : Pour afficher les erreurs à l'utilisateur
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
     const toggleVisibility = () =>{
@@ -28,7 +28,6 @@ const handleSubmit = async (e) => {
         password: password,
       });
 
-      // 🪄 LA LIGNE MAGIQUE EST ICI : On met à jour le token CSRF tout de suite !
       await fetchAndSetCsrfToken();
 
       localStorage.setItem('userName', response.data.user.name);

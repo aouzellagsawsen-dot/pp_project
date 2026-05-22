@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; // ✅ CORRECTION : Ajout de useState
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, ChevronLeft, Send } from 'lucide-react';
 import api from '../../api/axios.js';
@@ -8,26 +8,23 @@ const ForgotPassword = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 1. Déclaration des états
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // 2. Fonction déclenchée à la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage({ type: '', text: '' }); 
     setIsLoading(true);
 
     try {
-      // Appel de la route backend validée : /api/auth/forgotpassword
       const response = await api.post('/api/auth/forgotpassword', { email });
       
       setMessage({ 
         type: 'success', 
         text: response.data.message || "A magic link has been sent to your email address." 
       });
-      setEmail(''); // On vide le champ en cas de succès
+      setEmail('');
       
     } catch (error) {
       const errorText = error.response?.data?.message || "Something went wrong. Please try again.";

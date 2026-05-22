@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { Calendar} from 'lucide-react'
 
-// const [returned, setReturned] = useState("")
-
-
 const BookCard = ({book}) => {
   const formatDueDate = (dateString) => {
     if (!dateString) return "No date set";
