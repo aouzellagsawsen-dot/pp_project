@@ -10,16 +10,13 @@ export const addPhysicalBook = async (req, res) => {
     }
     let finalQuotes = [];
     if (quotes) {
-        // 1. On retransforme le texte du FormData en vrai tableau Javascript
         const parsedQuotes = typeof quotes === 'string' ? JSON.parse(quotes) : quotes;
         
-        // 2. On nettoie : on garde uniquement les citations qui ne sont pas vides
         if (Array.isArray(parsedQuotes)) {
             finalQuotes = parsedQuotes.filter(q => q && q.trim() !== "");
         }
     }
 
-    // 1. RECHERCHE DU LIVRE EXISTANT
     const existingBook = await Book.findOne({ 
         title: { $regex: new RegExp(`^${title}$`, 'i') },
         author: { $regex: new RegExp(`^${author}$`, 'i') }
@@ -28,14 +25,11 @@ export const addPhysicalBook = async (req, res) => {
     let targetBookId;
     let bookData;
 
-    // 2. LOGIQUE CONDITIONNELLE (Existe-t-il ?)
     if (existingBook) {
-        // Le livre existe déjà ! On ne le recrée pas, on garde juste son ID.
         targetBookId = existingBook._id;
         bookData = existingBook;
         
     } else {
-        // Le livre n'existe pas, on le crée.
         const cover = req.file ? `/uploads/covers/${req.file.filename}` : `/uploads/covers/default-cover.png`;
 
         const newBook = await Book.create({
@@ -52,14 +46,12 @@ export const addPhysicalBook = async (req, res) => {
         bookData = newBook;
     }
 
-    // 3. CRÉATION DE LA COPIE PHYSIQUE
     const newPhysicalBook = await PhysicalBook.create({
         bookInfos: targetBookId,
         ownerId: req.user.id,
         status: 'Available'
     });
 
-    // On renvoie un message dynamique pour savoir ce qu'il s'est passé en coulisses
     const responseMessage = existingBook 
         ? "Livre existant trouvé, nouvelle copie ajoutée !" 
         : "Nouveau livre et nouvelle copie créés avec succès !";
@@ -77,23 +69,19 @@ export const deleteBook = async (req, res) => {
     const bookId = req.params.id;
     const userId = req.user.id; 
 
-    // ÉTAPE 1 : On cherche et on supprime uniquement LA copie de cet utilisateur
     const deletedCopy = await PhysicalBook.findOneAndDelete({ 
         bookInfos: bookId, 
         ownerId: userId 
     });
 
-    // Si l'utilisateur n'avait pas de copie de ce livre
     if (!deletedCopy) {
         const error = new Error("Vous ne possédez pas d'exemplaire de ce livre, ou il est introuvable.");
         error.statusCode = 404;
         throw error;
     }
 
-    // ÉTAPE 2 : On compte combien de copies il reste pour ce livre (celles des autres)
     const remainingCopies = await PhysicalBook.countDocuments({ bookInfos: bookId });
 
-    // ÉTAPE 3 : S'il ne reste plus aucune copie, on supprime l'œuvre abstraite
     if (remainingCopies === 0) {
         await Book.findByIdAndDelete(bookId);
     }
@@ -108,21 +96,16 @@ export const deleteBook = async (req, res) => {
 export const updateBook = async (req, res) => {
     const bookId = req.params.id;
     
-    // On récupère toutes les données envoyées dans le body
     let updateData = { ...req.body };
 
-    // Gestion spécifique du genre 
     if (updateData.genre && updateData.genre !== 'Others') {
         updateData.customGenre = undefined;
     }
 
-    // Si l'utilisateur a uploadé une NOUVELLE image, on met à jour le chemin
-    // J'ai corrigé ici aussi, plus besoin de 'public/' devant le chemin !
     if (req.file) {
         updateData.cover = `/uploads/covers/${req.file.filename}`;
     }
 
-    // On met à jour le document MongoDB
     const updatedBook = await Book.findByIdAndUpdate(bookId, updateData, { 
         new: true, 
         runValidators: true
@@ -155,13 +138,11 @@ export const getBookById = async (req, res) => {
         let physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId, status: 'Available' })
             .populate('ownerId', 'name username'); 
 
-        // Si aucune copie n'est dispo, on prend la première copie existante (même empruntée)
         if (!physicalCopy) {
             physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId })
                 .populate('ownerId', 'name username');
         }
         
-        // 3. On fusionne les données pour que le Front-end reçoive tout dans un seul objet "data"
         const result = {
             ...book,
             status: physicalCopy ? physicalCopy.status : 'Unavailable',
@@ -200,7 +181,6 @@ export const allBooks = async (req, res) => {
             finalStatus = 'unavailable';
         }
 
-        // On fusionne tout !
         return {
             ...book.toObject(),
             status: finalStatus,
@@ -208,7 +188,6 @@ export const allBooks = async (req, res) => {
         };
     }));
 
-    // 3. On envoie au Front
     res.status(200).json({
         success: true,
         data: booksWithStatus

@@ -5,8 +5,8 @@ export const getNotifications = async (req, res) => {
     const userId = req.user.id;
 
     const notifications = await Notification.find({ recipient: userId })
-        .populate('sender', 'username avatar') // On donne juste le nom et l'image du sender au front
-        .sort({ createdAt: -1 }); // Les plus récentes en premier
+        .populate('sender', 'username avatar')
+        .sort({ createdAt: -1 });
 
     res.status(200).json({
         success: true,
@@ -20,7 +20,7 @@ export const markAsRead = async (req, res) => {
     const userId = req.user.id;
 
     const notification = await Notification.findOneAndUpdate(
-        { _id: id, recipient: userId }, // Sécurité : on vérifie que c'est bien la sienne
+        { _id: id, recipient: userId },
         { isRead: true },
         { new: true }
     );
@@ -29,8 +29,23 @@ export const markAsRead = async (req, res) => {
        
         const error = new Error("Notification not found.");
         error.statusCode = 404;
-        throw error; // Attrapé instantanément par Express 5
+        throw error;
     }
 
     res.status(200).json({ success: true, message: "Marqued as read" });
+}
+
+// Marquer TOUTES les notifications comme lues
+export const markAllAsRead = async (req, res) => {
+    const userId = req.user.id;
+
+    await Notification.updateMany(
+        { recipient: userId, isRead: false },
+        { $set: { isRead: true } }
+    );
+
+    res.status(200).json({ 
+        success: true, 
+        message: "All notifications marked as read." 
+    });
 }

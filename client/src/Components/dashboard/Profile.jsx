@@ -5,26 +5,22 @@ import api from '../../api/axios';
 
 const Profile = () => {
 
-  // 1. États du composant
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
 
-  // Données affichées sur la page
   const [userData, setUserData] = useState({
     name: "Chargement...",
     email: "Chargement...",
     bio: ""
   });
 
-  // Données manipulées dans le formulaire (modale)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     bio: ""
   });
 
-  // 2. Récupération des données depuis le Back-end au chargement
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -32,7 +28,6 @@ const Profile = () => {
       try {
         const response = await api.get('/api/users/profile'); 
         
-        // Si le backend renvoie { success: true, data: { ... } }
         if (response.data.success) {
           const userInfos = {
             name: response.data.user.name || "",
@@ -40,11 +35,11 @@ const Profile = () => {
             bio: response.data.user.bio || "Book lover and avid reader. Always looking for my next great read!"
           };
           setUserData(userInfos);
-          setFormData(userInfos); // On pré-remplit le formulaire
+          setFormData(userInfos);
         }
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
-        // Si erreur, on tente de fallback sur le localStorage
+
         setUserData({
           name: localStorage.getItem('name') || "Reader",
           email: localStorage.getItem('email') || "reader@gmail.com",
@@ -58,7 +53,7 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
-  // 3. Gestion des champs du formulaire
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -71,23 +66,21 @@ const Profile = () => {
         window.scrollTo(0, 0);
       }, []);
 
-  // 4. Sauvegarde des données vers le Back-end
   const handleSave = async (e) => {
     e.preventDefault();
 
     try {
-      //  Remplace par ta vraie route PUT ou PATCH du back-end
+
       const response = await api.put('/api/users/profile', formData);
 
-      // Si la mise à jour a réussi côté serveur
+
       if (response.data.success) {
-        setUserData(formData); // On met à jour l'affichage
-        
-        // On met à jour le localStorage pour que le Header s'actualise
+        setUserData(formData);
+
         localStorage.setItem('name', formData.name);
         localStorage.setItem('email', formData.email);
         
-        setIsModalOpen(false); // On ferme la modale
+        setIsModalOpen(false);
       }
     } catch (error) {
       console.error('Erreur lors de la sauvegarde :', error);
@@ -95,9 +88,8 @@ const Profile = () => {
     }
   };
 
-  // 5. Annulation
   const handleCancel = () => {
-    setFormData({ ...userData }); // On annule les frappes non sauvegardées
+    setFormData({ ...userData });
     setIsModalOpen(false);
   };
 

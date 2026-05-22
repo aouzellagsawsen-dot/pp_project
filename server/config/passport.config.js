@@ -14,10 +14,8 @@ const cookieExtractor = (req) => {
 
 export default function initializePassport(passport) {
     // ============ LOCAL STRATEGY ============
-    // Utilisée uniquement pour le /api/login
     const authenticateUser = async (email, password, done) => {
         try {
-            // AJOUT CRITIQUE : .select('+password')
             const user = await User.findOne({ email: email }).select('+password')
             
             if (!user) {
@@ -26,7 +24,6 @@ export default function initializePassport(passport) {
             
             const isPasswordValid = await user.comparePassword(password)
             if (isPasswordValid) {
-                // On s'assure de ne pas renvoyer le mot de passe dans l'objet 'user' à la suite du code
                 user.password = undefined 
                 return done(null, user)
             } else {
@@ -38,16 +35,14 @@ export default function initializePassport(passport) {
     }
 
     // ============ JWT STRATEGY (STATELESS) ============
-    // Utilisée pour protéger tes routes via /middleware/auth.middleware.js
     const jwtOptions = {
         jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: process.env.JWT_ACCESS_SECRET, // Sécurité : pas de fallback !
+        secretOrKey: process.env.JWT_ACCESS_SECRET,
         passReqToCallback: false
     }
     
     const verifyJwt = async (payload, done) => {
         try {
-            // Requête BDD optionnelle mais recommandée pour vérifier si l'user existe toujours
             const user = await User.findById(payload.userId)
             if (user) {
                 return done(null, user)
@@ -66,19 +61,15 @@ export default function initializePassport(passport) {
     }
     const verifyGoogle = async (accessToken, refreshToken, profile, done) => {
         try {
-            // 1. Chercher si l'utilisateur existe déjà via son googleID
             let user = await User.findOne({ googleID: profile.id })
             if (user) {
-                return done(null, user) // Utilisateur trouvé, on continue !
+                return done(null, user)
             }
-            // 2. Si l'utilisateur n'existe pas, on le crée
-            // On récupère l'email principal dans le tableau d'emails renvoyé par Google
             user = await User.create({
                 googleID: profile.id,
-                username: profile.displayName.replace(/\s+/g, '').toLowerCase(), // Un pseudo sans espaces
+                username: profile.displayName.replace(/\s+/g, '').toLowerCase(),
                 name: profile.displayName,
                 email: profile.emails[0].value,
-                // Le mot de passe ne sera pas demandé grâce à required: function()
             })
 
             return done(null, user)
@@ -88,7 +79,6 @@ export default function initializePassport(passport) {
 
     }
 
-    // Enregistrement des stratégies
     passport.use('local', new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.use('jwt', new JWTStrategy(jwtOptions, verifyJwt))
     passport.use('google', new GoogleStrategy(googleOptions, verifyGoogle))

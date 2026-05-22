@@ -1,7 +1,6 @@
 import multer from 'multer'
 import path from 'path'
 
-// 1. Configuration du stockage
 const coverStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads/covers') 
@@ -23,7 +22,6 @@ const pdpStorage = multer.diskStorage({
 
 })
 
-// 2. Filtre de sécurité (On n'accepte QUE les images)
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
         cb(null, true)
@@ -32,15 +30,14 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-// 3. Export du middleware
 export const uploadCover = multer({ 
     storage: coverStorage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // Limite à 5 Mo maximum
+    limits: { fileSize: 5 * 1024 * 1024 }
 })
 
 export const uploadPdp = multer({ 
     storage: pdpStorage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // Limite à 5 Mo maximum
+    limits: { fileSize: 5 * 1024 * 1024 }
 })

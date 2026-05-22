@@ -62,7 +62,7 @@ const NotificationCard = ({notification}) => {
 
    if (!notification.isRead) {
     try {
-      await api.put(`/api/notify/${notification._id}/read`);
+      await api.patch(`/api/notify/${notification._id}/read`);
     } catch (error) {
       console.error("Erreur API (Notification marquée lue) :", error);
     }

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { BookOpen, Users, Globe, Leaf, Heart, ArrowRight, Star, BarChart3, TrendingUp, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// Animations
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
@@ -113,7 +112,7 @@ const AboutPage = () => {
             {Values.map((item, i) => (
               <motion.div 
                 key={i}
-                whileHover={{ x: 10 }} // Slide right on hover
+                whileHover={{ x: 10 }}
                 className="bg-[#FAF7F2] p-10 rounded-[2.5rem] border border-[#4a3728]/10 shadow-sm transition-all flex gap-8 items-start"
               >
                 <div className="text-[#8D7B68] shrink-0 mt-1">{item.icon}</div>

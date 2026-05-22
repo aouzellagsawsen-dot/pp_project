@@ -24,7 +24,7 @@ export const authenticateToken = (req, res, next) => {
         const error = new Error('Aucun token fourni. Veuillez vous connecter.')
         error.statusCode = 401
         error.code = 'NO_TOKEN'
-        throw error // Express 5 attrape ça direct !
+        throw error
     }
 
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
@@ -34,7 +34,7 @@ export const authenticateToken = (req, res, next) => {
         email: decoded.email 
     }
     
-    next() // Obligatoire : on passe le relais au contrôleur
+    next()
 }
 
 // ============ AUTHORIZATION ============
@@ -63,7 +63,7 @@ export const authorizeOwner = (req, res, next) => {
         throw error
     }
 
-    next() // Obligatoire : on passe le relais au contrôleur
+    next()
 }
 
 // ============ EXPORTS CSRF ============

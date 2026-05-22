@@ -15,12 +15,10 @@ const AdminPanel = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // MODAL STATES FOR DUE DATE
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLoanId, setSelectedLoanId] = useState(null);
   const [dueDate, setDueDate] = useState('');
 
-  // 1. Quotes carousel
   useEffect(() => {
     const timer = setInterval(() => {
       setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
@@ -28,12 +26,10 @@ const AdminPanel = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 2. Scroll to top on load
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 3. Fetching pending loan requests
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -48,13 +44,11 @@ const AdminPanel = () => {
     fetchRequests();
   }, []);
 
-  // 4. Open modal instead of approving instantly
   const openApproveModal = (loanId) => {
     setSelectedLoanId(loanId);
     setIsModalOpen(true);
   };
 
-  // 5. Confirm approval with the chosen due date
   const handleConfirmApprove = async () => {
     if (!dueDate) {
       alert("Please select a due date for the return.");
@@ -62,13 +56,11 @@ const AdminPanel = () => {
     }
 
     try {
-      // Sending the selected due date in the request body
       await api.put(`/api/loans/approve/${selectedLoanId}`, { dueDate });
       setPendingRequests((prev) => prev.filter(req => req._id !== selectedLoanId));
       
       alert("Request approved! The borrower has been notified.");
       
-      // Reset modal state
       setIsModalOpen(false);
       setDueDate('');
       setSelectedLoanId(null);
@@ -77,7 +69,6 @@ const AdminPanel = () => {
     }
   };
 
-  // 6. Function to REJECT
   const handleReject = async (loanId) => {
     try {
       await api.put(`/api/loans/reject/${loanId}`);
@@ -88,7 +79,6 @@ const AdminPanel = () => {
     }
   };
 
-  // Current date formatted as YYYY-MM-DD to prevent selecting past dates
   const today = new Date().toISOString().split('T')[0];
 
   return (

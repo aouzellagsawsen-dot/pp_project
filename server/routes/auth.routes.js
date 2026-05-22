@@ -6,33 +6,33 @@ import passport from 'passport'
 const router = express.Router()
 
 // ============ INSCRIPTION (REGISTER) ============
-router.post('/register', uploadPdp.single('profilePicture'), registerValidation, register) // y
+router.post('/register', uploadPdp.single('profilePicture'), registerValidation, register)
 
 // ============ CONNEXION (LOGIN) ============
-router.post('/login', login) // y
+router.post('/login', login)
 
 // ============ RAFRAÎCHIR LE TOKEN (REFRESH) ============
-router.post('/refresh', refreshToken) // y
+router.post('/refresh', refreshToken)
 
 // ============ DÉCONNEXION (LOGOUT) ============
-router.post('/logout', logout) // y
+router.post('/logout', logout)
 
 // ============ CSRF TOKEN ============
-router.get('/csrf-token', csrfCode) // y
+router.get('/csrf-token', csrfCode)
 
-router.post('/verify-email', verifyEmail) // y
+router.post('/verify-email', verifyEmail)
 
-router.get('/verify-email/:token', validEmail) // n
+router.get('/verify-email/:token', validEmail)
 
 // ============ AUTHENTIFICATION GOOGLE (OAUTH2) ============
-router.get('/google', googleAuth) // y
+router.get('/google', googleAuth)
 
-router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }), googleCall) // y
+router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }), googleCall)
 
 // ============ FORGOT PASSWORD ============
-router.post('/forgotpassword', forgotPass) // y
+router.post('/forgotpassword', forgotPass)
 
 // ============ RESET PASSWORD ============
-router.put('/resetpassword/:token', resetPass) // y
+router.put('/resetpassword/:token', resetPass)
 
 export default router

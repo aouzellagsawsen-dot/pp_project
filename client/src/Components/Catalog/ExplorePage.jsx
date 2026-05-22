@@ -5,24 +5,20 @@ import { Link } from 'react-router-dom'
 import api from '../../api/axios.js'
 
 const ExplorePage = () => {
-    // 1. États pour les données du Back
     const [books, setBooks] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [search, setsearch] = useState("")
     const [genre, setgenre] = useState("All genres")
     const [status, setstatus] = useState("All books")
 
-    // 2. Fonction de liaison avec le Back
     useEffect(() => {
         window.scrollTo(0, 0);
 
         const fetchBooks = async () => {
             try {
-                // On appelle la route allBooks de ton controller
                 const response = await api.get('/api/books/list'); 
                 
                 if (response.data.success) {
-                    // On remplit notre state avec les vrais livres de la DB
                     setBooks(response.data.data);
                 }
             } catch (error) {
@@ -35,7 +31,6 @@ const ExplorePage = () => {
         fetchBooks();
     }, []);
 
-    // 3. Filtrage (La logique reste la même, mais sur les données du Back)
     const filteredBooks = books.filter((book) => {
         const matchesSearch = book.title?.toLowerCase().includes(search.toLowerCase()) ||
                               book.author?.toLowerCase().includes(search.toLowerCase());

@@ -13,7 +13,6 @@ export const deleteAccount = async (req, res) => {
             })
         }
         
-        // Clear all authentication cookies
         res.clearCookie('accessToken')
         res.clearCookie('refreshToken')
         

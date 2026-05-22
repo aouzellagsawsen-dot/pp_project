@@ -14,7 +14,6 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
         try {
           const response = await api.get('/api/notify');
           if (response.data.success) {
-            // On compte uniquement celles qui ne sont pas lues
             const unread = response.data.data.filter(notif => !notif.isRead).length;
             setUnreadCount(unread);
           }

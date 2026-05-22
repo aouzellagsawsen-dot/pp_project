@@ -5,11 +5,9 @@ import api from '../../api/axios.js';
 
 const ResetPassword = () => {
 
-  // 1. Initialisation des hooks de navigation et d'URL
   const { token } = useParams();
   const navigate = useNavigate();
 
-  // 2. Initialisation des états du formulaire
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -35,10 +33,8 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      // Utilisation de ton instance Axios
       const response = await api.put(`/api/auth/resetpassword/${token}`, { password });
 
-      // Si l'appel réussit
       setSuccess(response.data.message || "Password updated successfully! Redirecting...");
       
       setTimeout(() => {
@@ -46,7 +42,6 @@ const ResetPassword = () => {
       }, 3000);
 
     } catch (err) {
-      // Axios encapsule les erreurs du backend dans err.response.data
       const errorMessage = err.response?.data?.message || "The reset link is invalid or has expired.";
       setError(errorMessage);
     } finally {

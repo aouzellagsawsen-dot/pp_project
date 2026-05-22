@@ -74,8 +74,6 @@ export const updateUserProfile = async (req, res) => {
     if (name) user.name = name
     if (pdp) user.pdp = pdp
 
-    // Si le .save() déclenche une erreur de validation Mongoose, 
-    // Express 5 l'attrape automatiquement et l'envoie au errorHandler.
     const updatedUser = await user.save()
 
     res.json({
