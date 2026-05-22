@@ -6,7 +6,7 @@ import { Calendar} from 'lucide-react'
 
 const BookCard = ({book}) => {
   return (
-  <div className="flex items-center justify-between bg-[#FAF6F0] p-4 rounded-[30px] mb-4 shadow-sm border border-[#F3EEE5] w-full">
+  <div className="flex items-center justify-between bg-[#FAF6F0] p-4 rounded-[30px] mb-4 shadow-sm border border-[#F3EEE5] w-[728px]">
       <div className='bg-[#FAF6F0] flex items-center gap-5 flex-1'>
         <img className='w-20 h-25 object-cover rounded-2xl shadow-md' src={book.cover?.startsWith('/') ? `http://localhost:5000${book.cover}` : book.cover} alt="Book cover"></img>
         <div className='flex flex-col flex-1'>
