@@ -30,28 +30,43 @@ const NotificationCard = ({notification}) => {
     }
 
     const handleNotificationClick = async () => {
-    try {
-        await api.put(`/api/notify/${notification._id}/read`);
-      if (notification.type === "loan_request") {
-            navigate('/adminpanel'); 
-        } 
-        else if (notification.type === "message") {
-            const senderId = notification.sender?._id;
-            const senderName = notification.sender?.username;
+    let destination = "";
 
-            if (senderId && senderName) {
-                
-                navigate(`/messages?userId=${senderId}&userName=${senderName}`);
-            } else {
-                navigate('/messages');
-            }
-        } 
-        else if (notification.type === "loan_approved" || notification.type === "loan_rejected") {
-          navigate('/catalog'); 
+  switch (notification.type) {
+    case "loan_request":
+      destination = '/adminpanel';
+      break;
+      
+    case "message":
+      const senderId = notification.sender?._id;
+      const senderName = notification.sender?.username;
+      if (senderId && senderName) {
+        destination = `/messages?userId=${senderId}&userName=${senderName}`;
+      } else {
+        destination = '/messages';
       }
+      break;
+      
+    case "loan_approved":
+    case "loan_rejected":
+      destination = '/catalog'; 
+      break;
+      
+    default:
+      destination = '/';
+  }
+
+  if (destination) {
+    navigate(destination);
+  }
+
+   if (!notification.isRead) {
+    try {
+      await api.put(`/api/notify/${notification._id}/read`);
     } catch (error) {
-      console.error("Erreur lors du traitement du clic notification", error);
+      console.error("Erreur API (Notification marquée lue) :", error);
     }
+  }
   };
 
    return (

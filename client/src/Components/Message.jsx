@@ -12,7 +12,23 @@ const MessagesPage = () => {
   const bookTitle = searchParams.get('bookTitle');
 
   // Récupération de l'ID de l'utilisateur connecté depuis le localStorage
-  const currentUserId = localStorage.getItem('userId');
+  const currentUserId = (() => {
+  // On tente 'userId' et on retire les guillemets invisibles si JSON.stringify a été utilisé
+  let id = localStorage.getItem('userId');
+  if (id) return id.replace(/['"]/g, '');
+
+  // Si 'userId' est vide, on cherche si l'objet complet 'user' est stocké
+  let userStr = localStorage.getItem('user');
+  if (userStr) {
+    try {
+      const userObj = JSON.parse(userStr);
+      return userObj._id || String(userObj.id);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+})();
 
   // États du composant
   const [conversations, setConversations] = useState([]);
@@ -227,8 +243,9 @@ const MessagesPage = () => {
                 <div className="flex-1 overflow-y-auto p-10 space-y-8 flex flex-col">
                   {messages.map((msg) => {
                     // On détermine si le message vient de moi en comparant les IDs
-                    const isMe = (msg.sender._id || msg.sender) === currentUserId;
-                    return (
+                    const senderIdStr = String(msg.sender?._id || msg.sender).replace(/['"]/g, '');
+                    const isMe = senderIdStr === currentUserId;
+                     return (
                       <div key={msg._id} className={`max-w-[75%] flex flex-col ${isMe ? 'self-end items-end' : 'self-start items-start'}`}>
                         <div className={`p-5 rounded-[1.8rem] text-[15px] shadow-sm border ${
                           isMe ? 'bg-[#8D7B68] text-[#FDFBF7] border-[#7A6959] rounded-tr-none' : 'bg-[#D6B88D]/30 text-[#4A3F35] border-[#D7C9B8] rounded-tl-none'

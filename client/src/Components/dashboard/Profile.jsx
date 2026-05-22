@@ -66,11 +66,7 @@ const Profile = () => {
       [name]: value
     }));
   };
-<<<<<<< Updated upstream
-
-=======
   
->>>>>>> Stashed changes
   useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
