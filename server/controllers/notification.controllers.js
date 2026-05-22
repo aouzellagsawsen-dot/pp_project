@@ -27,10 +27,10 @@ export const markAsRead = async (req, res) => {
 
     if (!notification) {
        
-        const error = new Error("Notification introuvable.");
+        const error = new Error("Notification not found.");
         error.statusCode = 404;
         throw error; // Attrapé instantanément par Express 5
     }
 
-    res.status(200).json({ success: true, message: "Marquée comme lue" });
+    res.status(200).json({ success: true, message: "Marqued as read" });
 }

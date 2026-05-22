@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Bell,MessageCircle,Star,Box,Check} from 'lucide-react'
 import api from "../../api/axios"; 
@@ -10,22 +10,22 @@ const NotificationCard = ({notification}) => {
 
     const getNotifTitle = () => {
         switch(notification.type){
-            case "loan_request": return "Nouvelle demande d'emprunt";
-            case "loan_approved": return "Demande acceptée !";
-            case "loan_rejected": return "Demande refusée";
-            case "message": return "Nouveau message";
-            default: return "Notification";
-                         
+            case "loan_request": return "New Loan Request";
+            case "loan_approved": return "Request Approved!";
+            case "loan_rejected": return "Request Declined";
+            case "message": return "New Message";
+            case "review": return "New Review";
+            default: return "Notification";     
         }
     }
     const GetNotifIcon = () => {
         switch(notification.type){
-            case "loan_request": return <Bell className='text-[orange]' />
-            case "loan_approved": return <Check className='text-[green]' />
-            case "loan_rejected": return <Box className='text-[red]' />
-            case "message" : return <MessageCircle className='text-[blue]' />
-            case "review" : return <Star className='text-[brown]' />
-            default: return <Bell />;
+            case "loan_request": return <Bell className='text-amber-500' />;
+            case "loan_approved": return <Check className='text-emerald-600' />;
+            case "loan_rejected": return <Box className='text-rose-600' />;
+            case "message": return <MessageCircle className='text-blue-500' />;
+            case "review": return <Star className='text-amber-700' />;
+            default: return <Bell className='text-[#8D7B68]' />;
         }
     }
 
