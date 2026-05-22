@@ -1,8 +1,27 @@
 import React from 'react';
-import database from '../../data/db.json'; 
+
+const testimonials = [
+  {
+    id: 1,
+    name: "Sirine",
+    role: "ALINÉA MEMBER",
+    text: "I've met so many fellow book lovers through this platform. Highly recommended!"
+  },
+  {
+    id: 2,
+    name: "Ilyes",
+    role: "ALINÉA MEMBER",
+    text: "The perfect solution for book enthusiasts. Love the elegant design too!"
+  },
+  {
+    id: 3,
+    name: "Yasmine",
+    role: "ALINÉA MEMBER",
+    text: "Alinéa has transformed how I discover and share books. The community is wonderful!"
+  }
+];
 
 const Testimonial = () => {
-  const { testimonials } = database;
 
   return (
     <section className="bg-[#F1EAD7] py-20 px-4 font-serif text-center">

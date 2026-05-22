@@ -1,35 +1,36 @@
 import { useEffect } from "react";
+import cachetImg from './Cachet.png';
 
 const articles = [
   {
     title: "Information We Collect",
     content: "We collect information you provide directly to us, such as your name, email address, profile picture, and books you list on the platform.",
-    image: "/image.png.png",
+    image: cachetImg,
   },
   {
     title: "How We Use Your Information",
     content: "We use the information we collect to provide, maintain, and improve our services, and communicate with you.",
-    image: "/image.png.png",
+    image: cachetImg,
   },
   {
     title: "Information Sharing",
     content: "We do not sell or rent your personal information to third parties. Your profile is visible to facilitate sharing.",
-    image: "/image.png.png",
+    image: cachetImg,
   },
   {
     title: "Data Security",
     content: "We implement appropriate security measures to protect your personal information. However, no method is 100% secure.",
-    image: "/image.png.png",
+    image: cachetImg,
   },
   {
     title: "Your Rights",
     content: "You have the right to access, update, or delete your personal information at any time.",
-    image: "/image.png.png",
+    image: cachetImg,
   },
   {
     title: "Contact Us",
     content: "If you have any questions about this Privacy Policy, please contact us.",
-    image: "/image.png.png",
+    image: cachetImg,
   },
 ];
 
