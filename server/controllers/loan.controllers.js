@@ -10,19 +10,19 @@ export const requestLoan = async (req, res) => {
     const copy = await PhysicalBook.findById(copyId)
 
     if (!copy) {
-        const error = new Error("Cet exemplaire est introuvable.")
+        const error = new Error("This copy could not be found.")
         error.statusCode = 404
         throw error
     }
 
     if (copy.ownerId.toString() === borrowerId) {
-        const error = new Error("Vous ne pouvez pas emprunter votre propre livre.")
+        const error = new Error("You cannot borrow your own book.")
         error.statusCode = 400
         throw error
     }
 
     if (copy.status !== 'Available') {
-        const error = new Error("Ce livre n'est pas disponible pour le moment.")
+        const error = new Error("This book is not available at the moment.")
         error.statusCode = 400
         throw error
     }
@@ -42,13 +42,13 @@ export const requestLoan = async (req, res) => {
         recipient: copy.ownerId,     // Le propriétaire reçoit l'alerte
         sender: borrowerId,          // L'emprunteur déclenche l'alerte
         type: 'loan_request',
-        content: "a demandé à emprunter l'un de vos livres.",
+        content: "requested to borrow one of your books.",
         relatedId: newLoan._id       // Lien vers la demande pour le front
     });
 
     res.status(201).json({ 
         success: true, 
-        message: "Votre demande d'emprunt a été envoyée au propriétaire !",
+        message: "Your loan request has been sent to the owner!",
         data: newLoan
     });
 }
@@ -58,24 +58,26 @@ export const approveLoan = async (req, res) => {
     const loanId = req.params.loanId; 
     const lenderId = req.user.id;
 
+    const { dueDate } = req.body;
+
     // On récupère le prêt en incluant les infos du livre physique
     const loan = await Loan.findById(loanId).populate('physicalBook');
 
     if (!loan) {
-        const error = new Error("Demande d'emprunt introuvable.");
+        const error = new Error("Loan request not found.");
         error.statusCode = 404;
         throw error;
     }
 
     // Vérification de sécurité : Seul le propriétaire peut accepter
     if (loan.lender.toString() !== lenderId) {
-        const error = new Error("Vous n'êtes pas autorisé à approuver cette demande.");
+        const error = new Error("You are not authorized to approve this request.");
         error.statusCode = 403;
         throw error;
     }
 
     if (loan.status !== 'pending') {
-        const error = new Error("Cette demande a déjà été traitée.");
+        const error = new Error("This request has already been processed.");
         error.statusCode = 400;
         throw error;
     }
@@ -85,8 +87,12 @@ export const approveLoan = async (req, res) => {
     loan.startDate = Date.now();
     
     // Calcul de la date de retour (ex: 30 jours plus tard)
-    const returnDate = new Date();
-    returnDate.setDate(returnDate.getDate() + 30);
+    let returnDate = new Date();
+    if (dueDate) {
+        returnDate = new Date(dueDate);
+    } else {
+        returnDate.setDate(returnDate.getDate() + 30);
+    }
     loan.dueDate = returnDate;
 
     await loan.save();
@@ -97,18 +103,24 @@ export const approveLoan = async (req, res) => {
     copy.borrowerId = loan.borrower; 
     await copy.save();
 
-    // 🔥 NOUVEAU : Création de la notification pour l'EMPRUNTEUR
+    const formattedDate = returnDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
+    // Création de la notification pour l'EMPRUNTEUR
     await Notification.create({
         recipient: loan.borrower,    // L'emprunteur reçoit la bonne nouvelle
         sender: lenderId,            // Le propriétaire est l'expéditeur
         type: 'loan_approved',
-        content: "a accepté votre demande d'emprunt ! Vous avez 30 jours pour le rendre.",
+        content: `approved your loan request! Please return the book by ${formattedDate}.`,
         relatedId: loan._id          // Lien vers le prêt actif
     });
 
     res.status(200).json({ 
         success: true, 
-        message: "Emprunt validé ! L'emprunteur a 30 jours pour le rendre.",
+        message: `Loan approved! Return deadline set for ${formattedDate}.`,
         data: loan
     });
 }
@@ -122,20 +134,20 @@ export const rejectLoan = async (req, res) => {
     const loan = await Loan.findById(loanId).populate('physicalBook');
 
     if (!loan) {
-        const error = new Error("Demande d'emprunt introuvable.");
+        const error = new Error("Loan request not found.");
         error.statusCode = 404;
         throw error;
     }
 
     // Vérification de sécurité : Seul le propriétaire peut refuser
     if (loan.lender.toString() !== lenderId) {
-        const error = new Error("Vous n'êtes pas autorisé à rejeter cette demande.");
+        const error = new Error("You are not authorized to approve this request.");
         error.statusCode = 403;
         throw error;
     }
 
     if (loan.status !== 'pending') {
-        const error = new Error("Cette demande a déjà été traitée.");
+        const error = new Error("This request has already been processed.");
         error.statusCode = 400;
         throw error;
     }
@@ -165,13 +177,13 @@ export const rejectLoan = async (req, res) => {
         recipient: loan.borrower,    // L'emprunteur reçoit la mauvaise nouvelle
         sender: lenderId,            // Le propriétaire est l'expéditeur
         type: 'loan_rejected',
-        content: "a malheureusement refusé votre demande d'emprunt.",
+        content: "unfortunately declined your loan request.",
         relatedId: loan._id          // Lien vers le prêt (qui est maintenant 'rejected')
     });
 
     res.status(200).json({ 
         success: true, 
-        message: "La demande d'emprunt a bien été refusée.",
+        message: "The loan request has been successfully declined.",
         data: loan
     });
 }
