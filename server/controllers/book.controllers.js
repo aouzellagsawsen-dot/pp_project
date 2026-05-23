@@ -1,0 +1,221 @@
+import Book from "../models/book.model.js"
+import PhysicalBook from "../models/book_copy.model.js"
+
+// ============ AJOUTER UN LIVRE ============
+export const addPhysicalBook = async (req, res) => {
+    let { title, author, genre, customGenre, description, quotes } = req.body;
+
+    if (genre !== 'Others') {
+        customGenre = undefined;
+    }
+    let finalQuotes = [];
+    if (quotes) {
+        const parsedQuotes = typeof quotes === 'string' ? JSON.parse(quotes) : quotes;
+        
+        if (Array.isArray(parsedQuotes)) {
+            finalQuotes = parsedQuotes.filter(q => q && q.trim() !== "");
+        }
+    }
+
+    const existingBook = await Book.findOne({ 
+        title: { $regex: new RegExp(`^${title}$`, 'i') },
+        author: { $regex: new RegExp(`^${author}$`, 'i') }
+    });
+
+    let targetBookId;
+    let bookData;
+
+    if (existingBook) {
+        targetBookId = existingBook._id;
+        bookData = existingBook;
+        
+    } else {
+        const cover = req.file ? `/uploads/covers/${req.file.filename}` : `/uploads/covers/default-cover.png`;
+
+        const newBook = await Book.create({
+            title,
+            author,
+            genre,
+            customGenre,
+            description,
+            cover,
+            quotes: finalQuotes
+        });
+
+        targetBookId = newBook._id;
+        bookData = newBook;
+    }
+
+    const newPhysicalBook = await PhysicalBook.create({
+        bookInfos: targetBookId,
+        ownerId: req.user.id,
+        status: 'Available'
+    });
+
+    const responseMessage = existingBook 
+        ? "Livre existant trouvé, nouvelle copie ajoutée !" 
+        : "Nouveau livre et nouvelle copie créés avec succès !";
+
+    res.status(201).json({ 
+        success: true, 
+        message: responseMessage,
+        data: bookData, 
+        copy: newPhysicalBook 
+    });
+}
+
+// ============ SUPPRIMER UN LIVRE ============
+export const deleteBook = async (req, res) => {
+    const bookId = req.params.id;
+    const userId = req.user.id; 
+
+    const deletedCopy = await PhysicalBook.findOneAndDelete({ 
+        bookInfos: bookId, 
+        ownerId: userId 
+    });
+
+    if (!deletedCopy) {
+        const error = new Error("Vous ne possédez pas d'exemplaire de ce livre, ou il est introuvable.");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    const remainingCopies = await PhysicalBook.countDocuments({ bookInfos: bookId });
+
+    if (remainingCopies === 0) {
+        await Book.findByIdAndDelete(bookId);
+    }
+
+    res.status(200).json({ 
+        success: true, 
+        message: "Votre exemplaire a été retiré de votre inventaire avec succès !" 
+    });
+}
+
+// ============ MODIFIER UN LIVRE ============
+export const updateBook = async (req, res) => {
+    const bookId = req.params.id;
+    
+    let updateData = { ...req.body };
+
+    if (updateData.genre && updateData.genre !== 'Others') {
+        updateData.customGenre = undefined;
+    }
+
+    if (req.file) {
+        updateData.cover = `/uploads/covers/${req.file.filename}`;
+    }
+
+    const updatedBook = await Book.findByIdAndUpdate(bookId, updateData, { 
+        new: true, 
+        runValidators: true
+    });
+
+    if (!updatedBook) {
+        const error = new Error("Livre introuvable.");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    res.status(200).json({ 
+        success: true, 
+        message: "Livre mis à jour avec succès !", 
+        data: updatedBook 
+    });
+}
+
+// ============ RÉCUPÉRER UN SEUL LIVRE PAR ID ============
+export const getBookById = async (req, res) => {
+    try {
+        const bookId = req.params.id;
+        
+        const book = await Book.findById(bookId).lean();
+        
+        if (!book) {
+            return res.status(404).json({ success: false, message: "Livre introuvable." });
+        }
+
+        let physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId, status: 'Available' })
+            .populate('ownerId', 'name username'); 
+
+        if (!physicalCopy) {
+            physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId })
+                .populate('ownerId', 'name username');
+        }
+        
+        const result = {
+            ...book,
+            status: physicalCopy ? physicalCopy.status : 'Unavailable',
+            ownerId: physicalCopy ? physicalCopy.ownerId : null, 
+            copyId: physicalCopy ? physicalCopy._id : null
+        };
+        
+        res.status(200).json({ 
+            success: true, 
+            data: result
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// ============ LISTER TOUS LES LIVRES ============
+export const allBooks = async (req, res) => {
+
+    const books = await Book.find().sort({ createdAt: -1 });
+
+    const booksWithStatus = await Promise.all(books.map(async (book) => {
+        
+        const copies = await PhysicalBook.find({ bookInfos: book._id });
+
+
+        const availableCopy = copies.find(copy => copy.status === 'Available');
+
+        let finalStatus = 'borrowed';
+        let copyIdToReserve = null;
+
+        if (availableCopy) {
+            finalStatus = 'available';
+            copyIdToReserve = availableCopy._id;
+        } else if (copies.length === 0) {
+            finalStatus = 'unavailable';
+        }
+
+        return {
+            ...book.toObject(),
+            status: finalStatus,
+            copyToReserve: copyIdToReserve
+        };
+    }));
+
+    res.status(200).json({
+        success: true,
+        data: booksWithStatus
+    });
+}
+
+// ============ LISTER LES LIVRES D'UN UTILISATEUR ============
+export const getMyAddedBooks = async (req, res) => {
+    const userId = req.user.id;
+
+    const myBooks = await PhysicalBook.find({ ownerId: userId })
+        .populate('bookInfos')
+        .sort({ createdAt: -1 })
+
+    const formattedBooks = myBooks.map(copy => {
+        if (!copy.bookInfos) return null
+
+        return {
+            ...copy.bookInfos.toObject(),
+            copyId: copy._id,
+            status: copy.status,
+            addedAt: copy.createdAt
+        };
+    }).filter(book => book !== null);
+
+    res.status(200).json({
+        success: true,
+        count: formattedBooks.length,
+        data: formattedBooks
+    });
+}
