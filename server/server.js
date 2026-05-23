@@ -11,7 +11,6 @@ import { fileURLToPath } from 'url'
 import { authLimiter, globalLimiter } from './middleware/rateLimiter.middleware.js'
 import authRoutes from './routes/auth.routes.js'
 import userRoutes from './routes/user.routes.js'
-import adminRoutes from './routes/admin.routes.js'
 import bookRoutes from './routes/book.routes.js'
 import favoriteRoutes from './routes/favorite.routes.js'
 import notificationRoutes from './routes/notification.routes.js'
@@ -52,14 +51,13 @@ dbConnection()
 initializePassport(passport)
 
 // ============ ROUTING ===============
-app.use('/api/auth', authRoutes) // faut ajouter authLimiter apres 
-app.use('/api/users', userRoutes) // faut ajouter globalLimiter apres
-app.use('/api/admin', adminRoutes)
-app.use('/api/books', bookRoutes)
-app.use('/api/favorites', favoriteRoutes)
-app.use('/api/notify', notificationRoutes)
-app.use('/api/messages', messagingRoutes)
-app.use('/api/loans', loanRoutes)
+app.use('/api/auth',authLimiter, authRoutes)
+app.use('/api/users', globalLimiter, userRoutes)
+app.use('/api/books',globalLimiter, bookRoutes)
+app.use('/api/favorites', globalLimiter, favoriteRoutes)
+app.use('/api/notify', globalLimiter, notificationRoutes)
+app.use('/api/messages', globalLimiter, messagingRoutes)
+app.use('/api/loans', globalLimiter, loanRoutes)
 
 const server = http.createServer(app); 
 
@@ -71,8 +69,8 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-
-    socket.on('sendMessage', (data) => {s
+    
+    socket.on('sendMessage', (data) => {
         socket.broadcast.emit('receiveMessage', data);
     });
 
