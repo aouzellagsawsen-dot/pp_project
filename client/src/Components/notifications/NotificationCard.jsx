@@ -38,13 +38,7 @@ const NotificationCard = ({notification}) => {
       break;
       
     case "message":
-      const senderId = notification.sender?._id;
-      const senderName = notification.sender?.username;
-      if (senderId && senderName) {
-        destination = `/messages?userId=${senderId}&userName=${senderName}`;
-      } else {
-        destination = '/messages';
-      }
+        destination = '/Message';
       break;
       
     case "loan_approved":
