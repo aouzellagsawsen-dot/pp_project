@@ -44,7 +44,6 @@ const MessagesPage = () => {
           setConversations(fetchedConvs);
 
           if (targetUserId && targetUserName) {
-
             const existingConv = fetchedConvs.find(c => 
               c.participants.some(p => p._id === targetUserId)
             );
@@ -52,7 +51,6 @@ const MessagesPage = () => {
             if (existingConv) {
               setActiveConvId(existingConv._id);
             } else {
-
               const mockConv = {
                 _id: `temp_${targetUserId}`,
                 participants: [
@@ -65,12 +63,10 @@ const MessagesPage = () => {
               setActiveConvId(mockConv._id);
             }
 
-
             if (bookTitle) {
               setInputValue(`Hi ${targetUserName}, I'm interested in "${bookTitle}". Is it still available?`);
             }
           } else if (fetchedConvs.length > 0) {
-
             setActiveConvId(fetchedConvs[0]._id);
           }
         }
@@ -105,7 +101,6 @@ const MessagesPage = () => {
 
     loadMessages();
   }, [activeConvId]);
-
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || !activeConvId) return;

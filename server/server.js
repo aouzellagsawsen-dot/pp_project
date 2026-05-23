@@ -71,23 +71,17 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-    console.log(`⚡ Utilisateur connecté : ${socket.id}`)
 
-    socket.onAny((eventName, ...args) => {
-        console.log(`[DEBUG] Le serveur a reçu l'événement exact : "${eventName}"`, args)
-    })
-
-    socket.on('sendMessage', (data) => {
-        console.log(`Message de ${data.pseudo} :`, data.text)
-        socket.broadcast.emit('receiveMessage', data)
-    })
+    socket.on('sendMessage', (data) => {s
+        socket.broadcast.emit('receiveMessage', data);
+    });
 
     socket.on('disconnect', () => {
-        console.log(`❌ Utilisateur déconnecté : ${socket.id}`)
-    })
-})
+    });
+    
+});
 
-// ============ ERROR HANDLERS (Toujours à la fin !) ============
+// ============ ERROR HANDLERS  ============
 app.use(csrfHandler)
 app.use(errorHandler)
 
