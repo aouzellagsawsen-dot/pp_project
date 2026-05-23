@@ -11,25 +11,11 @@ const MessagesPage = () => {
   const targetUserName = searchParams.get('userName');
   const bookTitle = searchParams.get('bookTitle');
 
-  const currentUserId = (() => {
-  let id = localStorage.getItem('userId');
-  if (id) return id.replace(/['"]/g, '');
-
-  let userStr = localStorage.getItem('user');
-  if (userStr) {
-    try {
-      const userObj = JSON.parse(userStr);
-      return userObj._id || String(userObj.id);
-    } catch (e) {
-      return null;
-    }
-  }
-  return null;
-})();
+  const currentUserId = localStorage.getItem('userId');
 
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]); 
-  const [activeConvId, setActiveConvId] = useState(null);
+  const [activeConvId, setActiveConvId] = useState(null); 
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -47,9 +33,6 @@ const MessagesPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  // ==========================================
-  // 1. CHARGEMENT INITIAL DES CONVERSATIONS
-  // ==========================================
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -61,6 +44,7 @@ const MessagesPage = () => {
           setConversations(fetchedConvs);
 
           if (targetUserId && targetUserName) {
+
             const existingConv = fetchedConvs.find(c => 
               c.participants.some(p => p._id === targetUserId)
             );
@@ -68,6 +52,7 @@ const MessagesPage = () => {
             if (existingConv) {
               setActiveConvId(existingConv._id);
             } else {
+
               const mockConv = {
                 _id: `temp_${targetUserId}`,
                 participants: [
@@ -80,10 +65,12 @@ const MessagesPage = () => {
               setActiveConvId(mockConv._id);
             }
 
+
             if (bookTitle) {
               setInputValue(`Hi ${targetUserName}, I'm interested in "${bookTitle}". Is it still available?`);
             }
           } else if (fetchedConvs.length > 0) {
+
             setActiveConvId(fetchedConvs[0]._id);
           }
         }
@@ -97,9 +84,6 @@ const MessagesPage = () => {
     loadInbox();
   }, [targetUserId, targetUserName, bookTitle]);
 
-  // ==========================================
-  // 2. CHARGEMENT DES MESSAGES AU SÉLECTION
-  // ==========================================
   useEffect(() => {
     if (!activeConvId) return;
 
@@ -122,9 +106,7 @@ const MessagesPage = () => {
     loadMessages();
   }, [activeConvId]);
 
-  // ==========================================
-  // 3. ENVOYER UN MESSAGE
-  // ==========================================
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || !activeConvId) return;
 
@@ -149,8 +131,9 @@ const MessagesPage = () => {
             setActiveConvId(newMsg.conversationId);
           }
         } else {
+
           setMessages(prev => [...prev, newMsg]);
-          
+
           setConversations(prev => {
             const updated = prev.map(c => 
               c._id === activeConvId ? { ...c, updatedAt: new Date().toISOString() } : c
@@ -224,9 +207,9 @@ const MessagesPage = () => {
                 {/* Bulles de Messages */}
                 <div className="flex-1 overflow-y-auto p-10 space-y-8 flex flex-col">
                   {messages.map((msg) => {
-                    const senderIdStr = String(msg.sender?._id || msg.sender).replace(/['"]/g, '');
-                    const isMe = senderIdStr === currentUserId;
-                     return (
+                    // On détermine si le message vient de moi en comparant les IDs
+                    const isMe = String(msg.sender._id || msg.sender) === String(currentUserId);
+                    return (
                       <div key={msg._id} className={`max-w-[75%] flex flex-col ${isMe ? 'self-end items-end' : 'self-start items-start'}`}>
                         <div className={`p-5 rounded-[1.8rem] text-[15px] shadow-sm border ${
                           isMe ? 'bg-[#8D7B68] text-[#FDFBF7] border-[#7A6959] rounded-tr-none' : 'bg-[#D6B88D]/30 text-[#4A3F35] border-[#D7C9B8] rounded-tl-none'
