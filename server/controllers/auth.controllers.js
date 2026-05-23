@@ -212,6 +212,8 @@ export const googleAuth = passport.authenticate('google', {
   scope: ['profile', 'email']
 })
 
+// ============ GOOGLE CALL-BACK ============
+
 export const googleCall = (req, res) => {
         const user = req.user;
 
@@ -248,11 +250,9 @@ export const forgotPass = async (req, res) => {
     const { email } = req.body;
 
     try {
-
         const user = await User.findOne({ email });
 
         if (!user) {
-
             return res.status(404).json({ 
                 success: false,
                 message: "If an account exists with this email, a reset link has been sent." 
@@ -260,19 +260,19 @@ export const forgotPass = async (req, res) => {
         }
 
         const resetToken = user.getResetPasswordToken();
-
         await user.save({ validateBeforeSave: false });
 
         const resetUrl = `${process.env.FRONTEND_URL}/ResetPassword/${resetToken}`;
 
-        const message = `You are receiving this email because you (or someone else) has requested a password reset for your account.\n\nPlease click on the link below to complete the process:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
+        const messageText = "A password reset request has been made for your account. Please click the button below to set up your new credentials.";
 
         try {
-
             await sendEmail({
                 email: user.email,
-                subject: 'Password Reset Request - Alinéa',
-                message: message
+                subject: 'New Password',
+                message: messageText,
+                link: resetUrl,
+                buttonText: "Reset the Password"
             });
 
             res.status(200).json({ 
@@ -281,7 +281,6 @@ export const forgotPass = async (req, res) => {
             });
 
         } catch (mailError) {
-
             user.resetPasswordToken = undefined;
             user.resetPasswordExpires = undefined;
             await user.save({ validateBeforeSave: false });
@@ -294,13 +293,13 @@ export const forgotPass = async (req, res) => {
         }
 
     } catch (error) {
-    console.log("------- ERREUR DETECTEE ICI -------");
-    console.log(error);
-    res.status(500).json({ 
-        success: false,
-        message: error.message
-    });
-}
+        console.log("------- ERREUR DETECTEE ICI -------");
+        console.log(error);
+        res.status(500).json({ 
+            success: false,
+            message: error.message
+        });
+    }
 }
 
 // ============ RESET PASSWORD ============
