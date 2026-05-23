@@ -1,6 +1,6 @@
 import express from 'express'
 import { uploadPdp } from '../middleware/upload.middleware.js'
-import { csrfCode, forgotPass, googleAuth, googleCall, login, logout, refreshToken, register, registerValidation, resetPass, validEmail, verifyEmail } from '../controllers/auth.controllers.js'
+import { csrfCode, forgotPass, getMe, googleAuth, googleCall, login, logout, refreshToken, register, registerValidation, resetPass, validEmail, verifyEmail } from '../controllers/auth.controllers.js'
 import passport from 'passport'
 
 const router = express.Router()
@@ -34,5 +34,8 @@ router.post('/forgotpassword', forgotPass)
 
 // ============ RESET PASSWORD ============
 router.put('/resetpassword/:token', resetPass)
+
+// ============ GET CURRENT USER INFO ============
+router.get('/me', getMe)
 
 export default router

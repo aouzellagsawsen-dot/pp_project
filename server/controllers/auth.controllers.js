@@ -241,8 +241,8 @@ export const googleCall = (req, res) => {
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-
-        res.redirect('http://localhost:5173/welcome');
+        
+        res.redirect('http://localhost:5173/welcome?login=success');
 }
 
 // ============ FORGOT PASSWORD ============
@@ -343,4 +343,35 @@ export const resetPass = async (req, res) => {
 export const csrfCode = (req, res) => {
     const csrfToken = getCsrfToken(req, res)
     res.json({ csrfToken })
+}
+
+// ============ GET CURRENT USER (ME) ============
+export const getMe = async (req, res) => {
+    try {
+        const token = req.cookies.accessToken;
+        
+        if (!token) {
+            return res.status(401).json({ success: false, message: "Non authentifié" });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+        const user = await User.findById(decoded.userId).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Utilisateur introuvable" });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            user: {
+                id: user._id,
+                name: user.name,
+                username: user.username,
+                email: user.email,
+                pdp: user.pdp
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ success: false, message: "Session expirée ou invalide" });
+    }
 }

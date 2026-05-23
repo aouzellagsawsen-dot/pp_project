@@ -1,13 +1,41 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BookOpen, PlusCircle, LayoutDashboard, MessageSquare } from 'lucide-react';
+import api from '../../api/axios.js';
 
-const BienvenuePage = () => {
+const BienvenuePage = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
-  const userName = localStorage.getItem('userName') || "Reader";
+  const [searchParams] = useSearchParams();
+
+  const [userName, setUserName] = useState(localStorage.getItem('userName') || "Reader");
+
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+    window.scrollTo(0, 0);
+
+    const checkGoogleLogin = async () => {
+      if (searchParams.get('login') === 'success') {
+        try {
+          const response = await api.get('/api/auth/me');
+          
+          if (response.data && response.data.user) {
+            localStorage.setItem('userName', response.data.user.username);
+            localStorage.setItem('userId', response.data.user.id);
+            localStorage.setItem('isLoggedIn', 'true');
+            
+            if (setIsLoggedIn) setIsLoggedIn(true);
+            
+            setUserName(response.data.user.username);
+          }
+        } catch (err) {
+          console.error("Erreur lors de la récupération du profil Google:", err);
+        } finally {
+          window.history.replaceState(null, '', '/welcome');
+        }
+      }
+    };
+
+    checkGoogleLogin();
+  }, [searchParams, setIsLoggedIn]);
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-[#F1EAD7] px-6">
