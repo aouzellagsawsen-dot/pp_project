@@ -11,25 +11,20 @@ const MessagesPage = () => {
   const targetUserName = searchParams.get('userName');
   const bookTitle = searchParams.get('bookTitle');
 
-  // Récupération de l'ID de l'utilisateur connecté depuis le localStorage
   const currentUserId = localStorage.getItem('userId');
 
-  // États du composant
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]); 
   const [activeConvId, setActiveConvId] = useState(null); 
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Réf pour scroller automatiquement en bas de la discussion
   const messagesEndRef = useRef(null);
 
-  // Formatage de l'heure
   const formatTime = (dateString) => {
     return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // Scroll automatique vers le bas
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -38,7 +33,6 @@ const MessagesPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  // 1. CHARGEMENT INITIAL DES CONVERSATIONS
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -49,9 +43,7 @@ const MessagesPage = () => {
           const fetchedConvs = response.data.data;
           setConversations(fetchedConvs);
 
-          // Gestion du bouton "Contact" depuis une autre page
           if (targetUserId && targetUserName) {
-            // On regarde si une conversation existe déjà avec cet utilisateur
             const existingConv = fetchedConvs.find(c => 
               c.participants.some(p => p._id === targetUserId)
             );
@@ -59,9 +51,8 @@ const MessagesPage = () => {
             if (existingConv) {
               setActiveConvId(existingConv._id);
             } else {
-              // Si elle n'existe pas, on crée une conversation "virtuelle" temporaire dans l'état
               const mockConv = {
-                _id: `temp_${targetUserId}`, // ID temporaire
+                _id: `temp_${targetUserId}`,
                 participants: [
                   { _id: currentUserId },
                   { _id: targetUserId, username: targetUserName }
@@ -72,12 +63,10 @@ const MessagesPage = () => {
               setActiveConvId(mockConv._id);
             }
 
-            // Pré-remplir l'input avec le titre du livre
             if (bookTitle) {
               setInputValue(`Hi ${targetUserName}, I'm interested in "${bookTitle}". Is it still available?`);
             }
           } else if (fetchedConvs.length > 0) {
-            // Par défaut, on ouvre la première conversation de la liste
             setActiveConvId(fetchedConvs[0]._id);
           }
         }
@@ -91,11 +80,9 @@ const MessagesPage = () => {
     loadInbox();
   }, [targetUserId, targetUserName, bookTitle]);
 
-  // 2. CHARGEMENT DES MESSAGES AU SÉLECTION
   useEffect(() => {
     if (!activeConvId) return;
 
-    // Si c'est une conversation temporaire, il n'y a pas encore de messages dans la DB
     if (activeConvId.startsWith('temp_')) {
       setMessages([]);
       return;
@@ -115,12 +102,9 @@ const MessagesPage = () => {
     loadMessages();
   }, [activeConvId]);
 
- 
-  // 3. ENVOYER UN MESSAGE
   const handleSendMessage = async () => {
     if (!inputValue.trim() || !activeConvId) return;
 
-    // Trouver le destinataire (l'autre participant)
     const currentChat = conversations.find(c => c._id === activeConvId);
     const receiver = currentChat?.participants.find(p => p._id !== currentUserId);
 
@@ -128,25 +112,23 @@ const MessagesPage = () => {
 
     try {
       const textToSend = inputValue;
-      setInputValue(""); // On vide l'input immédiatement pour une UI fluide
+      setInputValue("");
 
       const response = await api.post(`/api/messages/send/${receiver._id}`, { text: textToSend });
 
       if (response.data.success) {
         const newMsg = response.data.data;
 
-        // Si on était sur une conversation temporaire, il faut recharger l'inbox
         if (activeConvId.startsWith('temp_')) {
           const inboxResponse = await api.get('/api/messages/conversations');
           if (inboxResponse.data.success) {
             setConversations(inboxResponse.data.data);
-            setActiveConvId(newMsg.conversationId); // On bascule sur le vrai ID
+            setActiveConvId(newMsg.conversationId);
           }
         } else {
-          // Sinon, on ajoute simplement le message à l'écran
+
           setMessages(prev => [...prev, newMsg]);
-          
-          // On remonte cette conversation en haut de la liste de gauche
+
           setConversations(prev => {
             const updated = prev.map(c => 
               c._id === activeConvId ? { ...c, updatedAt: new Date().toISOString() } : c
@@ -161,7 +143,6 @@ const MessagesPage = () => {
     }
   };
 
-  // Récupérer les infos de la personne avec qui on parle actuellement
   const activeChat = conversations.find(c => c._id === activeConvId);
   const otherParticipant = activeChat?.participants.find(p => p._id !== currentUserId);
 
