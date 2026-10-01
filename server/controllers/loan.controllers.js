@@ -6,6 +6,7 @@ import Notification from "../models/notification.model.js"
 export const requestLoan = async (req, res) => {
     const copyId = req.params.copyId
     const borrowerId = req.user.id
+    const { requestedFormat } = req.body
 
     const copy = await PhysicalBook.findById(copyId)
 
@@ -30,7 +31,8 @@ export const requestLoan = async (req, res) => {
     const newLoan = await Loan.create({
         physicalBook: copy._id,
         borrower: borrowerId,
-        lender: copy.ownerId 
+        lender: copy.ownerId,
+        requestedFormat: requestedFormat
     })
 
     copy.status = 'Requested'

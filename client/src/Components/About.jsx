@@ -44,7 +44,7 @@ const AboutPage = () => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div className="min-h-screen bg-[#F2E8D9] font-serif text-[#4a3728] overflow-x-hidden">
+    <div className="min-h-screen bg-[#f1ead7] font-serif text-[#4a3728] overflow-x-hidden">
       
       {/* 1. HERO SECTION: OUR IMPETUS (What pushed us to create this site) */}
       <section className="relative pt-32 pb-20 px-6 text-center">

@@ -11,7 +11,8 @@ const Add_a_new_book = () => {
     customGenre: '',
     description: '',
     quotes: ['', ''],
-    cover: null
+    cover: null,
+    format: []
   }
   const [isOpen, setIsOpen] = useState(null)
   const [bookData, setbookData] = useState(initialState)
@@ -44,6 +45,15 @@ const Add_a_new_book = () => {
     }
   }
 
+  const handleFormatChange = (e) => {
+  const { value, checked } = e.target;
+  if (checked) {
+    setformData({ ...formData, format: [...formData.format, value] });
+  } else {
+    setformData({ ...formData, format: formData.format.filter(f => f !== value) });
+  }
+};
+
   const [isLoading, setisLoading] = useState(false)
 
   const handleSubmit = async (e) => {
@@ -58,6 +68,7 @@ const Add_a_new_book = () => {
     dataToSend.append('customGenre', formData.customGenre);
     dataToSend.append('description', formData.description);
     dataToSend.append('quotes', JSON.stringify(formData.quotes));
+    dataToSend.append('format', JSON.stringify(formData.format));
 
     if (selectedFile) {
       dataToSend.append('image', selectedFile);
@@ -150,6 +161,33 @@ const Add_a_new_book = () => {
               />
             </div>
           )}
+
+          <div>
+  <label className='text-[#7A6A5A] font-medium'>Available Format(s)</label>
+  <div className="flex gap-6 mt-2 pl-1.5">
+    <label className="flex items-center gap-2 cursor-pointer font-sans text-[#7A6A5A]">
+      <input 
+        type="checkbox" 
+        value="Physical" 
+        checked={formData.format.includes('Physical')} 
+        onChange={handleFormatChange} 
+        className="w-4 h-4 accent-[#8D7B68]" 
+      />
+      Physical Book
+    </label>
+    
+    <label className="flex items-center gap-2 cursor-pointer font-sans text-[#7A6A5A]">
+      <input 
+        type="checkbox" 
+        value="PDF" 
+        checked={formData.format.includes('PDF')} 
+        onChange={handleFormatChange} 
+        className="w-4 h-4 accent-[#8D7B68]" 
+      />
+      PDF Format
+    </label>
+  </div>
+</div>
 
           <div>
             <label className='font-sans text-[#7A6A5A] font-medium' htmlFor='description'>Description</label>

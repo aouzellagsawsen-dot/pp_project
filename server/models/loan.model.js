@@ -21,6 +21,11 @@ const loanSchema = new mongoose.Schema({
         enum: ['pending', 'active', 'returned', 'rejected', 'overdue'],
         default: 'pending' 
     },
+    requestedFormat: {
+        type: String,
+        enum: ['Physical', 'PDF'], 
+        required: false 
+    },
     requestDate: { 
         type: Date, 
         default: Date.now 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BookOpen, Heart, Bell, MessageSquare, User, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../../api/axios'
+import api from '../../api/axios';
 
 const Header = ({ isLoggedIn, setIsLoggedIn }) => { 
   const navigate = useNavigate();
@@ -28,23 +28,21 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
 
   const handleLogout = async () => {
     try {
-
       await api.post('/api/auth/logout'); 
     } catch (error) {
       console.error("Erreur lors de la déconnexion côté serveur:", error);
     } finally {
-
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('userName');
       setIsLoggedIn(false);
-
       window.location.href = '/'; 
     }
   };
 
   return (
-    <header className="w-full bg-[#FDF5E6] border-b border-stone-200 text-[#5D4037] backdrop-blur-md shadow-sm sticky top-0 z-50">
-      <div className="max-w-360 mx-auto px-12 h-20 flex items-center justify-between">
+    <header className="w-full fixed top-0 z-50 pt-5 px-6 sm:px-8 md:px-12 lg:px-16 pointer-events-none">
+      
+      <div className="max-w-[1400px] mx-auto bg-white border border-[#e4d2c0] h-[72px] px-6 md:px-8 rounded-full shadow-sm flex items-center justify-between text-[#5D4037] pointer-events-auto">
         
         {/* Logo Section */}
         <Link to={isLoggedIn ? "/welcome" : "/"}
@@ -75,7 +73,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
                 <Link to ="/notifications" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative">
                   <Bell size={22} strokeWidth={1.5} />
                   {unreadCount > 0 && (
-                    <span className="absolute top-2 right-2 bg-[#8B5E3C] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#FDF5E6]">
+                    <span className="absolute top-2 right-2 bg-[#8B5E3C] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -83,7 +81,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
 
                 <Link to ="/Message" className="p-2 hover:bg-[#8D7B68]/10 rounded-full transition-all relative">
                   <MessageSquare size={22} strokeWidth={1.5} />
-                  <span className="absolute top-2 right-2 bg-[#8B5E3C] w-2 h-2 rounded-full border border-[#FDF5E6]"></span>
+                  <span className="absolute top-2 right-2 bg-[#8B5E3C] w-2 h-2 rounded-full border border-white"></span>
                 </Link>
               </div>
 
@@ -106,9 +104,11 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
               </div>
             </>
           ) : (
-            <Link to="/signup" className="px-6 py-2 bg-[#4a3728] text-white rounded-full font-serif hover:bg-[#5D4037] shadow-md">
-              Join the community
-            </Link>
+            <Link to="/signup" 
+                           className="bg-[#8D7B68] text-[#F1EAD7] px-6 py-2 rounded-full flex items-center gap-3 hover:bg-[#7a6a59] transition-all shadow-md shadow-black/5">
+                           Join the community
+                        </Link>
+            
           )}
         </div>
       </div>

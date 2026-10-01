@@ -1,9 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { BookOpen,Star,ChevronLeft,Feather,Sparkles,Eye,EyeOff} from 'lucide-react';
-import { Link, useLocation, useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BookOpen, Eye, EyeOff, Star, ArrowLeft } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-const Sign_up = ({ setIsLoggedIn }) => {
 
+const FloatingBook = ({ className }) => (
+    <div className={`absolute ${className}`}>
+        <svg viewBox="0 0 45 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-sm">
+            <rect width="45" height="60" rx="2" fill="#E6DDD0" />
+            <line x1="8" y1="0" x2="8" y2="60" stroke="#D6CBB9" strokeWidth="1.5" />
+            <line x1="14" y1="10" x2="32" y2="10" stroke="#D6CBB9" strokeWidth="1" strokeLinecap="round" />
+            <line x1="14" y1="14" x2="26" y2="14" stroke="#D6CBB9" strokeWidth="1" strokeLinecap="round" />
+        </svg>
+    </div>
+);
+
+const Sign_up = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState({
     username: '',
     name: '',
@@ -11,189 +22,190 @@ const Sign_up = ({ setIsLoggedIn }) => {
     password: '',
     confirmPassword: ''
   });
-
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-
-  const [nameInput, setNameInput] = useState('');
-  
-
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+    window.scrollTo(0, 0);
+  }, []);
 
-  const [showPassword, setShowPassword] = useState(false)
-
-  const toggleVisibility = () =>{
-    setShowPassword(!showPassword)
-  }
+  const toggleVisibility = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      return setError('Les mots de passe ne correspondent pas.');
+      return setError('Passwords do not match.');
     }
 
     setIsLoading(true);
 
     try {
-      const response = await api.post('/api/auth/register', {
-        username: formData.username,
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword 
-      });
-
+      const response = await api.post('/api/auth/register', formData);
       localStorage.setItem('userName', formData.username);
       localStorage.setItem('isLoggedIn', 'true');
 
-     if (response.data && response.data.user) {
+      if (response.data && response.data.user) {
         localStorage.setItem('userId', response.data.user._id || response.data.user.id);
       }
       
-      if (setIsLoggedIn) {
-        setIsLoggedIn(true);
-      }
-      
+      if (setIsLoggedIn) setIsLoggedIn(true);
       const destination = location.state?.from || "/welcome";
       navigate(destination);
-
     } catch (err) {
-      // --- EN CAS D'ERREUR ---
       console.error("Registration error:", err);
-      setError(err.response?.data?.message || "An error occured during registration.");
+      setError(err.response?.data?.message || "An error occurred during registration.");
     } finally {
       setIsLoading(false);
     }
   };
 
-const handleGoogleAuth = () => {
+  const handleGoogleAuth = () => {
     window.location.href = 'http://localhost:5000/api/auth/google';
-};
+  };
 
   return (
-    <div className='flex justify-between flex-col items-center min-h-screen bg-[#f1ead7] gap-[2]'>
+    <div className="min-h-screen bg-[#F1EAD7] flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden">
       
-      <div className="absolute top-10 right-10 w-24 h-24 text-stone-300 rotate-12">
-        <Feather strokeWidth={0.5} size={80}/></div>
-      <div className="absolute bottom-20 left-20 w-32 h-32 text-stone-300 rotate-12">
-        <Feather strokeWidth={0.5} size={100}/></div>
-      <div className="absolute top-1/2 left-1/4 w-16 h-16 text-stone-300 opacity-50">
-        <Sparkles strokeWidth={0.5} size={40}/></div>
+      <Link 
+  to="/" 
+  className="absolute top-10 md:top-12 left-8 md:left-12 flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 hover:bg-white/80 shadow-sm backdrop-blur-sm text-[#7A6A5A] hover:text-[#4a3728] transition-all z-50 font-medium text-sm"
+>
+  <ArrowLeft size={16} />
+  <span>Home</span>
+</Link>
 
-      <div className='flex items-center mt-16 gap-2 mb-6'>
-      <BookOpen strokeWidth={2.5} size={32} className='text-[#8D7B68]'></BookOpen>
-      <h1 className='text-[#5c544b] text-center text-[30px] font-serif'>Alinéa</h1>
-      </div>
+      <style>{`
+          @keyframes float-slow {
+              0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+              50% { transform: translateY(-20px) rotate(calc(var(--rot, 0deg) + 10deg)); }
+          }
+          @keyframes float-medium {
+              0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+              50% { transform: translateY(-15px) rotate(calc(var(--rot, 0deg) - 10deg)); }
+          }
+          .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+          .animate-float-medium { animation: float-medium 6s ease-in-out infinite; }
+      `}</style>
+
+      {/* --- LIVRES FLOTTANTS --- */}
+      <FloatingBook className="w-[50px] top-[5%] left-[6%] animate-float-slow [--rot:-15deg] rotate-[-15deg] hidden sm:block" />
+      <FloatingBook className="w-[40px] top-[45%] left-[3%] animate-float-medium [--rot:10deg] rotate-[10deg] hidden md:block" />
+      <FloatingBook className="w-[45px] bottom-[10%] left-[18%] animate-float-medium [--rot:-8deg] rotate-[-8deg] hidden sm:block" />
+      <FloatingBook className="w-[35px] bottom-[15%] left-[55%] animate-float-slow [--rot:15deg] rotate-[15deg]" />
+      <FloatingBook className="w-[65px] bottom-[20%] right-[12%] animate-float-medium [--rot:-12deg] rotate-[-12deg]" />
+      <FloatingBook className="w-[45px] top-[40%] right-[5%] animate-float-medium [--rot:22deg] rotate-[22deg] hidden md:block" />
+      <FloatingBook className="w-[42px] top-[10%] right-[20%] animate-float-slow [--rot:-20deg] rotate-[-20deg] hidden lg:block" />
       
-    <div className='top-0 absolute left-0 translate-x-3 translate-y-3 text-[#d8b486]'>
-      <Sparkles size={24} strokeWidth={1}/>
+      <FloatingBook className="w-[30px] top-[25%] left-[25%] animate-float-slow [--rot:30deg] rotate-[30deg] hidden lg:block" />
+      <FloatingBook className="w-[55px] bottom-[40%] left-[10%] animate-float-medium [--rot:-25deg] rotate-[-25deg] hidden md:block" />
+      <FloatingBook className="w-[25px] top-[15%] right-[35%] animate-float-slow [--rot:45deg] rotate-[45deg] hidden lg:block" />
+      <FloatingBook className="w-[50px] bottom-[5%] right-[30%] animate-float-slow [--rot:-15deg] rotate-[-15deg] hidden sm:block" />
+      <FloatingBook className="w-[35px] top-[60%] right-[4%] animate-float-medium [--rot:18deg] rotate-[18deg] hidden md:block" />
+
+      {/* Logo & Slogan à l'extérieur */}
+      <div className="flex flex-col items-center mb-8 relative z-10 mt-6">
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <BookOpen className="w-10 h-10 text-[#8D7B68]" strokeWidth={2} />
+          <h1 className="text-4xl font-serif font-medium text-[#4a3728] tracking-tight">Alinéa</h1>
+        </Link>
+        <p className="text-[#7A6A5A] text-[15px] italic mt-2 font-serif tracking-wide">— share your reading —</p>
       </div>
 
-      <div className='bottom-0 absolute right-0 -translate-x-3 -translate-y-3 text-[#d8b486]'>
-      <Sparkles size={24} strokeWidth={1}/>
-      </div>
-
-      <form onSubmit={handleSubmit}
-      className='my-auto flex font-[Lora] flex-col bg-white/60 pb-20 max-w-[500] min-w-[450] max-h-[700] min-h-[650] px-6 py-12 rounded-[20px] font-extrabold gap-2.5'>
+      {/* Wrapper pour le rectangle + ornements */}
+      <div className="relative z-10 w-full max-w-[500px] mb-8">
         
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="h-px w-16 bg-linear-to-r from-transparent to-[#8D7B68]"></div>
-          <Feather size={14} strokeWidth={1.5} className="text-[#8D7B68]" />
-          <div className="h-px w-16 bg-linear-to-r from-transparent to-[#8D7B68]"></div>
-        </div>
+        {/* Ornements extérieurs */}
+        <div className="absolute -left-6 top-[20%] text-[#c5b5a1] text-xl animate-pulse hidden sm:block">✦</div>
+        <div className="absolute -right-8 top-[30%] text-[#8D7B68] text-2xl animate-pulse hidden sm:block">✧</div>
+        <div className="absolute -left-10 bottom-[30%] text-[#8D7B68] text-2xl animate-pulse hidden sm:block">✧</div>
+        <div className="absolute -right-5 bottom-[20%] text-[#c5b5a1] text-xl animate-pulse hidden sm:block">✦</div>
 
-        <h1 className='text-[#5C544B] text-4xl font-serif font-semibold text-[32px] tracking-tight text-center'>Join Our Community</h1>
-        <p className='text-[#7A6A5A] text-[16px] font-medium text-center italic'>- Start sharing and discovering amazing books -</p>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-sm font-sans">
-            {error}
+        {/* Main Card (élargie) */}
+        <div className="bg-[#FCFaf5] p-8 md:p-10 rounded-[2rem] shadow-xl shadow-stone-300/30 w-full">
+          
+          {/* Toggle */}
+          <div className="flex w-full bg-[#EFE9DD] rounded-full p-1 mb-8">
+            <Link to="/signin" className="flex-1 text-center py-2 rounded-full text-sm font-medium text-[#7c7064] hover:text-[#4a3728] transition-colors">Sign In</Link>
+            <div className="flex-1 text-center py-2 bg-white rounded-full text-sm font-medium shadow-sm text-[#4a3728]">Sign Up</div>
           </div>
-        )}
 
-        <div>
-        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="username" required>Username</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your username" id="username" value={formData.username} onChange={handleChange}></input>
-        </div>
-        
-        <div>
-        <label className='font-sans text-[#7A6A5A] size-[14] font-medium' htmlFor="name" required>Full Name</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none text-[#7A6A5A] bg-[#FFFBF2] rounded-xl w-full' type="text" placeholder=" Enter your full name" id="name" value={formData.name}
-            onChange={handleChange}></input>
-        </div>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-serif font-semibold text-[#5C544B]">Join Our Community</h2>
+            <p className="text-[#7A6A5A] text-sm italic mt-2">-- Start sharing and discovering amazing books --</p>
+          </div>
 
-        <div>
-        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="email" required>Email</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl p-[50] h-5 w-full text-[#7A6A5A]' type="email" placeholder=" Enter your email" id="email" value={formData.email}
-            onChange={handleChange}/>
-        </div>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-xl text-sm text-center">
+                {error}
+              </div>
+            )}
 
-        <div>
-        <label  className='font-sans text-[#7A6A5A] font-medium' htmlFor="password">Password</label>
-        <div className='flex gap-2'>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-bold placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full h-5 text-[#7A6A5A]' type={showPassword ? "text" : "password"} placeholder=" ......" id="password" value={formData.password}
-              onChange={handleChange}/>
-        <button  type="button" onClick={toggleVisibility}>
-          {showPassword ? <EyeOff size={20} className='text-[#7A6A5A]'></EyeOff> : <Eye size={20} className='text-[#7A6A5A]'></Eye>}
-        </button>
-        </div>
-        </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-[#7A6A5A] ml-1">Username</label>
+                <input required type="text" id="username" placeholder="Username" className="w-full px-4 py-3 rounded-xl bg-white border border-[#EFE7D6] focus:outline-none focus:border-[#c5b5a1] transition-all text-sm text-[#5c544b]" value={formData.username} onChange={handleChange} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-[#7A6A5A] ml-1">Full Name</label>
+                <input required type="text" id="name" placeholder="Full name" className="w-full px-4 py-3 rounded-xl bg-white border border-[#EFE7D6] focus:outline-none focus:border-[#c5b5a1] transition-all text-sm text-[#5c544b]" value={formData.name} onChange={handleChange} />
+              </div>
+            </div>
 
-        <div>
-        <label className='font-sans text-[#7A6A5A] font-medium' htmlFor="confirmPassword">Confirm Password</label>
-        <input className='pl-1.5 placeholder:text-[#e6cbb2] placeholder:font-extralight placeholder:font-sans border border-[#EFE7D6] focus:outline-none bg-[#FFFBF2] rounded-xl w-full text-[#7A6A5A]' type="password" value={formData.confirmPassword}
-            onChange={handleChange} id="confirmPassword"/>
-        </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#7A6A5A] ml-1">Email</label>
+              <input required type="email" id="email" placeholder="you@example.com" className="w-full px-4 py-3 rounded-xl bg-white border border-[#EFE7D6] focus:outline-none focus:border-[#c5b5a1] transition-all text-sm text-[#5c544b]" value={formData.email} onChange={handleChange} />
+            </div>
 
-        <div>
-          <input type="checkbox" required/>
-             <label className='font-sans text-[#7A6A5A] text-[14px] font-normal'> I agree to the Terms of Service and Privacy Policy</label>
-        </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#7A6A5A] ml-1">Password</label>
+              <div className="relative flex items-center">
+                <input required type={showPassword ? "text" : "password"} id="password" placeholder="Minimum 8 characters" className="w-full px-4 py-3 pr-10 rounded-xl bg-white border border-[#EFE7D6] focus:outline-none focus:border-[#c5b5a1] transition-all text-sm text-[#5c544b]" value={formData.password} onChange={handleChange} />
+                <button type="button" onClick={toggleVisibility} className="absolute right-3 text-[#A89F91] hover:text-[#756455]">
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
 
-       <div>
-        <button type="submit"
-        className='bg-[#8D7B68] text-[#FFFFFF] font-sans rounded-full font-medium text-center w-full py-2 px-0.5 flex justify-center items-center gap-1 shadow-2xl cursor-pointer'
-        disabled={isLoading}>
-          <Star strokeWidth={2.5} size={9}></Star><span className='font-medium'>{isLoading ? 'Creating Account...' : 'Create Account'}</span>
-        </button>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#7A6A5A] ml-1">Confirm Password</label>
+              <input required type="password" id="confirmPassword" placeholder="••••••••" className="w-full px-4 py-3 rounded-xl bg-white border border-[#EFE7D6] focus:outline-none focus:border-[#c5b5a1] transition-all text-sm text-[#5c544b]" value={formData.confirmPassword} onChange={handleChange} />
+            </div>
+
+            <button type="submit" disabled={isLoading} className="w-full py-3.5 bg-[#8D7B68] text-white rounded-full text-sm font-semibold hover:bg-[#7A6A59] transition-all shadow-md mt-6 flex justify-center items-center gap-2">
+              <Star strokeWidth={2.5} size={16} />
+              {isLoading ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="flex items-center gap-3 my-6">
+            <hr className="flex-1 border-[#EFE7D6]" />
+            <span className="text-[10px] text-[#A89F91] uppercase tracking-wider bg-[#FCFaf5] px-2">or continue with</span>
+            <hr className="flex-1 border-[#EFE7D6]" />
+          </div>
+
+          <button type="button" onClick={handleGoogleAuth} className="w-full inline-flex justify-center items-center py-3 px-4 border border-[#EFE7D6] rounded-full bg-transparent text-sm font-medium text-[#5c544b] hover:bg-white transition-colors">
+            <img className="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+            Continue with Google
+          </button>
+
+          <p className="text-center text-[11px] text-[#A89F91] mt-6">
+            By continuing, you agree to our <Link to="/terms" className="underline hover:text-[#756455]">Terms of Use</Link>
+          </p>
+        </div>
       </div>
-
-      <div>
-        <button type="button" className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-full shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 cursor-pointer"
-        onClick={handleGoogleAuth}>
-          <img className="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo"></img>
-          <span className='font-medium'>Sign up with Google</span>
-        </button>
-      </div>
-
-       <div className='mt-1.5 mb-0.5'>
-        <p className='text-[#7A6A5A] font-medium text-center'>Already have an account ? <Link className='underline cursor-pointer' to="/signin">Sign in</Link></p> 
-      </div>
-    </form>
-
-    <div className='flex items-center mb-3.5 gap-0.5 mt-3.5'>
-      <ChevronLeft size={13} className='text-[#5C544B]'/>
-      <Link className='text-[#5C544B] text-[14px] hover:underline cursor-pointer' to="/">Back to Home</Link>
-      
-     </div> 
     </div>
-  )
-}
+  );
+};
 
-export default Sign_up
+export default Sign_up;

@@ -3,7 +3,7 @@ import PhysicalBook from "../models/book_copy.model.js"
 
 // ============ AJOUTER UN LIVRE ============
 export const addPhysicalBook = async (req, res) => {
-    let { title, author, genre, customGenre, description, quotes } = req.body;
+    let { title, author, genre, customGenre, description, quotes, format, language, pagesPhysical, pagesPdf } = req.body;
 
     if (genre !== 'Others') {
         customGenre = undefined;
@@ -11,10 +11,13 @@ export const addPhysicalBook = async (req, res) => {
     let finalQuotes = [];
     if (quotes) {
         const parsedQuotes = typeof quotes === 'string' ? JSON.parse(quotes) : quotes;
-        
         if (Array.isArray(parsedQuotes)) {
             finalQuotes = parsedQuotes.filter(q => q && q.trim() !== "");
         }
+    }
+    let finalFormat = ['Physical']; 
+    if (format) {
+        finalFormat = typeof format === 'string' ? JSON.parse(format) : format;
     }
 
     const existingBook = await Book.findOne({ 
@@ -28,7 +31,6 @@ export const addPhysicalBook = async (req, res) => {
     if (existingBook) {
         targetBookId = existingBook._id;
         bookData = existingBook;
-        
     } else {
         const cover = req.file ? `/uploads/covers/${req.file.filename}` : `/uploads/covers/default-cover.png`;
 
@@ -37,9 +39,15 @@ export const addPhysicalBook = async (req, res) => {
             author,
             genre,
             customGenre,
+            language: language || 'French',
             description,
             cover,
-            quotes: finalQuotes
+            quotes: finalQuotes,
+            format: finalFormat,
+            pages: {
+                physical: pagesPhysical ? parseInt(pagesPhysical) : undefined,
+                pdf: pagesPdf ? parseInt(pagesPdf) : undefined
+            }
         });
 
         targetBookId = newBook._id;
@@ -62,7 +70,7 @@ export const addPhysicalBook = async (req, res) => {
         data: bookData, 
         copy: newPhysicalBook 
     });
-}
+};
 
 // ============ SUPPRIMER UN LIVRE ============
 export const deleteBook = async (req, res) => {
@@ -129,18 +137,20 @@ export const getBookById = async (req, res) => {
     try {
         const bookId = req.params.id;
         
-        const book = await Book.findById(bookId).lean();
+        const book = await Book.findById(bookId)
+            .populate('reviews.user', 'username pdp') 
+            .lean();
         
         if (!book) {
             return res.status(404).json({ success: false, message: "Livre introuvable." });
         }
 
         let physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId, status: 'Available' })
-            .populate('ownerId', 'name username'); 
+            .populate('ownerId', 'name username pdp'); 
 
         if (!physicalCopy) {
             physicalCopy = await PhysicalBook.findOne({ bookInfos: bookId })
-                .populate('ownerId', 'name username');
+                .populate('ownerId', 'name username pdp');
         }
         
         const result = {
@@ -161,22 +171,24 @@ export const getBookById = async (req, res) => {
 
 // ============ LISTER TOUS LES LIVRES ============
 export const allBooks = async (req, res) => {
-
     const books = await Book.find().sort({ createdAt: -1 });
 
     const booksWithStatus = await Promise.all(books.map(async (book) => {
         
-        const copies = await PhysicalBook.find({ bookInfos: book._id });
-
+        // MODIFICATION ICI : On ajoute le .populate() pour récupérer le nom et la photo
+        const copies = await PhysicalBook.find({ bookInfos: book._id })
+            .populate('ownerId', 'username pdp'); 
 
         const availableCopy = copies.find(copy => copy.status === 'Available');
 
         let finalStatus = 'borrowed';
         let copyIdToReserve = null;
+        let owner = copies.length > 0 ? copies[0].ownerId : null;
 
         if (availableCopy) {
             finalStatus = 'available';
             copyIdToReserve = availableCopy._id;
+            owner = availableCopy.ownerId;
         } else if (copies.length === 0) {
             finalStatus = 'unavailable';
         }
@@ -184,7 +196,8 @@ export const allBooks = async (req, res) => {
         return {
             ...book.toObject(),
             status: finalStatus,
-            copyToReserve: copyIdToReserve
+            copyToReserve: copyIdToReserve,
+            owner: owner // Contient désormais { _id, username, pdp }
         };
     }));
 
@@ -218,4 +231,50 @@ export const getMyAddedBooks = async (req, res) => {
         count: formattedBooks.length,
         data: formattedBooks
     });
+}
+
+// ============ AJOUTER OU MODIFIER UN AVIS ============
+export const addReview = async (req, res) => {
+    try {
+        const { rating, comment } = req.body;
+        const bookId = req.params.id;
+
+        const book = await Book.findById(bookId);
+
+        if (!book) {
+            return res.status(404).json({ success: false, message: "Livre introuvable." });
+        }
+
+        // Vérifie si l'utilisateur a déjà laissé un avis
+        const existingReview = book.reviews.find(
+            (r) => r.user.toString() === req.user.id.toString()
+        );
+
+        if (existingReview) {
+            existingReview.rating = Number(rating);
+            existingReview.comment = comment;
+        } else {
+            const review = {
+                user: req.user.id,
+                rating: Number(rating),
+                comment,
+            };
+            book.reviews.push(review);
+            book.numReviews = book.reviews.length;
+        }
+
+        // Recalcule la note moyenne
+        book.averageRating = book.reviews.reduce((acc, item) => item.rating + acc, 0) / book.reviews.length;
+
+        await book.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: "Avis ajouté avec succès !",
+            averageRating: book.averageRating,
+            numReviews: book.numReviews
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
 }

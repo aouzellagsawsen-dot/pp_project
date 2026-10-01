@@ -1,127 +1,267 @@
-import React, { useEffect, useState } from 'react'
-import { Search, ChevronDown } from 'lucide-react'
-import ProductCard from './ProductCard'
-import { Link } from 'react-router-dom'
-import api from '../../api/axios.js'
+import React, { useEffect, useState } from 'react';
+import { Search, Filter, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import ProductCard from './ProductCard';
+import HeroBanner from './HeroBanner';
+import { Link } from 'react-router-dom';
+import api from '../../api/axios.js';
+
+const GENRES = [
+    { label: "All", value: "All" }, { label: "Classic Fiction", value: "Classic Fiction" },
+    { label: "Coming of Age", value: "Coming of Age" }, { label: "Dystopian", value: "Dystopian" },
+    { label: "Fantasy", value: "Fantasy" }, { label: "Historical Fiction", value: "Historical Fiction" },
+    { label: "Mystery", value: "Mystery" }, { label: "Romance", value: "Romance" },
+    { label: "Science Fiction", value: "Science Fiction" }, { label: "Others", value: "Others" }
+];
+const LANGUAGES = ["All", "French", "English", "Arabic"];
+const FORMATS = [
+    { label: "All formats", value: "All" }, { label: "Paper", value: "Physical" },
+    { label: "PDF", value: "PDF" }, { label: "Paper + PDF", value: "Both" }
+];
+const STATUS = [
+    { label: "All statuses", value: "All" }, { label: "Available", value: "available" },
+    { label: "Borrowed", value: "borrowed" }, { label: "Reserved", value: "pending_swap" }
+];
 
 const ExplorePage = () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
     const [books, setBooks] = useState([]); 
     const [loading, setLoading] = useState(true);
-    const [search, setsearch] = useState("")
-    const [genre, setgenre] = useState("All genres")
-    const [status, setstatus] = useState("All books")
+    const [showFilters, setShowFilters] = useState(false);
+
+    const [search, setSearch] = useState("");
+    const [genre, setGenre] = useState("All");
+    const [language, setLanguage] = useState("All");
+    const [format, setFormat] = useState("All");
+    const [status, setStatus] = useState("All");
+    const [sortBy, setSortBy] = useState("rating");
+
+    // PAGINATION
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 12; // Modifiable (ex: 12 ou 18 livres)
 
     useEffect(() => {
         window.scrollTo(0, 0);
-
         const fetchBooks = async () => {
             try {
                 const response = await api.get('/api/books/list'); 
-                
                 if (response.data.success) {
                     setBooks(response.data.data);
                 }
             } catch (error) {
-                console.error("Erreur lors du chargement des livres:", error);
+                console.error("Error loading books:", error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchBooks();
     }, []);
 
-    const filteredBooks = books.filter((book) => {
+    // Réinitialiser la page quand un filtre change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, genre, language, format, status, sortBy]);
+
+    let processedBooks = books.filter((book) => {
         const matchesSearch = book.title?.toLowerCase().includes(search.toLowerCase()) ||
                               book.author?.toLowerCase().includes(search.toLowerCase());
+        const matchesGenre = genre === "All" || book.genre === genre;
+        const matchesLanguage = language === "All" || book.language === language;
+        const matchesFormat = format === "All" || 
+            (format === "Physical" && book.format?.includes('Physical') && !book.format?.includes('PDF')) ||
+            (format === "PDF" && book.format?.includes('PDF') && !book.format?.includes('Physical')) ||
+            (format === "Both" && book.format?.includes('Physical') && book.format?.includes('PDF'));
+        const matchesStatus = status === "All" || book.status === status;
         
-       const matchesGenre = genre === "All genres" || 
-                         (book.genre?.toLowerCase() === genre.toLowerCase());
-        
-        const matchesStatus = status === "All books" || book.status === status;
-        
-        return matchesSearch && matchesGenre && matchesStatus;
+        return matchesSearch && matchesGenre && matchesLanguage && matchesFormat && matchesStatus;
     });
 
+    processedBooks.sort((a, b) => {
+        if (sortBy === "rating") return (b.averageRating || 0) - (a.averageRating || 0);
+        if (sortBy === "title") return a.title.localeCompare(b.title);
+        if (sortBy === "recent") return new Date(b.createdAt) - new Date(a.createdAt);
+        return 0;
+    });
+
+    // Calcul des données paginées
+    const totalPages = Math.ceil(processedBooks.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentBooks = processedBooks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    };
+
     if (loading) {
-        return <div className="min-h-screen bg-[#f1ead7] flex items-center justify-center font-serif italic">Loading library...</div>;
+        return <div className="min-h-screen w-full bg-[#f1ead7] flex items-center justify-center font-serif italic text-[#7A6A5A]">Loading library...</div>;
     }
 
     return (
-        <div className='flex justify-center flex-col items-center min-h-screen bg-[#f1ead7]'>
-            <div className='pl-95 flex flex-col w-full'>
-                <div className='w-full max-w-3xl px-1 mb-6 pt-5'>
-                    <h1 className='font-serif font-semibold text-4xl text-[#5C544B] tracking-tight pb-1'>Explore Our Collection</h1>
-                    <p className='italic font-sans text-[#5C544B]'>Discover your next favorite book from our community library</p>
-                </div>
+        <div className='flex flex-col items-center w-full min-h-screen bg-[#f1ead7] pb-16'>
+            
+            <HeroBanner isLoggedIn={isLoggedIn} booksCount={books.length} />
 
-                {/* Section Filtres */}
-                <div className='bg-[#FAF6F0] w-200 rounded-2xl p-6 shadow-md my-auto flex'>
-                    <div className='grid grid-cols-4 gap-4'>
-                        <div className='bg-[#FFF8E7] rounded-2xl col-span-2 flex border border-[#e4d2c0]'>
-                            <Search className='w-5 h-5 ml-2 mt-2 text-[#7A6A5A]' />
-                            <input 
-                                value={search} 
-                                onChange={(e) => setsearch(e.target.value)} 
-                                id="searchbar" 
-                                placeholder='Search by title or author...' 
-                                type="text" 
-                                className='w-full bg-transparent placeholder:font-extralight pl-1.5 focus:outline-none'
-                            />
-                        </div>
+            <div className='w-full px-6 sm:px-8 md:px-12 lg:px-16 mb-4 mt-8'>
+                <div className='flex flex-col md:flex-row gap-3 items-center justify-center max-w-[1400px] mx-auto'>
+                    <div className='flex-1 w-full bg-white rounded-full flex items-center border border-[#e4d2c0] px-4 py-3 shadow-sm'>
+                        <Search className='w-5 h-5 text-[#7A6A5A] mr-3' />
+                        <input 
+                            value={search} 
+                            onChange={(e) => setSearch(e.target.value)} 
+                            placeholder='Title, author, genre...' 
+                            type="text" 
+                            className='w-full bg-transparent outline-none text-[#4a3728] placeholder-[#a89f91]'
+                        />
+                    </div>
 
-                        {/* Dropdown Genre */}
-                        <div className='col-span-1 rounded-2xl bg-[#FFF8E7] flex border border-[#e4d2c0] relative'>
-                            <select value={genre} onChange={(e) => setgenre(e.target.value)} className='appearance-none bg-transparent focus:outline-none p-2 cursor-pointer w-full'>
-                                <option value="All genres">All genres</option>
-                                <option value="Classic Fiction">Classic Fiction</option>
-                                <option value="Coming of Age">Coming of Age</option>
-                                <option value="Dystopian">Dystopian</option>
-                                <option value="Horror">Horror</option>
-                                <option value="Historical Fiction">Historical Fiction</option>
-                                <option value="Mystery">Mystery</option>
-                                <option value="Romance">Romance</option>
-                                <option value="Science Fiction">Science Fiction</option>
-                                <option value="Others">Other</option>
+                    <div className='flex gap-3 w-full md:w-auto'>
+                        <button 
+                            onClick={() => setShowFilters(!showFilters)}
+                            className={`flex-1 md:flex-none flex justify-center items-center gap-2 px-6 py-3 rounded-full border transition-colors shadow-sm font-medium
+                                ${showFilters ? 'bg-[#7A6A5A] text-white border-[#7A6A5A]' : 'bg-[#FAF6F0] text-[#7A6A5A] border-[#e4d2c0] hover:bg-[#F0EBE1]'}`}
+                        >
+                            <Filter size={18} />
+                            Filters
+                        </button>
+
+                        <div className='relative flex-1 md:flex-none'>
+                            <select 
+                                value={sortBy} 
+                                onChange={(e) => setSortBy(e.target.value)} 
+                                className='w-full appearance-none bg-white text-[#4a3728] border border-[#e4d2c0] rounded-full px-6 py-3 pr-10 outline-none cursor-pointer shadow-sm font-medium'
+                            >
+                                <option value="rating">Top rated</option>
+                                <option value="title">Title A→Z</option>
+                                <option value="recent">Most recent</option>
                             </select>
-                            <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-gray-700">
-                                <ChevronDown size={16} />
-                            </div>
-                        </div>
-
-                        {/* Dropdown Status */}
-                        <div className='col-span-1 rounded-2xl bg-[#FFF8E7] flex border border-[#e4d2c0] relative'>
-                            <select value={status} onChange={(e) => setstatus(e.target.value)} className='appearance-none bg-transparent focus:outline-none p-2 cursor-pointer w-full'>
-                                <option value="All books">All books</option>
-                                <option value="available">Available</option>
-                                <option value="borrowed">Borrowed</option>
-                            </select>
-                            <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-gray-700">
-                                <ChevronDown size={16} />
-                            </div>
+                            <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7A6A5A] pointer-events-none" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Grid des Livres provenant du Back */}
-            <div className='max-w-6xl mt-9 mb-5 space-y-4 grid grid-cols-4 gap-6 w-full relative items-stretch px-1'>
-                {filteredBooks.length > 0 ? (
-                    filteredBooks.map((book) => (
-                        <Link 
-                            key={book._id} 
-                            to={`/book/${book._id}`} 
-                            className='min-w-[calc(33.333%-1rem)] block no-underline group/card'
-                        >
+            {showFilters && (
+                <div className='w-full px-6 sm:px-8 md:px-12 lg:px-16 mb-8'>
+                    <div className='bg-[#FAF6F0] rounded-[2rem] p-8 border border-[#e4d2c0] shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[1400px] mx-auto items-start'>
+                        <div>
+                            <h3 className='text-xs font-bold text-[#a89f91] uppercase tracking-wider mb-3'>GENRE</h3>
+                            <div className='flex flex-wrap gap-2'>
+                                {GENRES.map(g => (
+                                    <button 
+                                        key={g.value} 
+                                        onClick={() => setGenre(g.value)}
+                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                                            ${genre === g.value ? 'bg-[#7A6A5A] text-white shadow-md' : 'bg-[#EAE2D1]/50 text-[#7A6A5A] hover:bg-[#EAE2D1]'}`}
+                                    >
+                                        {g.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className='text-xs font-bold text-[#a89f91] uppercase tracking-wider mb-3'>LANGUAGE</h3>
+                            <div className='flex flex-wrap gap-2'>
+                                {LANGUAGES.map(l => (
+                                    <button 
+                                        key={l} 
+                                        onClick={() => setLanguage(l)}
+                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                                            ${language === l ? 'bg-[#7A6A5A] text-white shadow-md' : 'bg-[#EAE2D1]/50 text-[#7A6A5A] hover:bg-[#EAE2D1]'}`}
+                                    >
+                                        {l}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className='text-xs font-bold text-[#a89f91] uppercase tracking-wider mb-3'>FORMAT</h3>
+                            <div className='flex flex-wrap gap-2'>
+                                {FORMATS.map(f => (
+                                    <button 
+                                        key={f.value} 
+                                        onClick={() => setFormat(f.value)}
+                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                                            ${format === f.value ? 'bg-[#7A6A5A] text-white shadow-md' : 'bg-[#EAE2D1]/50 text-[#7A6A5A] hover:bg-[#EAE2D1]'}`}
+                                    >
+                                        {f.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className='text-xs font-bold text-[#a89f91] uppercase tracking-wider mb-3'>STATUS</h3>
+                            <div className='flex flex-wrap gap-2'>
+                                {STATUS.map(s => (
+                                    <button 
+                                        key={s.value} 
+                                        onClick={() => setStatus(s.value)}
+                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                                            ${status === s.value ? 'bg-[#7A6A5A] text-white shadow-md' : 'bg-[#EAE2D1]/50 text-[#7A6A5A] hover:bg-[#EAE2D1]'}`}
+                                    >
+                                        {s.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* GRILLE DE LIVRES */}
+            <div className='w-full mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 px-6 sm:px-8 md:px-12 lg:px-16'>
+                {currentBooks.length > 0 ? (
+                    currentBooks.map((book) => (
+                        <Link key={book._id} to={`/book/${book._id}`} className='block no-underline group/card'>
                             <ProductCard book={book} />
                         </Link>
                     ))
                 ) : (
-                    <p className="col-span-4 text-center py-10 opacity-50 italic">No books found in the collection.</p>
+                    <div className="col-span-full text-center py-20 flex flex-col items-center">
+                        <Search className="w-12 h-12 text-[#a89f91] mb-4 opacity-50" />
+                        <p className="text-lg font-serif italic text-[#7A6A5A]">No books match these criteria.</p>
+                        <button 
+                            onClick={() => {
+                                setSearch(""); setGenre("All"); setLanguage("All"); setFormat("All"); setStatus("All");
+                            }}
+                            className="mt-4 px-6 py-2 bg-[#EAE2D1] text-[#7A6A5A] rounded-full hover:bg-[#d8ceb8] transition-colors"
+                        >
+                            Reset filters
+                        </button>
+                    </div>
                 )}
             </div>
+
+            {/* BARRE DE PAGINATION (1/3, 2/3...) */}
+            {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 mt-12">
+                    <button 
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="p-2.5 rounded-full border border-[#e4d2c0] bg-white text-[#7A6A5A] hover:bg-[#FAF6F0] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+
+                    <div className="px-5 py-2 rounded-full bg-[#FAF6F0] border border-[#e4d2c0] text-[#7A6A5A] font-serif italic text-sm font-medium shadow-sm">
+                        {currentPage} / {totalPages}
+                    </div>
+
+                    <button 
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="p-2.5 rounded-full border border-[#e4d2c0] bg-white text-[#7A6A5A] hover:bg-[#FAF6F0] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                    >
+                        <ChevronRight size={20} />
+                    </button>
+                </div>
+            )}
+
         </div>
-    )
-}
+    );
+};
 
 export default ExplorePage;

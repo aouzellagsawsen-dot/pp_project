@@ -38,7 +38,7 @@ const BienvenuePage = ({ setIsLoggedIn }) => {
   }, [searchParams, setIsLoggedIn]);
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-[#F1EAD7] px-6">
+    <div className="min-h-[80vh] pt-32 flex items-center justify-center bg-[#F1EAD7] px-6">
       <div className="max-w-2xl w-full text-center space-y-8">
         
         <div className="space-y-3">
@@ -93,6 +93,8 @@ const BienvenuePage = ({ setIsLoggedIn }) => {
             <span>Access your messaging</span>
           </button>
         </div>
+        <br></br>
+        <br></br>
 
       </div>
     </div>

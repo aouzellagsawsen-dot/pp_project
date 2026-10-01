@@ -2,7 +2,7 @@ import SignUp from './Components/SignUp';
 import TermsOfUse from './Components/TermsOfUse';
 import AddNewBook from './Components/AddNewBook';
 import NotificationPanel from './Components/notifications/NotificationPanel';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom'; // Added useLocation
 import SignIn from './Components/auth/SignIn';
 import Header from './Components/layout/Header';
 import Footer from './Components/layout/Footer';
@@ -34,48 +34,56 @@ export default function App() {
     return localStorage.getItem('isLoggedIn') === 'true';
   });
   
-  const [message, setMessage] = useState('');
+  const location = useLocation(); // Get current route
 
   useEffect(() => {
     fetchAndSetCsrfToken();
   }, []);
 
+  // Define paths where Header and Footer should be hidden
+  const hiddenRoutes = ['/signin', '/signup', '/forgotpassword', '/resetpassword'];
+  const hideLayout = hiddenRoutes.some(path => location.pathname.toLowerCase().startsWith(path));
 
   return (
     <FavoritesProvider>
-    <div className="flex flex-col min-h-screen">
-      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/book/:id" element={<BookDescription isLoggedIn={isLoggedIn} />} />
-          <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/policy" element={<Policy />} />
-          <Route path="/Message" element={<Message />} />
-          <Route path="/About" element={<About />} />
-          <Route path="/ForgotPassword" element={<ForgotPassword />} />
-          <Route path="/ResetPassword/:token" element={<ResetPassword />} />
-          <Route path="/ContactUs" element={<ContactUs />} />
-          <Route path="/SignUp" element={<SignUp setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/terms" element={<TermsOfUse/>} />
-          <Route path="/AddNewBook" element={<AddNewBook/>}/>
-          <Route path="/notifications" element={<NotificationPanel/>}/>
-          <Route path="/favorites" element={<Favorites/>}/>
-          <Route path="/adminpanel" element={<AdminPanel/>}/>
-          <Route path="/catalog" element={<ExplorePage/>}/>
-          <Route path="/welcome" element={<BienvenuePage/>} />
-          <Route path="/dashboard" element={<Layout/>}>
-            <Route path="borrows" element={<Borrows/>} />
-            <Route path="mybooks" element={<MyBooks />} />
-            <Route path="history" element={<History />} />
-            <Route path="profile" element={<Profile />} />
-          </Route>
-          <Route path="/dashboard/publicprofile" element={<PublicProfile />} />
-        </Routes>
+      <div className="flex flex-col min-h-screen">
         
-      </main>
-      <Footer isLoggedIn={isLoggedIn}/>
-    </div>
+        {/* Conditionally render Header */}
+        {!hideLayout && <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
+        
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/book/:id" element={<BookDescription isLoggedIn={isLoggedIn} />} />
+            <Route path="/signin" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/policy" element={<Policy />} />
+            <Route path="/Message" element={<Message />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/ForgotPassword" element={<ForgotPassword />} />
+            <Route path="/ResetPassword/:token" element={<ResetPassword />} />
+            <Route path="/ContactUs" element={<ContactUs />} />
+            <Route path="/SignUp" element={<SignUp setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/terms" element={<TermsOfUse/>} />
+            <Route path="/AddNewBook" element={<AddNewBook/>}/>
+            <Route path="/notifications" element={<NotificationPanel/>}/>
+            <Route path="/favorites" element={<Favorites/>}/>
+            <Route path="/adminpanel" element={<AdminPanel/>}/>
+            <Route path="/catalog" element={<ExplorePage/>}/>
+            <Route path="/welcome" element={<BienvenuePage/>} />
+            <Route path="/dashboard" element={<Layout/>}>
+              <Route path="borrows" element={<Borrows/>} />
+              <Route path="mybooks" element={<MyBooks />} />
+              <Route path="history" element={<History />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
+            <Route path="/dashboard/publicprofile" element={<PublicProfile />} />
+          </Routes>
+        </main>
+
+        {/* Conditionally render Footer */}
+        {!hideLayout && <Footer isLoggedIn={isLoggedIn}/>}
+
+      </div>
     </FavoritesProvider>
   );
 }
