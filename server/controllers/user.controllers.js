@@ -82,3 +82,54 @@ export const updateUserProfile = async (req, res) => {
         user: updatedUser
     })
 }
+
+ // ========== SEARCH USERS ============
+export const searchUsers = async (req, res) => {
+  try {
+    const { q } = req.query
+
+    if (!q || q.trim() === '') {
+      return res.status(200).json([]);
+    }
+
+    /* const searchRegex = { $regex: q, $options: 'i' };
+    
+    const users = await User.find({
+      $or: [
+        { name: searchRegex },
+        { username: searchRegex },
+        { email: searchRegex }
+      ]
+    })
+    .select('name username pdp bio') 
+    .limit(20);
+*/
+
+    const users = await User.aggregate([
+      {
+        $search: {
+          index: "default",
+          text: {
+            query: q,
+            path: ["name", "username", "email"],
+            fuzzy: { maxEdits: 1 }
+          }
+        }
+      },
+      { $limit: 20 },
+      { 
+        $project: { 
+          name: 1, 
+          username: 1, 
+          pdp: 1, 
+          bio: 1 
+        } 
+      }
+    ])
+
+    res.status(200).json(users);
+
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la recherche", error: error.message });
+  }
+}

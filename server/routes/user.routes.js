@@ -1,6 +1,6 @@
 import express from 'express'
 import { authenticateToken, authorizeOwner, protectUserMutation } from '../middleware/auth.middleware.js'
-import { getCurrentProfile, getUserProfile, updateUserProfile } from '../controllers/user.controllers.js'
+import { getCurrentProfile, getUserProfile, updateUserProfile, searchUsers } from '../controllers/user.controllers.js'
 
 const router = express.Router()
 
@@ -12,5 +12,8 @@ router.get('/profile/:userId', authenticateToken, authorizeOwner, getUserProfile
 
 // Update user profile (authentication + authorization + CSRF)
 router.patch('/profile/:userId', protectUserMutation, updateUserProfile)
+
+// Search users 
+router.get('/search', searchUsers)
 
 export default router
