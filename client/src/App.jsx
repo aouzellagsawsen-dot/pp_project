@@ -76,7 +76,11 @@ export default function App() {
               <Route path="history" element={<History />} />
               <Route path="profile" element={<Profile />} />
             </Route>
-            <Route path="/dashboard/publicprofile" element={<PublicProfile />} />
+            {/* Route pour consulter son propre profil public */}
+              <Route path="/publicprofile" element={<PublicProfile />} />
+
+            {/* Route pour consulter le profil d'un autre utilisateur avec un ID */}
+              <Route path="/publicprofile/:userId" element={<PublicProfile />} />
           </Routes>
         </main>
 
